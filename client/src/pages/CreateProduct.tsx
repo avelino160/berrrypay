@@ -151,11 +151,11 @@ export default function CreateProduct() {
                       </div>
                       <label className="text-sm font-bold text-zinc-200">Descrição</label>
                     </div>
-                    <Input 
-                      className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
+                    <textarea 
+                      className="w-full bg-black/40 border border-zinc-800 rounded-md min-h-[150px] p-3 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 text-white placeholder:text-zinc-600 resize-none" 
                       value={newProduct.description}
                       onChange={e => setNewProduct({...newProduct, description: e.target.value})}
-                      placeholder="Descreva resumidamente o que está incluído no produto"
+                      placeholder="Descreva detalhadamente o que seu cliente receberá ao comprar este produto..."
                     />
                   </div>
                 </div>
@@ -191,24 +191,6 @@ export default function CreateProduct() {
                       placeholder="Ex: 97,00"
                     />
                     <p className="text-[11px] text-zinc-500 ml-1">Digite apenas números. Ex: 19700 = R$ 197,00</p>
-                  </div>
-                </div>
-
-                <div className="bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/50 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-zinc-800 rounded-lg">
-                        <MessageCircle className="w-3.5 h-3.5 text-zinc-400" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-zinc-200">Suporte ao Comprador</p>
-                        <p className="text-[10px] text-zinc-500">Personalize as informações de contato no email de entrega</p>
-                      </div>
-                    </div>
-                    <Switch 
-                      checked={newProduct.enableCustomSupport}
-                      onCheckedChange={(v) => setNewProduct({...newProduct, enableCustomSupport: v})}
-                    />
                   </div>
                 </div>
               </div>
@@ -328,30 +310,30 @@ export default function CreateProduct() {
               </div>
             )}
 
-              <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
-                {step > 1 && (
-                  <Button 
-                    variant="ghost" 
-                    className="flex-1 h-12 text-zinc-400 hover:text-white"
-                    onClick={() => setStep(step - 1)}
-                  >
-                    Voltar
-                  </Button>
-                )}
+            <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
+              {step > 1 && (
                 <Button 
-                  className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold" 
-                  onClick={() => step === 3 ? handleCreate() : handleNext()}
-                  disabled={createProduct.isPending}
+                  variant="ghost" 
+                  className="flex-1 h-12 text-zinc-400 hover:text-white"
+                  onClick={() => setStep(step - 1)}
                 >
-                  {createProduct.isPending ? (
-                    <Loader2 className="animate-spin w-4 h-4" />
-                  ) : step === 3 ? (
-                    "Finalizar e Criar Produto"
-                  ) : (
-                    "Próximo passo"
-                  )}
+                  Voltar
                 </Button>
-              </div>
+              )}
+              <Button 
+                className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold" 
+                onClick={() => step === 3 ? handleCreate() : handleNext()}
+                disabled={createProduct.isPending}
+              >
+                {createProduct.isPending ? (
+                  <Loader2 className="animate-spin w-4 h-4" />
+                ) : step === 3 ? (
+                  "Finalizar e Criar Produto"
+                ) : (
+                  "Próximo passo"
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
