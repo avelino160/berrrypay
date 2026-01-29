@@ -19,7 +19,7 @@ export function Header({ title, subtitle }: { title: string; subtitle?: string }
   });
 
   return (
-    <header className="h-20 border-b border-zinc-800/50 bg-[#09090b]/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-40 w-full shrink-0">
+    <header className="h-20 border-b border-zinc-800/50 bg-[#09090b]/80 backdrop-blur-md px-8 flex items-center justify-between w-full shrink-0">
       <div>
         <h2 className="text-xl font-bold text-white tracking-tight">{title}</h2>
         {subtitle && <p className="text-sm text-zinc-500 mt-0.5">{subtitle}</p>}
