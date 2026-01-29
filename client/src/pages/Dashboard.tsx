@@ -168,7 +168,7 @@ export default function Dashboard() {
                   tick={{fill: '#a1a1aa', fontSize: 10, fontWeight: 500}} 
                   axisLine={false}
                   tickLine={false}
-                  interval={selectedPeriod === "90" ? 6 : (selectedPeriod === "30" ? 2 : 0)}
+                  interval={0}
                   angle={-45}
                   textAnchor="end"
                   height={60}
