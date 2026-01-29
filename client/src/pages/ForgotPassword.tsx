@@ -59,7 +59,7 @@ export default function ForgotPassword() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl border-none outline-none ring-0"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
