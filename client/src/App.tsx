@@ -9,6 +9,7 @@ import Register from "@/pages/Register";
 import ForgotPassword from "@/pages/ForgotPassword";
 import Dashboard from "@/pages/Dashboard";
 import Products from "@/pages/Products";
+import EditProduct from "@/pages/EditProduct";
 import Checkouts from "@/pages/Checkouts";
 import Settings from "@/pages/Settings";
 import CreateProduct from "@/pages/CreateProduct";
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/products" component={Products} />
       <Route path="/products/new" component={CreateProduct} />
+      <Route path="/products/edit/:id" component={EditProduct} />
       <Route path="/checkouts" component={Checkouts} />
       <Route path="/settings" component={Settings} />
       {/* Fallback to 404 */}

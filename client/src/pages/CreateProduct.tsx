@@ -40,9 +40,12 @@ export default function CreateProduct() {
     try {
       await createProduct.mutateAsync({
         name: newProduct.name,
-        price: Number(newProduct.price) * 100,
+        price: Math.round(parseFloat(newProduct.price) * 100),
         description: newProduct.description,
+        deliveryUrl: newProduct.deliveryUrl,
+        whatsappUrl: newProduct.whatsappUrl,
         imageUrl: newProduct.imageUrl,
+        noEmailDelivery: newProduct.noEmailDelivery,
         active: true
       });
       toast({ title: "Sucesso", description: "Produto criado com sucesso!" });

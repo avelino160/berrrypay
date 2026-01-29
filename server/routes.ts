@@ -34,11 +34,46 @@ export async function registerRoutes(
     }
   });
 
-  // Checkouts
-  app.get(api.checkouts.list.path, async (req, res) => {
-    const checkouts = await storage.getCheckouts();
-    res.json(checkouts);
+  app.patch(api.products.update.path, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const input = api.products.update.input.parse(req.body);
+      const product = await storage.updateProduct(id, input);
+      res.json(product);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
   });
+
+  app.delete(api.products.delete.path, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProduct(id);
+      res.status(204).end();
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.get(api.products.get.path, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const product = await storage.getProduct(id);
+      if (!product) return res.status(404).json({ message: "Produto não encontrado" });
+      res.json(product);
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Checkouts
 
   app.post(api.checkouts.create.path, async (req, res) => {
     try {

@@ -69,6 +69,7 @@ export class DatabaseStorage implements IStorage {
 
   async updateProduct(id: number, updates: UpdateProductRequest): Promise<Product> {
     const [updated] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
+    if (!updated) throw new Error("Produto não encontrado");
     return updated;
   }
 
