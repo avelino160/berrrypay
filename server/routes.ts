@@ -99,10 +99,12 @@ export async function registerRoutes(
 
 async function seedDatabase() {
   const products = await storage.getProducts();
-  if (products.length === 0) {
+  const settings = await storage.getSettings();
+  
+  if (!settings) {
     // Seed basic settings
     await storage.updateSettings({
-      environment: 'sandbox',
+      environment: 'production',
       paypalClientId: '',
       paypalClientSecret: '',
     });

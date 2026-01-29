@@ -108,7 +108,10 @@ export class DatabaseStorage implements IStorage {
       return updated;
     } else {
       // Create default if not exists
-      const [created] = await db.insert(settings).values(updates as InsertSettings).returning();
+      const [created] = await db.insert(settings).values({
+        ...updates,
+        environment: "production"
+      } as InsertSettings).returning();
       return created;
     }
   }

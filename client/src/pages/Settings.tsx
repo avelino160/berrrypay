@@ -13,11 +13,11 @@ export default function Settings() {
   const updateSettings = useUpdateSettings();
   const { toast } = useToast();
 
-  const [form, setForm] = useState({
+    const [form, setForm] = useState({
     paypalClientId: "",
     paypalClientSecret: "",
     paypalWebhookId: "",
-    environment: "sandbox"
+    environment: "production"
   });
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Settings() {
         paypalClientId: settings.paypalClientId || "",
         paypalClientSecret: settings.paypalClientSecret || "",
         paypalWebhookId: settings.paypalWebhookId || "",
-        environment: settings.environment || "sandbox"
+        environment: "production"
       });
     }
   }, [settings]);
@@ -66,25 +66,6 @@ export default function Settings() {
             </div>
           </CardHeader>
           <CardContent className="pt-6 space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-400">Ambiente</label>
-              <Select 
-                value={form.environment} 
-                onValueChange={(val) => setForm({...form, environment: val})}
-              >
-                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-white">
-                  <SelectValue placeholder="Selecione o ambiente" />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                  <SelectItem value="sandbox">Sandbox (Teste)</SelectItem>
-                  <SelectItem value="production">Produção (Real)</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-zinc-600">
-                Use "Sandbox" para testes e "Produção" para vendas reais.
-              </p>
-            </div>
-
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-400">Client ID</label>
               <Input 
