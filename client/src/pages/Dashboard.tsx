@@ -40,8 +40,8 @@ export default function Dashboard() {
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Hoje</CardTitle>
             <TrendingUp className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white mb-1">
+          <CardContent className="flex items-baseline gap-2">
+            <div className="text-2xl font-bold text-white">
               {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)}
             </div>
             <p className="text-xs text-zinc-500">0 venda(s) hoje</p>
@@ -53,8 +53,8 @@ export default function Dashboard() {
             <CardTitle className="text-sm font-medium text-zinc-400">Faturamento (Pago)</CardTitle>
             <DollarSign className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white mb-1">
+          <CardContent className="flex items-baseline gap-2">
+            <div className="text-2xl font-bold text-white">
               {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.revenuePaid || 0)}
             </div>
             <p className="text-xs text-zinc-500">0 venda(s) confirmadas</p>
@@ -66,8 +66,8 @@ export default function Dashboard() {
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Aprovadas</CardTitle>
             <CheckCircle className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white mb-1">{stats?.salesApproved || 0}</div>
+          <CardContent className="flex items-baseline gap-2">
+            <div className="text-2xl font-bold text-white">{stats?.salesApproved || 0}</div>
             <p className="text-xs text-zinc-500">Transações aprovadas (pago)</p>
           </CardContent>
         </Card>
