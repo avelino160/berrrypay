@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useProducts } from "@/hooks/use-products";
 
 export default function Dashboard() {
-  const [selectedPeriod, setSelectedPeriod] = useState("30");
+  const [selectedPeriod, setSelectedPeriod] = useState("0");
   const { data: stats, isLoading: statsLoading } = useStats(selectedPeriod);
   const { data: products, isLoading: productsLoading } = useProducts();
   const [, setLocation] = useLocation();
