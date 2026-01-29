@@ -186,7 +186,7 @@ export default function CreateProduct() {
                     <Input 
                       type="number"
                       min="0"
-                      className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                      className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
                       value={newProduct.price}
                       onChange={e => {
                         const val = e.target.value;
