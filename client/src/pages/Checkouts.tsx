@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Plus, ShoppingCart, ExternalLink, Copy } from "lucide-react";
+import { Loader2, Plus, ShoppingCart, ExternalLink, Copy, Pencil } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Checkouts() {
@@ -23,20 +23,8 @@ export default function Checkouts() {
     productId: "" 
   });
 
-  const handleCreate = async () => {
-    try {
-      await createCheckout.mutateAsync({
-        name: newCheckout.name,
-        slug: newCheckout.slug,
-        productId: Number(newCheckout.productId),
-        active: true
-      });
-      setIsOpen(false);
-      setNewCheckout({ name: "", slug: "", productId: "" });
-      toast({ title: "Sucesso", description: "Checkout criado com sucesso!" });
-    } catch (error: any) {
-      toast({ title: "Erro", description: error.message, variant: "destructive" });
-    }
+  const handleCreate = () => {
+    window.open("/checkouts/new", "_blank");
   };
 
   const copyLink = (slug: string) => {
@@ -47,65 +35,13 @@ export default function Checkouts() {
   return (
     <Layout title="Checkouts" subtitle="Páginas de venda personalizadas">
       <div className="flex justify-end mb-6">
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 border-0 outline-none ring-0 focus-visible:ring-0">
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Checkout
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="bg-[#18181b] border-zinc-800 text-white sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Criar Novo Checkout</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-400">Nome Interno</label>
-                <Input 
-                  className="bg-zinc-900 border-zinc-800" 
-                  value={newCheckout.name}
-                  onChange={e => setNewCheckout({...newCheckout, name: e.target.value})}
-                  placeholder="Ex: Oferta Black Friday"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-400">Produto Vinculado</label>
-                <Select 
-                  onValueChange={(val) => setNewCheckout({...newCheckout, productId: val})}
-                  value={newCheckout.productId}
-                >
-                  <SelectTrigger className="bg-zinc-900 border-zinc-800">
-                    <SelectValue placeholder="Selecione um produto" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                    {products?.map(p => (
-                      <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-400">Slug (URL)</label>
-                <div className="flex items-center">
-                  <span className="bg-zinc-800 border border-r-0 border-zinc-700 px-3 py-2 text-sm text-zinc-500 rounded-l-md h-10 flex items-center">/</span>
-                  <Input 
-                    className="bg-zinc-900 border-zinc-800 rounded-l-none" 
-                    value={newCheckout.slug}
-                    onChange={e => setNewCheckout({...newCheckout, slug: e.target.value})}
-                    placeholder="promocao-especial"
-                  />
-                </div>
-              </div>
-              <Button 
-                className="w-full bg-purple-600 hover:bg-purple-500 mt-2 border-0 outline-none ring-0 focus-visible:ring-0" 
-                onClick={handleCreate}
-                disabled={createCheckout.isPending}
-              >
-                {createCheckout.isPending ? <Loader2 className="animate-spin w-4 h-4" /> : "Criar Checkout"}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button 
+          className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 border-0 outline-none ring-0 focus-visible:ring-0"
+          onClick={handleCreate}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Novo Checkout
+        </Button>
       </div>
 
       {isLoading ? (
@@ -161,6 +97,14 @@ export default function Checkouts() {
                   </Button>
                   <Button size="sm" variant="ghost" className="h-9 w-9 p-0 text-zinc-500 hover:text-blue-500">
                     <ExternalLink className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    className="h-9 w-9 p-0 text-zinc-500 hover:text-purple-500"
+                    onClick={() => window.open(`/checkouts/edit/${checkout.id}`, "_blank")}
+                  >
+                    <Pencil className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
