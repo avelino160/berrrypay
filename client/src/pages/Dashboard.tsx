@@ -165,9 +165,10 @@ export default function Dashboard() {
                 <XAxis 
                   dataKey="name" 
                   stroke="#52525b" 
-                  tick={{fill: '#71717a', fontSize: 12}} 
+                  tick={{fill: '#71717a', fontSize: 10}} 
                   axisLine={false}
                   tickLine={false}
+                  interval={selectedPeriod === "7" ? 0 : 4}
                   dy={10}
                 />
                 <YAxis 
