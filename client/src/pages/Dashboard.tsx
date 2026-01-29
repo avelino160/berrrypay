@@ -168,7 +168,7 @@ export default function Dashboard() {
                   tick={{fill: '#71717a', fontSize: 10}} 
                   axisLine={false}
                   tickLine={false}
-                  interval={selectedPeriod === "7" ? 0 : 4}
+                  interval={0}
                   dy={10}
                 />
                 <YAxis 
