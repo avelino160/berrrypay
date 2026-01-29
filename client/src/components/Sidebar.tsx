@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useStats } from "@/hooks/use-stats";
 
@@ -45,16 +45,16 @@ export function Sidebar() {
           <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50 relative overflow-hidden group">
              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
              <div className="relative flex items-center gap-4">
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-yellow-200 via-yellow-400 to-yellow-600 rounded-lg shadow-lg shadow-yellow-900/20">
-                   <LayoutDashboard className="text-yellow-950 w-6 h-6" />
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-purple-500/10 rounded-lg shadow-lg border border-purple-500/20">
+                   <Trophy className="text-purple-500 w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-xs font-bold text-zinc-400 block mb-1 uppercase tracking-wider">Faturamento</span>
                   <div className="flex items-baseline gap-1 flex-wrap">
-                    <span className="text-lg font-black text-white whitespace-nowrap">
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(currentRevenue)}
+                    <span className="text-lg font-bold text-white whitespace-nowrap">
+                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(currentRevenue)}
                     </span>
-                    <span className="text-xs font-bold text-zinc-500">/ R$ {currentGoal.label}</span>
+                    <span className="text-xs font-bold text-zinc-500">/ $ {currentGoal.label}</span>
                   </div>
                 </div>
              </div>
