@@ -78,7 +78,7 @@ export default function Dashboard() {
         <CardHeader className="border-b border-zinc-800/50 pb-4">
           <div className="flex items-center gap-2">
              <BarChart3 className="w-4 h-4 text-zinc-500" />
-             <CardTitle className="text-base font-semibold text-white">Faturamento do Período</CardTitle>
+             <CardTitle className="text-base font-bold text-white tracking-tight">Faturamento do Período</CardTitle>
           </div>
           <p className="text-xs text-zinc-500" data-testid="text-date-range">{dateRangeLabel}</p>
         </CardHeader>
