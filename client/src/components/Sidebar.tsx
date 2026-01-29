@@ -65,22 +65,15 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="p-4 border-t border-zinc-800/50 mt-auto">
-        <div className="flex items-center gap-3 px-2 mb-4">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-            AC
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">Avelino Chissico</p>
-            <p className="text-xs text-zinc-500 truncate">avelinochissico0000@gmail.com</p>
-          </div>
+        <div className="px-2 mb-4">
+          <p className="text-xs text-zinc-500 truncate">avelinochissico0000@gmail.com</p>
+          <Link href="/">
+            <button className="w-full flex items-center gap-2 px-0 py-2 mt-2 text-sm font-medium text-zinc-400 hover:text-red-400 transition-colors">
+              <LogOut size={16} />
+              Sair da conta
+            </button>
+          </Link>
         </div>
-        
-        <Link href="/">
-          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors">
-            <LogOut size={16} />
-            Sair da conta
-          </button>
-        </Link>
         
         <p className="text-[10px] text-zinc-600 text-center mt-4">
           © 2026 ColdPay Inc.
