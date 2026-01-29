@@ -57,7 +57,7 @@ export function Sidebar() {
                       : "text-zinc-400 hover:text-white hover:bg-zinc-900"
                   )}
                 >
-                  <Icon size={28} strokeWidth={2.5} />
+                  <Icon size={20} strokeWidth={2.5} />
                   {item.label}
                 </button>
               </Link>
