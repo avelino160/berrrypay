@@ -131,15 +131,15 @@ export default function CreateProduct() {
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-zinc-200">Capa do Produto</label>
                   <div 
-                    className="border-2 border-dashed border-zinc-800 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group relative overflow-hidden h-48"
+                    className="border-2 border-dashed border-zinc-800 rounded-2xl p-0 flex flex-col items-center justify-center bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group relative overflow-hidden w-[200px] h-[200px] mx-auto"
                     onClick={() => document.getElementById('image-upload')?.click()}
                   >
                     {newProduct.imageUrl ? (
                       <>
-                        <img src={newProduct.imageUrl} alt="Capa" className="absolute inset-0 w-full h-full object-cover opacity-50" />
-                        <div className="relative z-10 flex flex-col items-center gap-2">
+                        <img src={newProduct.imageUrl} alt="Capa" className="absolute inset-0 w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 z-10">
                           <ImageIcon className="w-8 h-8 text-white" />
-                          <p className="text-sm font-bold text-white">Clique para alterar a capa</p>
+                          <p className="text-xs font-bold text-white text-center px-2">Alterar capa</p>
                         </div>
                       </>
                     ) : (
@@ -147,9 +147,9 @@ export default function CreateProduct() {
                         <div className="p-3 bg-zinc-800/50 rounded-2xl group-hover:scale-110 transition-transform">
                           <Plus className="w-6 h-6 text-zinc-500" />
                         </div>
-                        <div className="text-center space-y-1">
-                          <p className="text-sm font-bold text-zinc-300">Adicionar capa do produto</p>
-                          <p className="text-[11px] text-zinc-500">Recomendado: 1080x1080px</p>
+                        <div className="text-center space-y-1 p-4">
+                          <p className="text-xs font-bold text-zinc-300">Capa Quadrada</p>
+                          <p className="text-[10px] text-zinc-500">500x500px</p>
                         </div>
                       </>
                     )}
