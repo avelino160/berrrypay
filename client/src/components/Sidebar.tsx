@@ -13,7 +13,7 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="w-64 min-h-screen bg-[#09090b] border-r border-zinc-800 flex flex-col">
+    <div className="w-64 min-h-screen bg-[#09090b] border-r border-zinc-800 flex flex-col fixed left-0 top-0 z-50">
       {/* Brand */}
       <div className="p-6 border-b border-zinc-800/50 flex-shrink-0">
         <h1 className="text-2xl font-bold tracking-tight">
