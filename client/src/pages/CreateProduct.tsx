@@ -15,6 +15,7 @@ export default function CreateProduct() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [deliveryMethod, setDeliveryMethod] = useState<"link" | "file">("link");
+  const [deliveryFiles, setDeliveryFiles] = useState<File[]>([]);
   const [newProduct, setNewProduct] = useState({ 
     name: "", 
     price: "", 
@@ -338,22 +339,68 @@ export default function CreateProduct() {
                       </div>
                       <div className="text-center space-y-1">
                         <p className="text-base font-bold text-zinc-300">Arraste um arquivo ou clique para selecionar</p>
-                        <p className="text-sm text-zinc-500">Tamanho máximo: 64MB</p>
+                        <p className="text-sm text-zinc-500">Tamanho máximo: 64MB • Limite: 20 arquivos</p>
                         <p className="text-xs text-zinc-600">Tipos aceitos: PDF, DOC, DOCX, XLS, XLSX, imagens, vídeos, áudios, ZIP</p>
                       </div>
                       <input 
                         id="file-delivery-upload" 
                         type="file" 
+                        multiple
                         className="hidden" 
                         onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            toast({ title: "Arquivo selecionado", description: `Arquivo ${file.name} pronto para upload.` });
-                            // In a real scenario, we would upload to a bucket here
+                          const files = Array.from(e.target.files || []);
+                          if (files.length + deliveryFiles.length > 20) {
+                            toast({ 
+                              title: "Limite excedido", 
+                              description: "Você só pode fazer upload de no máximo 20 arquivos.", 
+                              variant: "destructive" 
+                            });
+                            return;
                           }
+                          setDeliveryFiles(prev => [...prev, ...files]);
+                          toast({ 
+                            title: "Arquivos selecionados", 
+                            description: `${files.length} arquivo(s) adicionado(s). Total: ${deliveryFiles.length + files.length}/20` 
+                          });
                         }}
                       />
                     </div>
+
+                    {deliveryFiles.length > 0 && (
+                      <div className="bg-zinc-900/40 border border-zinc-800/50 rounded-xl p-4 space-y-3 animate-in fade-in duration-300">
+                        <div className="flex items-center justify-between border-b border-zinc-800/50 pb-2">
+                          <p className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Arquivos adicionados ({deliveryFiles.length}/20)</p>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-7 text-[10px] text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                            onClick={() => setDeliveryFiles([])}
+                          >
+                            Remover todos
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                          {deliveryFiles.map((file, idx) => (
+                            <div key={idx} className="flex items-center justify-between bg-black/20 p-2 rounded-lg group">
+                              <div className="flex items-center gap-2 overflow-hidden">
+                                <FileText className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+                                <span className="text-xs text-zinc-300 truncate">{file.name}</span>
+                                <span className="text-[10px] text-zinc-600 shrink-0">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                              </div>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeliveryFiles(prev => prev.filter((_, i) => i !== idx));
+                                }}
+                                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-zinc-800 rounded transition-all"
+                              >
+                                <Plus className="w-3.5 h-3.5 text-zinc-500 rotate-45" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
