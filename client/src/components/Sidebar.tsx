@@ -13,7 +13,7 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="w-64 min-h-screen bg-[#09090b] border-r border-zinc-800 flex flex-col fixed left-0 top-0 z-50">
+    <div className="w-64 min-h-screen bg-[#09090b] border-r border-zinc-800 flex flex-col">
       {/* Brand */}
       <div className="p-6 border-b border-zinc-800/50 flex-shrink-0">
         <h1 className="text-2xl font-bold tracking-tight">
@@ -66,8 +66,8 @@ export function Sidebar() {
         </nav>
       </div>
 
-      {/* Footer - Fixed at bottom */}
-      <div className="p-4 border-t border-zinc-800/50 flex-shrink-0 bg-[#09090b]">
+      {/* Footer - No fixed positioning */}
+      <div className="p-4 border-t border-zinc-800/50 flex-shrink-0">
         <div className="px-2">
           <p className="text-xs text-zinc-500 truncate mb-3">avelinochissico0000@gmail.com</p>
           <Link href="/">
