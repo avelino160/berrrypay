@@ -35,14 +35,14 @@ export default function Dashboard() {
     
     if (selectedPeriod === "0") {
       // For Today, show hourly data
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < 25; i++) {
         const name = `${i.toString().padStart(2, '0')}:00`;
         const sales = Math.floor(baseValue * (Math.sin(i / 4) + 1.5));
         data.push({ name, sales });
       }
     } else if (selectedPeriod === "1") {
       // For Yesterday, show hourly data
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < 25; i++) {
         const name = `${i.toString().padStart(2, '0')}:00`;
         const sales = Math.floor(baseValue * (Math.cos(i / 4) + 1.5));
         data.push({ name, sales });
