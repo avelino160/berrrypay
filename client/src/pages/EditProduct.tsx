@@ -27,6 +27,7 @@ export default function EditProduct() {
     deliveryUrl: "",
     whatsappUrl: "",
     imageUrl: "",
+    deliveryFiles: [] as string[],
     noEmailDelivery: false,
     active: true
   });
@@ -40,6 +41,7 @@ export default function EditProduct() {
         deliveryUrl: product.deliveryUrl || "",
         whatsappUrl: product.whatsappUrl || "",
         imageUrl: product.imageUrl || "",
+        deliveryFiles: product.deliveryFiles || [],
         noEmailDelivery: product.noEmailDelivery || false,
         active: product.active ?? true
       });
@@ -65,6 +67,7 @@ export default function EditProduct() {
         deliveryUrl: formData.deliveryUrl,
         whatsappUrl: formData.whatsappUrl,
         imageUrl: formData.imageUrl,
+        deliveryFiles: formData.deliveryFiles,
         noEmailDelivery: formData.noEmailDelivery,
         active: formData.active
       });
@@ -160,6 +163,42 @@ export default function EditProduct() {
                   <div className="space-y-4">
                     <Input className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" placeholder="URL de entrega" value={formData.deliveryUrl} onChange={e => setFormData({...formData, deliveryUrl: e.target.value})} />
                     <Input className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" placeholder="WhatsApp (opcional)" value={formData.whatsappUrl} onChange={e => setFormData({...formData, whatsappUrl: e.target.value})} />
+                  </div>
+                )}
+                {deliveryMethod === "file" && (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-200 uppercase tracking-wider">Arquivos de entrega</label>
+                      <div className="bg-black/40 border border-zinc-800 rounded-xl p-4 min-h-[100px] flex flex-col items-center justify-center gap-3">
+                        <FileText className="w-8 h-8 text-zinc-600" />
+                        <p className="text-sm text-zinc-500">O upload de novos arquivos não está disponível na edição.</p>
+                      </div>
+                      {formData.deliveryFiles.length > 0 && (
+                        <div className="mt-4 space-y-2">
+                          <p className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Arquivos atuais ({formData.deliveryFiles.length})</p>
+                          <div className="grid grid-cols-1 gap-2">
+                            {formData.deliveryFiles.map((file, idx) => (
+                              <div key={idx} className="flex items-center justify-between p-3 bg-zinc-900/60 border border-zinc-800 rounded-lg group">
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                  <div className="w-8 h-8 rounded bg-purple-500/10 flex items-center justify-center text-purple-400 flex-shrink-0">
+                                    <FileText className="w-4 h-4" />
+                                  </div>
+                                  <span className="text-sm text-zinc-300 truncate">{file}</span>
+                                </div>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-red-400" onClick={() => {
+                                  setFormData({
+                                    ...formData,
+                                    deliveryFiles: formData.deliveryFiles.filter((_, i) => i !== idx)
+                                  });
+                                }}>
+                                  <Plus className="w-4 h-4 rotate-45" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
