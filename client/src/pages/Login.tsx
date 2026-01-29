@@ -29,8 +29,8 @@ export default function Login() {
       </div>
 
       <div className="w-full max-w-sm p-6 relative z-10 animate-in fade-in zoom-in-95 duration-500">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-extrabold tracking-tight mb-2">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
             <span className="text-white">Pay</span>
           </h1>
@@ -85,14 +85,18 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="mt-4 text-center">
-            <p className="text-sm text-zinc-500">
-              Não tem conta?{" "}
-              <a href="#" className="text-blue-500 hover:text-blue-400 font-medium transition-colors">
-                Criar agora
-              </a>
-            </p>
-          </div>
+        </div>
+
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl border border-white/5 p-4 rounded-xl">
+          <p className="text-sm text-zinc-400 text-center mb-3">Não tem conta?</p>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full h-10 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium rounded-lg transition-all duration-300"
+            data-testid="button-criar-agora"
+          >
+            Criar agora
+          </Button>
         </div>
         
         <p className="text-center text-xs text-zinc-600 mt-8">
