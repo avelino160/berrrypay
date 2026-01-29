@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Loader2, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -94,13 +94,13 @@ export default function Login() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                  <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
-                 <a 
-                   href="/forgot-password"
+                 <Link 
+                   to="/forgot-password"
                    className="text-xs text-blue-500 hover:text-blue-400"
                    data-testid="link-forgot-password"
                  >
                    Esqueceu?
-                 </a>
+                 </Link>
               </div>
               <Input
                 type="password"

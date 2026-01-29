@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Loader2, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -108,9 +108,9 @@ export default function Register() {
         <div className="mt-4 text-center">
           <p className="text-sm text-zinc-400">
             Já tem uma conta?{" "}
-            <a href="/login" className="text-blue-500 hover:text-blue-400">
+            <Link to="/login" className="text-blue-500 hover:text-blue-400">
               Entre agora
-            </a>
+            </Link>
           </p>
         </div>
       </div>
