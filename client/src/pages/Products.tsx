@@ -70,10 +70,7 @@ export default function Products() {
                 </div>
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors">{product.name}</h3>
-                <p className="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">
-                  {product.description || "Sem descrição definida."}
-                </p>
+                <h3 className="text-lg font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors">{product.name}</h3>
                 <div className="flex items-end justify-between border-t border-zinc-800/50 pt-4 mt-2">
                   <div>
                     <p className="text-xs text-zinc-500">Preço</p>
