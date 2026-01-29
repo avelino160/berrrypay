@@ -59,10 +59,10 @@ export default function Products() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((product) => (
-            <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden max-w-[200px] mx-auto w-full">
-              <div className="w-[200px] h-[200px] bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50 mx-auto">
+            <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden w-full">
+              <div className="w-full aspect-square bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
                 {product.imageUrl ? (
-                  <img src={product.imageUrl} alt={product.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-500/5 to-blue-500/5">
                     <PackageOpen className="w-8 h-8 text-zinc-700" />
