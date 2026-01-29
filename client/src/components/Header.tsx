@@ -26,49 +26,6 @@ export function Header({ title, subtitle }: { title: string; subtitle?: string }
       </div>
 
       <div className="flex items-center gap-6">
-        {/* Date Picker (Interactive) */}
-        <div className="hidden md:block">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id="date"
-                variant={"outline"}
-                className={cn(
-                  "w-[260px] justify-start text-left font-normal bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors",
-                  !date && "text-muted-foreground"
-                )}
-                data-testid="button-date-picker"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4 text-zinc-500" />
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "dd/MM/yyyy")} -{" "}
-                      {format(date.to, "dd/MM/yyyy")}
-                    </>
-                  ) : (
-                    format(date.from, "dd/MM/yyyy")
-                  )
-                ) : (
-                  <span>Selecione uma data</span>
-                )}
-                <ChevronDown className="ml-auto h-4 w-4 text-zinc-600" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-zinc-950 border-zinc-800" align="end">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={2}
-                className="bg-zinc-950 text-white"
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-
         {/* User Pill */}
         <div className="flex items-center gap-3 pl-6 border-l border-zinc-800">
           <div className="text-right hidden sm:block">
