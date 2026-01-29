@@ -86,7 +86,7 @@ export default function CreateProduct() {
         <div key={s.id} className="flex items-center flex-1 last:flex-none">
           <div className="flex flex-col items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-              step >= s.id ? 'bg-emerald-500 text-white' : 'bg-zinc-800 text-zinc-500 border border-zinc-700'
+              step >= s.id ? 'bg-purple-600 text-white' : 'bg-zinc-800 text-zinc-500 border border-zinc-700'
             }`}>
               {step > s.id ? <Check className="w-4 h-4" /> : s.id}
             </div>
@@ -95,7 +95,7 @@ export default function CreateProduct() {
             </span>
           </div>
           {i < steps.length - 1 && (
-            <div className={`h-[1px] flex-1 mx-4 ${step > s.id ? 'bg-emerald-500' : 'bg-zinc-800'}`} />
+            <div className={`h-[1px] flex-1 mx-4 ${step > s.id ? 'bg-purple-600' : 'bg-zinc-800'}`} />
           )}
         </div>
       ))}
