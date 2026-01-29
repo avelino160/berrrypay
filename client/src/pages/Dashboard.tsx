@@ -165,10 +165,13 @@ export default function Dashboard() {
                 <XAxis 
                   dataKey="name" 
                   stroke="#52525b" 
-                  tick={{fill: '#71717a', fontSize: 10}} 
+                  tick={{fill: '#a1a1aa', fontSize: 10, fontWeight: 500}} 
                   axisLine={false}
                   tickLine={false}
                   interval={0}
+                  angle={-45}
+                  textAnchor="end"
+                  height={60}
                   dy={10}
                 />
                 <YAxis 
