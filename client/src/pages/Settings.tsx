@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Save, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-import { SiPaypal } from "react-icons/si";
+import paypalLogo from "@assets/paypal-logo-icon-png_44635_1769721723658.jpg";
 
 export default function Settings() {
   const { data: settings, isLoading: isLoadingSettings } = useSettings();
@@ -56,8 +56,8 @@ export default function Settings() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg mb-8">
           <CardHeader className="border-b border-zinc-800/50 pb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#003087]/10 flex items-center justify-center border border-[#003087]/20">
-                <SiPaypal className="w-5 h-5 text-[#003087]" />
+              <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-zinc-800/50 overflow-hidden p-1.5">
+                <img src={paypalLogo} alt="PayPal" className="w-full h-full object-contain" />
               </div>
               <div>
                 <CardTitle className="text-lg text-white">PayPal</CardTitle>
@@ -90,7 +90,15 @@ export default function Settings() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-400">Webhook ID (Opcional)</label>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-zinc-400">Webhook ID (Opcional)</label>
+                {form.paypalWebhookId && (
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                    CONECTADO
+                  </div>
+                )}
+              </div>
               <Input 
                 className="bg-zinc-900 border-zinc-800 font-mono text-xs" 
                 value={form.paypalWebhookId}
