@@ -38,7 +38,8 @@ export default function Dashboard() {
     <Layout title="Dashboard" subtitle="Visão geral das suas vendas">
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
+        <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md" />
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Realizadas</CardTitle>
             <Button
@@ -66,7 +67,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
+        <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md" />
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Quantidade de Vendas</CardTitle>
             <Button
