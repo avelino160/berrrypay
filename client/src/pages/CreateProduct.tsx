@@ -216,22 +216,22 @@ export default function CreateProduct() {
 
                   <div className="space-y-2">
                     <label className="text-xs font-medium text-zinc-500">Moeda do produto</label>
-                    <Select defaultValue="BRL">
-                      <SelectTrigger className="bg-black/40 border-zinc-800 h-11">
-                        <SelectValue placeholder="Selecione a moeda" />
+                    <Select defaultValue="USD" disabled>
+                      <SelectTrigger className="bg-black/40 border-zinc-800 h-11 opacity-50 cursor-not-allowed">
+                        <SelectValue placeholder="USD ($) - Dólar Americano" />
                       </SelectTrigger>
                       <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                        <SelectItem value="BRL">BRL (R$) - Real Brasileiro</SelectItem>
                         <SelectItem value="USD">USD ($) - Dólar Americano</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-zinc-500">Valor</label>
+                    <label className="text-xs font-medium text-zinc-500">Valor (USD)</label>
                     <Input 
                       type="number"
                       min="0"
+                      step="0.01"
                       className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
                       value={newProduct.price}
                       onChange={e => {
@@ -240,9 +240,13 @@ export default function CreateProduct() {
                           setNewProduct({...newProduct, price: val});
                         }
                       }}
-                      placeholder="Ex: 97,00"
+                      placeholder="Ex: 19.90"
                     />
-                    <p className="text-[11px] text-zinc-500 ml-1">Digite apenas números. Ex: 19700 = R$ 197,00</p>
+                    {newProduct.price && (
+                      <p className="text-[11px] text-emerald-500 ml-1">
+                        Aprox. {(Number(newProduct.price) * 5.5).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (Câmbio: R$ 5,50)
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
