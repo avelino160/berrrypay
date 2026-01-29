@@ -185,9 +185,15 @@ export default function CreateProduct() {
                     <label className="text-xs font-medium text-zinc-500">Valor</label>
                     <Input 
                       type="number"
-                      className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
+                      min="0"
+                      className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                       value={newProduct.price}
-                      onChange={e => setNewProduct({...newProduct, price: e.target.value})}
+                      onChange={e => {
+                        const val = e.target.value;
+                        if (val === "" || Number(val) >= 0) {
+                          setNewProduct({...newProduct, price: val});
+                        }
+                      }}
                       placeholder="Ex: 97,00"
                     />
                     <p className="text-[11px] text-zinc-500 ml-1">Digite apenas números. Ex: 19700 = R$ 197,00</p>
