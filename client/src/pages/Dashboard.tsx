@@ -36,7 +36,7 @@ export default function Dashboard() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Hoje</CardTitle>
-            <TrendingUp className="h-4 w-4 text-blue-500 group-hover:scale-110 transition-transform" />
+            <TrendingUp className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white mb-1">
@@ -49,7 +49,7 @@ export default function Dashboard() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Faturamento (Pago)</CardTitle>
-            <DollarSign className="h-4 w-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+            <DollarSign className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white mb-1">
@@ -62,7 +62,7 @@ export default function Dashboard() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Aprovadas</CardTitle>
-            <CheckCircle className="h-4 w-4 text-purple-500 group-hover:scale-110 transition-transform" />
+            <CheckCircle className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white mb-1">{stats?.salesApproved || 0}</div>
@@ -75,7 +75,7 @@ export default function Dashboard() {
       <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg">
         <CardHeader className="border-b border-zinc-800/50 pb-4">
           <div className="flex items-center gap-2">
-             <BarChart3 className="w-4 h-4 text-blue-500" />
+             <BarChart3 className="w-4 h-4 text-zinc-500" />
              <CardTitle className="text-base font-semibold text-white">Faturamento do Período</CardTitle>
           </div>
           <p className="text-xs text-zinc-500">01/01 - 29/01</p>
