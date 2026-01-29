@@ -11,8 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 import { type Settings } from "@shared/schema";
 
 export default function Products() {
+  const { data: products, isLoading } = useProducts();
+  const deleteProduct = useDeleteProduct();
   const { data: settings } = useQuery<Settings>({ queryKey: ["/api/settings"] });
   const rate = parseFloat(settings?.exchangeRate || "5.0");
+  const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   const handleDelete = async (id: number) => {
     if (!confirm("Tem certeza que deseja excluir este produto?")) return;
