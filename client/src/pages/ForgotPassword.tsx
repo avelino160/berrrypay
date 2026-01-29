@@ -29,14 +29,14 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-screen bg-[#09090b] flex items-center justify-center relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-[100px]" />
       </div>
 
       <div className="w-full max-w-sm p-6 relative z-10">
         <div className="text-center mb-6">
           <h1 className="text-4xl font-extrabold tracking-tight mb-2">
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
+            <span className="bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent">Berry</span>
             <span className="text-white">Pay</span>
           </h1>
           <p className="text-zinc-500 text-sm">Recuperar sua senha</p>
@@ -51,7 +51,7 @@ export default function ForgotPassword() {
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-black/40 border-zinc-800 text-white h-11"
+                className="bg-black/40 border-zinc-800 text-white h-11 focus:ring-purple-500/20 focus:border-purple-500"
                 required
               />
             </div>
@@ -59,7 +59,7 @@ export default function ForgotPassword() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl border-none outline-none ring-0"
+              className="w-full h-11 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl border-none outline-none ring-0 shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transition-all duration-300"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
@@ -79,14 +79,14 @@ export default function ForgotPassword() {
         <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl p-4 rounded-xl flex items-center justify-center gap-1 shadow-2xl ring-0 border-none outline-none">
           <p className="text-sm text-zinc-400">
             Lembrou a senha?{" "}
-            <Link to="/login" className="text-sm text-blue-500 hover:text-blue-400 font-medium transition-colors">
+            <Link to="/login" className="text-sm text-purple-500 hover:text-purple-400 font-medium transition-colors">
               Voltar ao login
             </Link>
           </p>
         </div>
 
         <p className="text-center text-xs text-zinc-600 mt-8">
-          © 2026 ColdPay Inc. Todos os direitos reservados.
+          © 2026 BerryPay Inc. Todos os direitos reservados.
         </p>
       </div>
     </div>

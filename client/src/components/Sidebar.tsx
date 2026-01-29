@@ -17,7 +17,7 @@ export function Sidebar() {
       {/* Brand */}
       <div className="p-8 border-b border-zinc-800/50 flex-shrink-0">
         <h1 className="text-4xl font-extrabold tracking-tight">
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
+          <span className="bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent">Berry</span>
           <span className="text-white">Pay</span>
         </h1>
         <p className="text-sm text-zinc-500 mt-1">Plataforma de Vendas</p>
@@ -32,7 +32,7 @@ export function Sidebar() {
               <span className="text-xs font-medium text-zinc-400">0%</span>
             </div>
             <div className="w-full bg-zinc-800 rounded-full h-1.5 mb-2">
-              <div className="bg-blue-500 h-1.5 rounded-full w-0" />
+              <div className="bg-purple-500 h-1.5 rounded-full w-0" />
             </div>
             <div className="flex justify-between items-end">
               <span className="text-lg font-semibold text-white">R$ 0,00</span>
@@ -52,7 +52,7 @@ export function Sidebar() {
                   className={cn(
                     "w-full flex items-center gap-4 px-5 py-4 rounded-xl font-bold transition-all duration-200 text-[17px]",
                     isActive
-                      ? "bg-[#3b82f6] text-white shadow-lg"
+                      ? "bg-[#8b5cf6] text-white shadow-lg"
                       : "text-zinc-400 hover:text-white hover:bg-zinc-900"
                   )}
                 >
@@ -75,7 +75,7 @@ export function Sidebar() {
             </button>
           </Link>
           <p className="text-[10px] text-zinc-600 text-center mt-3">
-            © 2026 ColdPay Inc.
+            © 2026 BerryPay Inc.
           </p>
         </div>
       </div>

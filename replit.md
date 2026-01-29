@@ -1,8 +1,8 @@
-# ColdPay - Sales Platform
+# BerryPay - Sales Platform
 
 ## Overview
 
-ColdPay is a full-stack sales and checkout platform built with React, Express, and PostgreSQL. It provides a dashboard for managing products, creating customizable checkout pages, and tracking sales with PayPal payment integration. The application follows a monorepo structure with shared types and validation schemas between frontend and backend.
+BerryPay is a full-stack sales and checkout platform built with React, Express, and PostgreSQL. It provides a dashboard for managing products, creating customizable checkout pages, and tracking sales with PayPal payment integration. The application follows a monorepo structure with shared types and validation schemas between frontend and backend.
 
 ## User Preferences
 

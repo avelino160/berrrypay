@@ -26,7 +26,7 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
       </div>
     );
   }
@@ -88,8 +88,8 @@ export default function Dashboard() {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
@@ -116,7 +116,7 @@ export default function Dashboard() {
                 <Area 
                   type="monotone" 
                   dataKey="sales" 
-                  stroke="#3b82f6" 
+                  stroke="#8b5cf6" 
                   strokeWidth={2}
                   fillOpacity={1} 
                   fill="url(#colorSales)" 

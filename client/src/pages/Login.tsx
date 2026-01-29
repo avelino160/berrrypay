@@ -71,7 +71,7 @@ export default function Login() {
       <div className="w-full max-w-sm p-6 relative z-10 animate-in fade-in zoom-in-95 duration-500">
         <div className="text-center mb-6">
           <h1 className="text-4xl font-extrabold tracking-tight mb-2">
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
+            <span className="bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent">Berry</span>
             <span className="text-white">Pay</span>
           </h1>
           <p className="text-zinc-500 text-sm">Entre na sua conta</p>
@@ -86,7 +86,7 @@ export default function Login() {
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-blue-500/20 focus:border-blue-500 h-11"
+                className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-purple-500/20 focus:border-purple-500 h-11"
                 required
               />
             </div>
@@ -96,7 +96,7 @@ export default function Login() {
                  <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
                  <Link 
                    to="/forgot-password"
-                   className="text-xs text-blue-500 hover:text-blue-400"
+                   className="text-xs text-purple-500 hover:text-purple-400"
                    data-testid="link-forgot-password"
                  >
                    Esqueceu a senha?
@@ -107,7 +107,7 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-blue-500/20 focus:border-blue-500 h-11"
+                className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-purple-500/20 focus:border-purple-500 h-11"
                 required
               />
             </div>
@@ -115,7 +115,7 @@ export default function Login() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 transition-all duration-300 border-none outline-none ring-0"
+              className="w-full h-11 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transition-all duration-300 border-none outline-none ring-0"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ export default function Login() {
         </div>
         
         <p className="text-center text-xs text-zinc-600 mt-8">
-          © 2026 ColdPay Inc. Todos os direitos reservados.
+          © 2026 BerryPay Inc. Todos os direitos reservados.
         </p>
       </div>
     </div>
