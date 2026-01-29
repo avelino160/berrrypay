@@ -36,7 +36,7 @@ export async function registerRoutes(
 
   app.patch(api.products.update.path, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const input = api.products.update.input.parse(req.body);
       const product = await storage.updateProduct(id, input);
       res.json(product);
@@ -54,7 +54,7 @@ export async function registerRoutes(
 
   app.delete(api.products.delete.path, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       await storage.deleteProduct(id);
       res.status(204).end();
     } catch (err) {
@@ -64,7 +64,7 @@ export async function registerRoutes(
 
   app.get(api.products.get.path, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       const product = await storage.getProduct(id);
       if (!product) return res.status(404).json({ message: "Produto não encontrado" });
       res.json(product);

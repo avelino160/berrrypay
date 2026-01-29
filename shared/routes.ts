@@ -41,7 +41,7 @@ export const api = {
       },
     },
     update: {
-      method: 'PUT' as const,
+      method: 'PATCH' as const,
       path: '/api/products/:id',
       input: insertProductSchema.partial(),
       responses: {
