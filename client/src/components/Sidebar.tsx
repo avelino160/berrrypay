@@ -41,7 +41,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-2 space-y-1">
+      <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location === item.href;
@@ -64,13 +64,13 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-zinc-800/50 mt-auto">
+      <div className="p-4 border-t border-zinc-800/50 mt-auto bg-[#09090b]">
         <div className="px-2 mb-4">
-          <p className="text-xs text-zinc-500 truncate">avelinochissico0000@gmail.com</p>
+          <p className="text-xs text-zinc-500 truncate mb-3">avelinochissico0000@gmail.com</p>
           <Link href="/">
-            <button className="w-full flex items-center gap-2 px-0 py-2 mt-2 text-sm font-medium text-zinc-400 hover:text-red-400 transition-colors">
+            <button className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-md transition-colors border border-zinc-700">
               <LogOut size={16} />
-              Sair da conta
+              Sair
             </button>
           </Link>
         </div>
