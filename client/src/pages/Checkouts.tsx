@@ -49,7 +49,7 @@ export default function Checkouts() {
       <div className="flex justify-end mb-6">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20">
+            <Button className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 border-0 outline-none ring-0 focus-visible:ring-0">
               <Plus className="w-4 h-4 mr-2" />
               Novo Checkout
             </Button>
@@ -97,7 +97,7 @@ export default function Checkouts() {
                 </div>
               </div>
               <Button 
-                className="w-full bg-blue-600 hover:bg-blue-500 mt-2" 
+                className="w-full bg-purple-600 hover:bg-purple-500 mt-2 border-0 outline-none ring-0 focus-visible:ring-0" 
                 onClick={handleCreate}
                 disabled={createCheckout.isPending}
               >
