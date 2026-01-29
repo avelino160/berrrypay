@@ -43,7 +43,7 @@ export function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="px-4 py-1 space-y-1">
+        <nav className="px-4 py-2 space-y-4">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location === item.href;
@@ -51,13 +51,13 @@ export function Sidebar() {
               <Link key={item.href} href={item.href}>
                 <button
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                    "w-full flex items-center gap-4 px-5 py-4 rounded-xl text-xl font-bold transition-all duration-200",
                     isActive
-                      ? "bg-blue-500/10 text-blue-500 shadow-sm border border-blue-500/20"
+                      ? "bg-blue-500 text-white shadow-lg"
                       : "text-zinc-400 hover:text-white hover:bg-zinc-900"
                   )}
                 >
-                  <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                  <Icon size={28} strokeWidth={isActive ? 3 : 2.5} />
                   {item.label}
                 </button>
               </Link>
