@@ -10,13 +10,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useProducts } from "@/hooks/use-products";
 
 export default function Dashboard() {
-  const { data: stats, isLoading: statsLoading } = useStats();
+  const [selectedPeriod, setSelectedPeriod] = useState("30");
+  const { data: stats, isLoading: statsLoading } = useStats(selectedPeriod);
   const { data: products, isLoading: productsLoading } = useProducts();
   const [, setLocation] = useLocation();
   const [showSales, setShowSales] = useState(true);
   const [showQty, setShowQty] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState("all");
-  const [selectedPeriod, setSelectedPeriod] = useState("30");
 
   // Mock data generation based on filters
   const chartData = useMemo(() => {
@@ -24,7 +24,7 @@ export default function Dashboard() {
     if (selectedPeriod === "7") days = 7;
     else if (selectedPeriod === "90") days = 90;
     else if (selectedPeriod === "0") days = 0; // Hoje
-    else if (selectedPeriod === "1") days = 1; // Ontem (2 dias: ontem e hoje)
+    else if (selectedPeriod === "1") days = 1; // Ontem
     else days = parseInt(selectedPeriod) || 30;
 
     const data = [];
@@ -33,16 +33,31 @@ export default function Dashboard() {
     // Varying data based on product and period
     const baseValue = selectedProduct === "all" ? 100 : (parseInt(selectedProduct) * 50) % 200;
     
-    for (let i = days; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(now.getDate() - i);
-      const name = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-      
-      // Pseudo-random but deterministic sales based on product and day
-      const dayFactor = (i % 7) + 1;
-      const sales = Math.floor(baseValue * dayFactor * (selectedPeriod === "7" ? 1.5 : 1));
-      
-      data.push({ name, sales });
+    if (selectedPeriod === "0") {
+      // For Today, show hourly data
+      for (let i = 0; i < 24; i++) {
+        const name = `${i.toString().padStart(2, '0')}:00`;
+        const sales = Math.floor(baseValue * (Math.sin(i / 4) + 1.5));
+        data.push({ name, sales });
+      }
+    } else if (selectedPeriod === "1") {
+      // For Yesterday, show hourly data
+      for (let i = 0; i < 24; i++) {
+        const name = `${i.toString().padStart(2, '0')}:00`;
+        const sales = Math.floor(baseValue * (Math.cos(i / 4) + 1.5));
+        data.push({ name, sales });
+      }
+    } else {
+      for (let i = days; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(now.getDate() - i);
+        const name = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+        
+        const dayFactor = (i % 7) + 1;
+        const sales = Math.floor(baseValue * dayFactor * (selectedPeriod === "7" ? 1.5 : 1));
+        
+        data.push({ name, sales });
+      }
     }
     return data;
   }, [selectedProduct, selectedPeriod]);
@@ -165,42 +180,42 @@ export default function Dashboard() {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} opacity={0.5} />
                 <XAxis 
                   dataKey="name" 
                   stroke="#52525b" 
-                  tick={{fill: '#a1a1aa', fontSize: 10, fontWeight: 500}} 
+                  tick={{fill: '#a1a1aa', fontSize: 11, fontWeight: 500}} 
                   axisLine={false}
                   tickLine={false}
-                  interval={selectedPeriod === "90" ? 2 : 0}
-                  angle={-45}
-                  textAnchor="end"
+                  interval={selectedPeriod === "90" ? 5 : (selectedPeriod === "0" || selectedPeriod === "1" ? 3 : 0)}
                   height={60}
                   dy={10}
                 />
                 <YAxis 
                   stroke="#52525b" 
-                  tick={{fill: '#71717a', fontSize: 12}} 
+                  tick={{fill: '#71717a', fontSize: 11}} 
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(value) => `R$${value}`}
                   dx={-10}
                 />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '8px', color: '#fff' }}
-                  itemStyle={{ color: '#fff' }}
+                  contentStyle={{ backgroundColor: '#18181b', borderColor: '#3f3f46', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
+                  itemStyle={{ color: '#a855f7', fontWeight: 'bold' }}
+                  cursor={{ stroke: '#a855f7', strokeWidth: 1 }}
                 />
                 <Area 
                   type="monotone" 
                   dataKey="sales" 
-                  stroke="#8b5cf6" 
-                  strokeWidth={2}
+                  stroke="#a855f7" 
+                  strokeWidth={3}
                   fillOpacity={1} 
-                  fill="url(#colorSales)" 
+                  fill="url(#colorSales)"
+                  animationDuration={1500}
                 />
               </AreaChart>
             </ResponsiveContainer>

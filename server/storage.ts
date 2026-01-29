@@ -32,7 +32,7 @@ export interface IStorage {
   updateSettings(updates: UpdateSettingsRequest): Promise<Settings>;
 
   // Stats
-  getDashboardStats(): Promise<DashboardStats>;
+  getDashboardStats(period?: string): Promise<DashboardStats>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -114,38 +114,52 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Stats
-  async getDashboardStats(): Promise<DashboardStats> {
-    // Mock stats based on the screenshot placeholders for now, 
-    // but implemented with real query logic structure for future.
-    
+  async getDashboardStats(period?: string): Promise<DashboardStats> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
-    // Sales Today
-    const [salesTodayResult] = await db.select({
+
+    let startDate: Date;
+    let endDate: Date = new Date();
+
+    if (period === "0") { // Hoje
+      startDate = new Date(today);
+      endDate = new Date(today);
+      endDate.setHours(23, 59, 59, 999);
+    } else if (period === "1") { // Ontem
+      startDate = new Date(today);
+      startDate.setDate(today.getDate() - 1);
+      endDate = new Date(today);
+      endDate.setDate(today.getDate() - 1);
+      endDate.setHours(23, 59, 59, 999);
+    } else if (period === "7") {
+      startDate = new Date(today);
+      startDate.setDate(today.getDate() - 7);
+    } else if (period === "90") {
+      startDate = new Date(today);
+      startDate.setDate(today.getDate() - 90);
+    } else { // Default 30 days
+      startDate = new Date(today);
+      startDate.setDate(today.getDate() - 30);
+    }
+
+    // Sales for the period
+    const [periodSalesResult] = await db.select({
       count: sql<number>`count(*)`,
       total: sql<number>`sum(${sales.amount})`
     })
     .from(sales)
     .where(and(
       eq(sales.status, 'paid'),
-      gte(sales.createdAt, today)
+      gte(sales.createdAt, startDate),
+      lt(sales.createdAt, new Date(endDate.getTime() + 1))
     ));
 
-    // Total Revenue
-    const [revenueResult] = await db.select({
-      count: sql<number>`count(*)`,
-      total: sql<number>`sum(${sales.amount})`
-    })
-    .from(sales)
-    .where(eq(sales.status, 'paid'));
-
     return {
-      salesToday: Number(salesTodayResult?.total || 0),
-      revenuePaid: Number(revenueResult?.total || 0),
-      salesApproved: Number(revenueResult?.count || 0),
-      revenueTarget: 1000000, // 10k in cents
-      revenueCurrent: Number(revenueResult?.total || 0),
+      salesToday: Number(periodSalesResult?.total || 0),
+      revenuePaid: Number(periodSalesResult?.total || 0),
+      salesApproved: Number(periodSalesResult?.count || 0),
+      revenueTarget: 1000000,
+      revenueCurrent: Number(periodSalesResult?.total || 0),
     };
   }
 }

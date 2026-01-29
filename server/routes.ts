@@ -86,7 +86,8 @@ export async function registerRoutes(
 
   // Stats
   app.get(api.stats.get.path, async (req, res) => {
-    const stats = await storage.getDashboardStats();
+    const period = req.query.period as string;
+    const stats = await storage.getDashboardStats(period);
     res.json(stats);
   });
 
