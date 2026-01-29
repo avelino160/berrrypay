@@ -51,13 +51,13 @@ export function Sidebar() {
               <Link key={item.href} href={item.href}>
                 <button
                   className={cn(
-                    "w-full flex items-center gap-4 px-5 py-4 rounded-xl text-xl font-light transition-all duration-200",
+                    "w-full flex items-center gap-4 px-5 py-4 rounded-xl text-xl font-bold transition-all duration-200",
                     isActive
                       ? "bg-blue-500 text-white shadow-lg"
                       : "text-zinc-400 hover:text-white hover:bg-zinc-900"
                   )}
                 >
-                  <Icon size={28} strokeWidth={1} />
+                  <Icon size={28} strokeWidth={2.5} />
                   {item.label}
                 </button>
               </Link>
