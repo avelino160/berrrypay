@@ -13,14 +13,14 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-[#09090b] border-r border-zinc-800 flex flex-col">
+    <div className="w-80 bg-[#09090b] border-r border-zinc-800 flex flex-col">
       {/* Brand */}
-      <div className="p-5 border-b border-zinc-800/50 flex-shrink-0">
-        <h1 className="text-xl font-bold tracking-tight">
-          <span className="text-blue-500">Cold</span>
+      <div className="p-8 border-b border-zinc-800/50 flex-shrink-0">
+        <h1 className="text-4xl font-extrabold tracking-tight">
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
           <span className="text-white">Pay</span>
         </h1>
-        <p className="text-xs text-zinc-500 mt-0.5">Plataforma de Vendas</p>
+        <p className="text-sm text-zinc-500 mt-1">Plataforma de Vendas</p>
       </div>
 
       {/* Navigation and Widgets Area - No internal scroll, fixed within flex */}
