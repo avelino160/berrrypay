@@ -110,7 +110,7 @@ export default function Checkouts() {
 
       {isLoading ? (
         <div className="flex justify-center p-12">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
         </div>
       ) : checkouts?.length === 0 ? (
         <Card className="bg-[#18181b] border-zinc-800/60 flex flex-col items-center justify-center py-16 text-center">

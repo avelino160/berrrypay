@@ -43,7 +43,7 @@ export default function Settings() {
   if (isLoadingSettings) {
     return (
       <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
       </div>
     );
   }
@@ -123,7 +123,7 @@ export default function Settings() {
               <Button 
                 onClick={handleSave} 
                 disabled={updateSettings.isPending}
-                className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20"
+                className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 border-0 outline-none ring-0 focus-visible:ring-0"
               >
                 {updateSettings.isPending ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
