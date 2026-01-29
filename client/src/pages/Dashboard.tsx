@@ -35,18 +35,20 @@ export default function Dashboard() {
     
     if (selectedPeriod === "0") {
       // For Today, show hourly data
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 24; i++) {
         const name = `${i.toString().padStart(2, '0')}:00`;
         const sales = Math.floor(baseValue * (Math.sin(i / 4) + 1.5));
         data.push({ name, sales });
       }
+      data.push({ name: "23:59", sales: Math.floor(baseValue * (Math.sin(23.9 / 4) + 1.5)) });
     } else if (selectedPeriod === "1") {
       // For Yesterday, show hourly data
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 24; i++) {
         const name = `${i.toString().padStart(2, '0')}:00`;
         const sales = Math.floor(baseValue * (Math.cos(i / 4) + 1.5));
         data.push({ name, sales });
       }
+      data.push({ name: "23:59", sales: Math.floor(baseValue * (Math.cos(23.9 / 4) + 1.5)) });
     } else {
       for (let i = days; i >= 0; i--) {
         const d = new Date();
@@ -191,11 +193,12 @@ export default function Dashboard() {
                   tick={{fill: '#a1a1aa', fontSize: 11, fontWeight: 500}} 
                   axisLine={false}
                   tickLine={false}
-                  interval={selectedPeriod === "90" ? 5 : (selectedPeriod === "0" || selectedPeriod === "1" ? 3 : 0)}
+                  interval={selectedPeriod === "90" ? 5 : (selectedPeriod === "0" || selectedPeriod === "1" ? 2 : 0)}
                   angle={selectedPeriod === "0" || selectedPeriod === "1" ? 0 : -45}
                   textAnchor={selectedPeriod === "0" || selectedPeriod === "1" ? "middle" : "end"}
                   height={60}
                   dy={10}
+                  padding={{ left: 10, right: 20 }}
                 />
                 <YAxis 
                   stroke="#52525b" 
