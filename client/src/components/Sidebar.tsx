@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useStats } from "@/hooks/use-stats";
 
 export function Sidebar() {
   const [location] = useLocation();
@@ -11,6 +12,21 @@ export function Sidebar() {
     { href: "/checkouts", label: "Checkouts", icon: ShoppingCart },
     { href: "/settings", label: "Configurações", icon: Settings },
   ];
+
+  const { data: stats } = useStats();
+  const currentRevenue = stats?.revenuePaid || 0;
+
+  const goals = [
+    { label: "10K", value: 10000 },
+    { label: "100K", value: 100000 },
+    { label: "1M", value: 1000000 },
+    { label: "10M", value: 10000000 },
+    { label: "100M", value: 100000000 },
+    { label: "1B", value: 1000000000 },
+  ];
+
+  const currentGoal = goals.find(g => currentRevenue < g.value) || goals[goals.length - 1];
+  const progress = Math.min((currentRevenue / currentGoal.value) * 100, 100);
 
   return (
     <div className="w-80 bg-[#09090b] border-r border-zinc-800 flex flex-col">
@@ -26,18 +42,32 @@ export function Sidebar() {
       <div className="flex-1">
         {/* Revenue Widget */}
         <div className="px-4 py-4">
-          <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-medium text-zinc-400">Faturamento</span>
-              <span className="text-xs font-medium text-zinc-400">0%</span>
-            </div>
-            <div className="w-full bg-zinc-800 rounded-full h-1.5 mb-2">
-              <div className="bg-purple-500 h-1.5 rounded-full w-0" />
-            </div>
-            <div className="flex justify-between items-end">
-              <span className="text-lg font-semibold text-white">R$ 0,00</span>
-              <span className="text-[10px] text-zinc-500">Meta: R$ 10K</span>
-            </div>
+          <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50 relative overflow-hidden group">
+             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+             <div className="relative flex items-center gap-4">
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-yellow-200 via-yellow-400 to-yellow-600 rounded-lg shadow-lg shadow-yellow-900/20">
+                   <LayoutDashboard className="text-yellow-950 w-6 h-6" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs font-bold text-zinc-400 block mb-1 uppercase tracking-wider">Faturamento</span>
+                  <div className="flex items-baseline gap-1 flex-wrap">
+                    <span className="text-lg font-black text-white whitespace-nowrap">
+                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(currentRevenue)}
+                    </span>
+                    <span className="text-xs font-bold text-zinc-500">/ R$ {currentGoal.label}</span>
+                  </div>
+                </div>
+             </div>
+             
+             <div className="mt-4 flex items-center gap-3">
+                <div className="flex-1 bg-zinc-800/50 rounded-full h-2 overflow-hidden border border-white/5">
+                  <div 
+                    className="bg-gradient-to-r from-purple-600 to-purple-400 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(168,85,247,0.4)]" 
+                    style={{ width: `${progress}%` }} 
+                  />
+                </div>
+                <span className="text-xs font-black text-white tabular-nums">{Math.floor(progress)}%</span>
+             </div>
           </div>
         </div>
 
