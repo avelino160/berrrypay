@@ -1,18 +1,78 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  price: integer("price").notNull(), // in cents
+  imageUrl: text("image_url"),
+  active: boolean("active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export const checkouts = pgTable("checkouts", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").notNull(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  views: integer("views").default(0),
+  active: boolean("active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export const settings = pgTable("settings", {
+  id: serial("id").primaryKey(),
+  paypalClientId: text("paypal_client_id"),
+  paypalClientSecret: text("paypal_client_secret"),
+  paypalWebhookId: text("paypal_webhook_id"),
+  environment: text("environment").default("sandbox"), // sandbox or production
+});
+
+export const sales = pgTable("sales", {
+  id: serial("id").primaryKey(),
+  checkoutId: integer("checkout_id"),
+  productId: integer("product_id"),
+  amount: integer("amount").notNull(),
+  status: text("status").notNull(), // pending, paid, failed
+  customerEmail: text("customer_email"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Schemas
+export const insertProductSchema = createInsertSchema(products).omit({ id: true, createdAt: true });
+export const insertCheckoutSchema = createInsertSchema(checkouts).omit({ id: true, createdAt: true, views: true });
+export const insertSettingsSchema = createInsertSchema(settings).omit({ id: true });
+export const insertSaleSchema = createInsertSchema(sales).omit({ id: true, createdAt: true });
+
+// Types
+export type Product = typeof products.$inferSelect;
+export type InsertProduct = z.infer<typeof insertProductSchema>;
+
+export type Checkout = typeof checkouts.$inferSelect;
+export type InsertCheckout = z.infer<typeof insertCheckoutSchema>;
+
+export type Settings = typeof settings.$inferSelect;
+export type InsertSettings = z.infer<typeof insertSettingsSchema>;
+
+export type Sale = typeof sales.$inferSelect;
+export type InsertSale = z.infer<typeof insertSaleSchema>;
+
+// Request Types
+export type CreateProductRequest = InsertProduct;
+export type UpdateProductRequest = Partial<InsertProduct>;
+
+export type CreateCheckoutRequest = InsertCheckout;
+export type UpdateCheckoutRequest = Partial<InsertCheckout>;
+
+export type UpdateSettingsRequest = Partial<InsertSettings>;
+
+// Dashboard Stats Type
+export type DashboardStats = {
+  salesToday: number;
+  revenuePaid: number;
+  salesApproved: number;
+  revenueTarget: number; // For the progress bar
+  revenueCurrent: number;
+};
