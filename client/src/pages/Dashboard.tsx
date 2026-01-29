@@ -37,59 +37,59 @@ export default function Dashboard() {
   return (
     <Layout title="Dashboard" subtitle="Visão geral das suas vendas">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md" />
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-400">Vendas Realizadas</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-1 pt-4">
+            <CardTitle className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Vendas Realizadas</CardTitle>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-zinc-500 hover:text-white transition-colors"
+              className="h-7 w-7 text-zinc-500 hover:text-white transition-colors"
               onClick={() => setShowSales(!showSales)}
               data-testid="button-toggle-sales-visibility"
             >
               {showSales ? (
-                <Eye className="h-4 w-4" />
+                <Eye className="h-3.5 w-3.5" />
               ) : (
-                <EyeOff className="h-4 w-4" />
+                <EyeOff className="h-3.5 w-3.5" />
               )}
             </Button>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white mb-1">
+          <CardContent className="pb-4">
+            <div className="text-xl font-bold text-white mb-0.5">
               {showSales 
                 ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)
                 : "••••••"
               }
             </div>
-            <p className="text-xs text-zinc-500">0 venda(s) hoje</p>
+            <p className="text-[10px] text-zinc-500">0 venda(s) hoje</p>
           </CardContent>
         </Card>
 
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md" />
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-400">Quantidade de Vendas</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-1 pt-4">
+            <CardTitle className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Quantidade de Vendas</CardTitle>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-zinc-500 hover:text-white transition-colors"
+              className="h-7 w-7 text-zinc-500 hover:text-white transition-colors"
               onClick={() => setShowQty(!showQty)}
               data-testid="button-toggle-qty-visibility"
             >
               {showQty ? (
-                <Eye className="h-4 w-4" />
+                <Eye className="h-3.5 w-3.5" />
               ) : (
-                <EyeOff className="h-4 w-4" />
+                <EyeOff className="h-3.5 w-3.5" />
               )}
             </Button>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white mb-1">
+          <CardContent className="pb-4">
+            <div className="text-xl font-bold text-white mb-0.5">
               {showQty ? (stats?.salesApproved || 0) : "••••"}
             </div>
-            <p className="text-xs text-zinc-500">Transações aprovadas (pago)</p>
+            <p className="text-[10px] text-zinc-500">Transações aprovadas</p>
           </CardContent>
         </Card>
       </div>
