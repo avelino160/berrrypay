@@ -7,14 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Plus, PackageOpen, Search, Pencil, Trash2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
-import { type Settings } from "@shared/schema";
 
 export default function Products() {
   const { data: products, isLoading } = useProducts();
   const deleteProduct = useDeleteProduct();
-  const { data: settings } = useQuery<Settings>({ queryKey: ["/api/settings"] });
-  const rate = parseFloat(settings?.exchangeRate || "5.0");
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
@@ -61,7 +57,7 @@ export default function Products() {
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((product) => (
             <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden w-full">
               <div className="w-full aspect-square bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
@@ -78,37 +74,37 @@ export default function Products() {
                   </span>
                 </div>
               </div>
-              <div className="p-3">
-                <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
-                <div className="flex items-end justify-between border-t border-zinc-800/50 pt-2 mt-1">
+              <div className="p-5">
+                <h3 className="text-lg font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors">{product.name}</h3>
+                <div className="flex items-end justify-between border-t border-zinc-800/50 pt-4 mt-2">
                   <div>
-                    <p className="text-[10px] text-zinc-500">Preço</p>
-                    <p className="text-sm font-bold text-white">
-                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
+                    <p className="text-xs text-zinc-500">Preço</p>
+                    <p className="text-lg font-bold text-white">
+                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
                     </p>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     <Button 
                       size="icon" 
                       variant="ghost" 
-                      className="h-8 w-8 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                      className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
                       onClick={(e) => {
                         e.stopPropagation();
                         setLocation(`/products/edit/${product.id}`);
                       }}
                     >
-                      <Pencil className="w-3 h-3" />
+                      <Pencil className="w-4 h-4" />
                     </Button>
                     <Button 
                       size="icon" 
                       variant="ghost" 
-                      className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                      className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDelete(product.id);
                       }}
                     >
-                      {deleteProduct.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                      {deleteProduct.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                     </Button>
                   </div>
                 </div>

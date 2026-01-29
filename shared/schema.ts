@@ -38,7 +38,6 @@ export const settings = pgTable("settings", {
   paypalClientSecret: text("paypal_client_secret"),
   paypalWebhookId: text("paypal_webhook_id"),
   environment: text("environment").default("sandbox"), // sandbox or production
-  exchangeRate: text("exchange_rate").default("5.0"), // USD to BRL rate
 });
 
 export const sales = pgTable("sales", {

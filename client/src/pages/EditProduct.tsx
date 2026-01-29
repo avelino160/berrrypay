@@ -148,7 +148,7 @@ export default function EditProduct() {
                     <textarea className="w-full bg-black/40 border border-zinc-800 rounded-md p-3 min-h-[120px] text-sm text-white focus:outline-none focus:ring-1 focus:ring-purple-500" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-zinc-200">Preço (USD $)</label>
+                    <label className="text-sm font-bold text-zinc-200">Preço (R$)</label>
                     <Input type="number" step="0.01" className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
                   </div>
                 </div>

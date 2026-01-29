@@ -122,9 +122,6 @@ export class DatabaseStorage implements IStorage {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const setting = await this.getSettings();
-    const rate = parseFloat(setting?.exchangeRate || "5.0");
-
     let startDate: Date;
     let endDate: Date = new Date();
 
@@ -182,12 +179,12 @@ export class DatabaseStorage implements IStorage {
         const found = hourlyResults.find(h => Number(h.hour) === i);
         chartData.push({
           name: `${i.toString().padStart(2, '0')}:00`,
-          sales: (Number(found?.total || 0) / 100) * rate // Convert USD cents to BRL
+          sales: Number(found?.total || 0) / 100 // Convert cents to real
         });
       }
       // Add 23:59
       const lastHour = hourlyResults.find(h => Number(h.hour) === 23);
-      chartData.push({ name: "23:59", sales: (Number(lastHour?.total || 0) / 100) * rate });
+      chartData.push({ name: "23:59", sales: Number(lastHour?.total || 0) / 100 });
     } else {
       // Daily breakdown
       const dailyResults = await db.select({
@@ -210,17 +207,17 @@ export class DatabaseStorage implements IStorage {
         const found = dailyResults.find(r => r.day === dayStr);
         chartData.push({
           name: dayStr,
-          sales: (Number(found?.total || 0) / 100) * rate
+          sales: Number(found?.total || 0) / 100
         });
       }
     }
 
     return {
-      salesToday: (Number(periodSalesResult?.total || 0) / 100) * rate,
-      revenuePaid: (Number(periodSalesResult?.total || 0) / 100) * rate,
+      salesToday: Number(periodSalesResult?.total || 0) / 100,
+      revenuePaid: Number(periodSalesResult?.total || 0) / 100,
       salesApproved: Number(periodSalesResult?.count || 0),
       revenueTarget: 10000, // 10k in real
-      revenueCurrent: (Number(periodSalesResult?.total || 0) / 100) * rate,
+      revenueCurrent: Number(periodSalesResult?.total || 0) / 100,
       chartData
     };
   }
