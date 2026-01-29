@@ -54,17 +54,23 @@ export default function Products() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((product) => (
-            <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group">
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 flex items-center justify-center">
-                    <PackageOpen className="w-5 h-5 text-purple-500" />
+            <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden">
+              <div className="aspect-video w-full bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
+                {product.imageUrl ? (
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-500/5 to-blue-500/5">
+                    <PackageOpen className="w-8 h-8 text-zinc-700" />
                   </div>
-                  <span className={`text-[10px] px-2 py-1 rounded-full border ${product.active ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-zinc-800 text-zinc-500 border-zinc-700'}`}>
+                )}
+                <div className="absolute top-3 right-3">
+                  <span className={`text-[10px] px-2 py-1 rounded-full border backdrop-blur-md ${product.active ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-zinc-800 text-zinc-500 border-zinc-700'}`}>
                     {product.active ? 'Ativo' : 'Inativo'}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors">{product.name}</h3>
                 <p className="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">
                   {product.description || "Sem descrição definida."}
                 </p>

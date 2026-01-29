@@ -41,6 +41,7 @@ export default function CreateProduct() {
         name: newProduct.name,
         price: Number(newProduct.price) * 100,
         description: newProduct.description,
+        imageUrl: newProduct.imageUrl,
         active: true
       });
       toast({ title: "Sucesso", description: "Produto criado com sucesso!" });
@@ -77,8 +78,7 @@ export default function CreateProduct() {
 
   const steps = [
     { id: 1, title: "Informações básicas" },
-    { id: 2, title: "Método de entrega" },
-    { id: 3, title: "Imagem (opcional)" }
+    { id: 2, title: "Método de entrega" }
   ];
 
   const renderStepIndicator = () => (
@@ -126,6 +126,47 @@ export default function CreateProduct() {
                 <div className="flex items-center gap-2 text-zinc-300 font-medium pb-2 border-b border-zinc-800/50">
                   <LayoutIcon className="w-4 h-4 text-purple-500" />
                   Informações básicas
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-zinc-200">Capa do Produto</label>
+                  <div 
+                    className="border-2 border-dashed border-zinc-800 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group relative overflow-hidden h-48"
+                    onClick={() => document.getElementById('image-upload')?.click()}
+                  >
+                    {newProduct.imageUrl ? (
+                      <>
+                        <img src={newProduct.imageUrl} alt="Capa" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+                        <div className="relative z-10 flex flex-col items-center gap-2">
+                          <ImageIcon className="w-8 h-8 text-white" />
+                          <p className="text-sm font-bold text-white">Clique para alterar a capa</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="p-3 bg-zinc-800/50 rounded-2xl group-hover:scale-110 transition-transform">
+                          <Plus className="w-6 h-6 text-zinc-500" />
+                        </div>
+                        <div className="text-center space-y-1">
+                          <p className="text-sm font-bold text-zinc-300">Adicionar capa do produto</p>
+                          <p className="text-[11px] text-zinc-500">Recomendado: 1080x1080px</p>
+                        </div>
+                      </>
+                    )}
+                    <input 
+                      id="image-upload" 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const url = URL.createObjectURL(file);
+                          setNewProduct({...newProduct, imageUrl: url});
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
                 
                 <div className="bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/50 space-y-4">
@@ -356,12 +397,12 @@ export default function CreateProduct() {
               )}
               <Button 
                 className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold" 
-                onClick={() => step === 3 ? handleCreate() : handleNext()}
+                onClick={() => step === 2 ? handleCreate() : handleNext()}
                 disabled={createProduct.isPending}
               >
                 {createProduct.isPending ? (
                   <Loader2 className="animate-spin w-4 h-4" />
-                ) : step === 3 ? (
+                ) : step === 2 ? (
                   "Finalizar e Criar Produto"
                 ) : (
                   "Próximo passo"
