@@ -64,7 +64,7 @@ export default function Login() {
     <div className="min-h-screen bg-[#09090b] flex items-center justify-center relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-[100px]" />
       </div>
 
@@ -137,7 +137,7 @@ export default function Login() {
           <p className="text-sm text-zinc-400">Não tem conta?</p>
           <Link 
             to="/register"
-            className="text-sm text-blue-500 hover:text-blue-400 font-medium transition-colors"
+            className="text-sm text-purple-500 hover:text-purple-400 font-medium transition-colors"
             data-testid="link-criar-agora"
           >
             Criar agora
