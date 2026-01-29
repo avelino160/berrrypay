@@ -61,7 +61,7 @@ export default function Products() {
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {products?.map((product) => (
             <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden w-full">
               <div className="w-full aspect-square bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
@@ -78,37 +78,37 @@ export default function Products() {
                   </span>
                 </div>
               </div>
-              <div className="p-5">
-                <h3 className="text-lg font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors">{product.name}</h3>
-                <div className="flex items-end justify-between border-t border-zinc-800/50 pt-4 mt-2">
+              <div className="p-3">
+                <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
+                <div className="flex items-end justify-between border-t border-zinc-800/50 pt-2 mt-1">
                   <div>
-                    <p className="text-xs text-zinc-500">Preço</p>
-                    <p className="text-lg font-bold text-white">
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
+                    <p className="text-[10px] text-zinc-500">Preço</p>
+                    <p className="text-sm font-bold text-white">
+                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Button 
                       size="icon" 
                       variant="ghost" 
-                      className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                      className="h-8 w-8 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
                       onClick={(e) => {
                         e.stopPropagation();
                         setLocation(`/products/edit/${product.id}`);
                       }}
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Pencil className="w-3 h-3" />
                     </Button>
                     <Button 
                       size="icon" 
                       variant="ghost" 
-                      className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                      className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDelete(product.id);
                       }}
                     >
-                      {deleteProduct.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                      {deleteProduct.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
                     </Button>
                   </div>
                 </div>
