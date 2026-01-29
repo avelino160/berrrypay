@@ -41,7 +41,7 @@ export default function Dashboard() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md" />
           <CardHeader className="flex flex-row items-center justify-between pb-1 pt-4">
-            <CardTitle className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Vendas realizadas</CardTitle>
+            <CardTitle className="text-xs font-medium text-zinc-400 tracking-wider">Vendas realizadas</CardTitle>
             <Button
               variant="ghost"
               size="icon"
@@ -70,7 +70,7 @@ export default function Dashboard() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md" />
           <CardHeader className="flex flex-row items-center justify-between pb-1 pt-4">
-            <CardTitle className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Quantidade de vendas</CardTitle>
+            <CardTitle className="text-xs font-medium text-zinc-400 tracking-wider">Quantidade de vendas</CardTitle>
             <Button
               variant="ghost"
               size="icon"
