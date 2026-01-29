@@ -14,6 +14,7 @@ export default function CreateProduct() {
   const createProduct = useCreateProduct();
   const { toast } = useToast();
   const [step, setStep] = useState(1);
+  const [deliveryMethod, setDeliveryMethod] = useState<"link" | "file">("link");
   const [newProduct, setNewProduct] = useState({ 
     name: "", 
     price: "", 
@@ -210,68 +211,95 @@ export default function CreateProduct() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1 bg-zinc-900/50 border-purple-500/50 text-purple-400 h-11">
+                  <Button 
+                    variant="outline" 
+                    className={`flex-1 h-11 transition-all ${deliveryMethod === "link" ? "bg-zinc-900 border-purple-500/50 text-purple-400" : "bg-zinc-900/20 border-zinc-800 text-zinc-500"}`}
+                    onClick={() => setDeliveryMethod("link")}
+                  >
                     <Globe className="w-4 h-4 mr-2" /> Link
                   </Button>
-                  <Button variant="outline" className="flex-1 bg-zinc-900/20 border-zinc-800 text-zinc-500 h-11">
+                  <Button 
+                    variant="outline" 
+                    className={`flex-1 h-11 transition-all ${deliveryMethod === "file" ? "bg-zinc-900 border-purple-500/50 text-purple-400" : "bg-zinc-900/20 border-zinc-800 text-zinc-500"}`}
+                    onClick={() => setDeliveryMethod("file")}
+                  >
                     <FileText className="w-4 h-4 mr-2" /> Arquivo
                   </Button>
-                  <Button variant="outline" className="flex-1 bg-zinc-900/20 border-zinc-800 text-zinc-500 h-11">
-                    <PackageOpen className="w-4 h-4 mr-2" /> Estoque
-                  </Button>
                 </div>
 
-                <div className="bg-orange-500/5 border border-orange-500/20 p-4 rounded-xl flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange-500/10 rounded-lg">
-                      <Send className="w-4 h-4 text-orange-500" />
+                {deliveryMethod === "link" ? (
+                  <>
+                    <div className="bg-orange-500/5 border border-orange-500/20 p-4 rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-orange-500/10 rounded-lg">
+                          <Send className="w-4 h-4 text-orange-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-zinc-200">Não enviar email de entrega</p>
+                          <p className="text-[10px] text-zinc-500">Ative para produtos sem link (ex: área de membros, serviços)</p>
+                        </div>
+                      </div>
+                      <Switch 
+                        checked={newProduct.noEmailDelivery}
+                        onCheckedChange={(v) => setNewProduct({...newProduct, noEmailDelivery: v})}
+                      />
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-zinc-200">Não enviar email de entrega</p>
-                      <p className="text-[10px] text-zinc-500">Ative para produtos sem link (ex: área de membros, serviços)</p>
+
+                    <div className="bg-blue-500/5 border border-blue-500/20 p-4 rounded-xl flex items-center gap-3">
+                      <div className="p-2 bg-blue-500/10 rounded-lg">
+                        <Send className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <p className="text-xs text-blue-400 font-medium">Este link será enviado automaticamente por email após a compra</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-200">URL de entrega por Email</label>
+                      <Input 
+                        className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
+                        placeholder="https://drive.google.com/file/..."
+                        value={newProduct.deliveryUrl}
+                        onChange={e => setNewProduct({...newProduct, deliveryUrl: e.target.value})}
+                      />
+                      <p className="text-[11px] text-zinc-500">Ideal para: Google Drive, Dropbox, OneDrive, área de membros, etc.</p>
+                    </div>
+
+                    <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl flex items-center gap-3">
+                      <div className="p-2 bg-emerald-500/10 rounded-lg">
+                        <MessageCircle className="w-4 h-4 text-emerald-500" />
+                      </div>
+                      <p className="text-xs text-emerald-400 font-medium">Este link será enviado via WhatsApp. Se vazio, usará o link do email acima.</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-200">URL de entrega por WhatsApp (opcional)</label>
+                      <Input 
+                        className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
+                        placeholder="https://linkwhatsapp.com/... (deixe vazio para usar o link do email)"
+                        value={newProduct.whatsappUrl}
+                        onChange={e => setNewProduct({...newProduct, whatsappUrl: e.target.value})}
+                      />
+                      <p className="text-[11px] text-zinc-500">Útil quando você quer enviar links diferentes por email e WhatsApp</p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="space-y-4 animate-in fade-in duration-300">
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg flex items-center gap-3">
+                       <MessageCircle className="w-4 h-4 text-emerald-500" />
+                       <p className="text-sm text-emerald-500">Este arquivo será enviado via WhatsApp após a compra</p>
+                    </div>
+
+                    <div className="border-2 border-dashed border-zinc-800 rounded-2xl p-10 flex flex-col items-center justify-center gap-4 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group">
+                      <div className="p-4 bg-zinc-800/50 rounded-2xl group-hover:scale-110 transition-transform">
+                        <Plus className="w-8 h-8 text-zinc-500" />
+                      </div>
+                      <div className="text-center space-y-1">
+                        <p className="text-base font-bold text-zinc-300">Arraste um arquivo ou clique para selecionar</p>
+                        <p className="text-sm text-zinc-500">Tamanho máximo: 64MB</p>
+                        <p className="text-xs text-zinc-600">Tipos aceitos: PDF, DOC, DOCX, XLS, XLSX, imagens, vídeos, áudios, ZIP</p>
+                      </div>
                     </div>
                   </div>
-                  <Switch 
-                    checked={newProduct.noEmailDelivery}
-                    onCheckedChange={(v) => setNewProduct({...newProduct, noEmailDelivery: v})}
-                  />
-                </div>
-
-                <div className="bg-blue-500/5 border border-blue-500/20 p-4 rounded-xl flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/10 rounded-lg">
-                    <Send className="w-4 h-4 text-blue-500" />
-                  </div>
-                  <p className="text-xs text-blue-400 font-medium">Este link será enviado automaticamente por email após a compra</p>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-zinc-200">URL de entrega por Email</label>
-                  <Input 
-                    className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
-                    placeholder="https://drive.google.com/file/..."
-                    value={newProduct.deliveryUrl}
-                    onChange={e => setNewProduct({...newProduct, deliveryUrl: e.target.value})}
-                  />
-                  <p className="text-[11px] text-zinc-500">Ideal para: Google Drive, Dropbox, OneDrive, área de membros, etc.</p>
-                </div>
-
-                <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl flex items-center gap-3">
-                  <div className="p-2 bg-emerald-500/10 rounded-lg">
-                    <MessageCircle className="w-4 h-4 text-emerald-500" />
-                  </div>
-                  <p className="text-xs text-emerald-400 font-medium">Este link será enviado via WhatsApp. Se vazio, usará o link do email acima.</p>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-zinc-200">URL de entrega por WhatsApp (opcional)</label>
-                  <Input 
-                    className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
-                    placeholder="https://linkwhatsapp.com/... (deixe vazio para usar o link do email)"
-                    value={newProduct.whatsappUrl}
-                    onChange={e => setNewProduct({...newProduct, whatsappUrl: e.target.value})}
-                  />
-                  <p className="text-[11px] text-zinc-500">Útil quando você quer enviar links diferentes por email e WhatsApp</p>
-                </div>
+                )}
               </div>
             )}
 
