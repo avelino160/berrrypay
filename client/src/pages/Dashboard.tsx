@@ -34,7 +34,7 @@ export default function Dashboard() {
   return (
     <Layout title="Dashboard" subtitle="Visão geral das suas vendas">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 sticky top-0 z-30 bg-[#09090b] pt-2 pb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Hoje</CardTitle>
