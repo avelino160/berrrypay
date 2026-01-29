@@ -42,7 +42,7 @@ export default function ForgotPassword() {
           <p className="text-zinc-500 text-sm">Recuperar sua senha</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl border border-white/5 p-6 rounded-xl shadow-2xl">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl border-0 p-6 rounded-xl shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">E-mail</label>

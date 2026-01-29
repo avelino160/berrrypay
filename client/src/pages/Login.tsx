@@ -77,7 +77,7 @@ export default function Login() {
           <p className="text-zinc-500 text-sm">Entre na sua conta de vendas</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl border border-white/5 p-6 rounded-xl shadow-2xl shadow-black/50">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl border-0 p-6 rounded-xl shadow-2xl shadow-black/50">
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">E-mail</label>
@@ -133,17 +133,15 @@ export default function Login() {
 
         </div>
 
-        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl border border-white/5 p-4 rounded-xl flex items-center justify-center gap-3">
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl border-0 p-4 rounded-xl flex items-center justify-center gap-1">
           <p className="text-sm text-zinc-400">Não tem conta?</p>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setLocation("/register")}
-            className="h-9 px-4 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium rounded-lg transition-all duration-300"
-            data-testid="button-criar-agora"
+          <Link 
+            to="/register"
+            className="text-sm text-blue-500 hover:text-blue-400 font-medium transition-colors"
+            data-testid="link-criar-agora"
           >
             Criar agora
-          </Button>
+          </Link>
         </div>
         
         <p className="text-center text-xs text-zinc-600 mt-8">

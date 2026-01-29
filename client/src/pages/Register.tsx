@@ -60,7 +60,7 @@ export default function Register() {
           <p className="text-zinc-500 text-sm">Crie sua conta de vendas</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl border border-white/5 p-6 rounded-xl shadow-2xl">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl border-0 p-6 rounded-xl shadow-2xl">
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">Usuário</label>
