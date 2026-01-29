@@ -95,8 +95,7 @@ export default function Login() {
               <div className="flex justify-between items-center">
                  <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
                  <a 
-                   href="#" 
-                   onClick={handleForgotPassword}
+                   href="/forgot-password"
                    className="text-xs text-blue-500 hover:text-blue-400"
                    data-testid="link-forgot-password"
                  >
