@@ -14,7 +14,7 @@ export function Layout({ children, title, subtitle }: LayoutProps) {
       <Sidebar />
       <div className="flex-1 ml-64 flex flex-col h-screen overflow-hidden relative">
         <Header title={title} subtitle={subtitle} />
-        <main className="flex-1 p-8 overflow-y-auto relative">
+        <main className="flex-1 p-8 overflow-y-auto relative scroll-smooth">
           <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
             {children}
           </div>
