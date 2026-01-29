@@ -74,7 +74,7 @@ export default function Login() {
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
             <span className="text-white">Pay</span>
           </h1>
-          <p className="text-zinc-500 text-sm">Entre na sua conta de vendas</p>
+          <p className="text-zinc-500 text-sm">Entre na sua conta</p>
         </div>
 
         <div className="bg-[#18181b]/80 backdrop-blur-xl p-6 rounded-xl shadow-2xl shadow-black/50 ring-0 border-none outline-none">

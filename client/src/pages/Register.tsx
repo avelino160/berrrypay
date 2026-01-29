@@ -57,15 +57,16 @@ export default function Register() {
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
             <span className="text-white">Pay</span>
           </h1>
-          <p className="text-zinc-500 text-sm">Crie sua conta de vendas</p>
+          <p className="text-zinc-500 text-sm">Crie sua conta</p>
         </div>
 
         <div className="bg-[#18181b]/80 backdrop-blur-xl p-6 rounded-xl shadow-2xl ring-0 border-none outline-none">
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">Usuário</label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">E-mail</label>
               <Input
-                placeholder="Seu nome de usuário"
+                type="email"
+                placeholder="seu@email.com"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="bg-black/40 border-zinc-800 text-white h-11"
