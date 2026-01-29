@@ -50,7 +50,7 @@ export default function Dashboard() {
 
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-400">Vendas Aprovadas</CardTitle>
+            <CardTitle className="text-sm font-medium text-zinc-400">Quantidade de Vendas</CardTitle>
             <CheckCircle className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
