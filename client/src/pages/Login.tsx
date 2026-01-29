@@ -3,12 +3,30 @@ import { useLocation } from "wouter";
 import { Loader2, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+
+  const handleForgotPassword = (e: React.MouseEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Recuperação de Senha",
+      description: "Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.",
+    });
+  };
+
+  const handleCreateAccount = () => {
+    toast({
+      title: "Cadastro Indisponível",
+      description: "O sistema de novos cadastros está temporariamente suspenso.",
+      variant: "destructive",
+    });
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +72,14 @@ export default function Login() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                  <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
-                 <a href="#" className="text-xs text-blue-500 hover:text-blue-400">Esqueceu?</a>
+                 <a 
+                   href="#" 
+                   onClick={handleForgotPassword}
+                   className="text-xs text-blue-500 hover:text-blue-400"
+                   data-testid="link-forgot-password"
+                 >
+                   Esqueceu?
+                 </a>
               </div>
               <Input
                 type="password"
@@ -92,6 +117,7 @@ export default function Login() {
           <Button
             type="button"
             variant="outline"
+            onClick={handleCreateAccount}
             className="h-9 px-4 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium rounded-lg transition-all duration-300"
             data-testid="button-criar-agora"
           >
