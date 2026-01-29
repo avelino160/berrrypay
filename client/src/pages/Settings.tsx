@@ -56,7 +56,7 @@ export default function Settings() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg mb-8">
           <CardHeader className="border-b border-zinc-800/50 pb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 flex items-center justify-center overflow-hidden">
+              <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-zinc-800/50 overflow-hidden p-1.5">
                 <img src={paypalLogo} alt="PayPal" className="w-full h-full object-contain" />
               </div>
               <div>
