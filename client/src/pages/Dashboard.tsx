@@ -95,10 +95,7 @@ export default function Dashboard() {
       {/* Chart Section */}
       <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg">
         <CardHeader className="border-b border-zinc-800/50 pb-4">
-          <div className="flex items-center gap-2">
-             <BarChart3 className="w-4 h-4 text-zinc-500" />
              <CardTitle className="text-base font-bold text-white tracking-tight">Faturamento do Período</CardTitle>
-          </div>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="h-[300px] w-full">
