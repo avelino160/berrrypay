@@ -77,7 +77,7 @@ export default function Login() {
           <p className="text-zinc-500 text-sm">Entre na sua conta de vendas</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl border-0 p-6 rounded-xl shadow-2xl shadow-black/50">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl p-6 rounded-xl shadow-2xl shadow-black/50 ring-0 border-none outline-none">
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">E-mail</label>
@@ -133,7 +133,7 @@ export default function Login() {
 
         </div>
 
-        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl border-0 p-4 rounded-xl flex items-center justify-center gap-1">
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl p-4 rounded-xl flex items-center justify-center gap-1 ring-0 border-none outline-none">
           <p className="text-sm text-zinc-400">Não tem conta?</p>
           <Link 
             to="/register"

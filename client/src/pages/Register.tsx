@@ -60,7 +60,7 @@ export default function Register() {
           <p className="text-zinc-500 text-sm">Crie sua conta de vendas</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl border-0 p-6 rounded-xl shadow-2xl">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl p-6 rounded-xl shadow-2xl ring-0 border-none outline-none">
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">Usuário</label>
@@ -105,10 +105,10 @@ export default function Register() {
           </form>
         </div>
 
-        <div className="mt-4 text-center">
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl p-4 rounded-xl flex items-center justify-center gap-1 shadow-2xl ring-0 border-none outline-none">
           <p className="text-sm text-zinc-400">
             Já tem uma conta?{" "}
-            <Link to="/login" className="text-blue-500 hover:text-blue-400">
+            <Link to="/login" className="text-sm text-blue-500 hover:text-blue-400 font-medium transition-colors">
               Entre agora
             </Link>
           </p>

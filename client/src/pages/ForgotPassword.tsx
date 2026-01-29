@@ -76,10 +76,10 @@ export default function ForgotPassword() {
           </form>
         </div>
 
-        <div className="mt-4 text-center">
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl p-4 rounded-xl flex items-center justify-center gap-1 shadow-2xl ring-0 border-none outline-none">
           <p className="text-sm text-zinc-400">
             Lembrou a senha?{" "}
-            <Link to="/login" className="text-blue-500 hover:text-blue-400">
+            <Link to="/login" className="text-sm text-blue-500 hover:text-blue-400 font-medium transition-colors">
               Voltar ao login
             </Link>
           </p>
