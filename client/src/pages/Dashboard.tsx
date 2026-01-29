@@ -192,6 +192,8 @@ export default function Dashboard() {
                   axisLine={false}
                   tickLine={false}
                   interval={selectedPeriod === "90" ? 5 : (selectedPeriod === "0" || selectedPeriod === "1" ? 3 : 0)}
+                  angle={selectedPeriod === "0" || selectedPeriod === "1" ? 0 : -45}
+                  textAnchor={selectedPeriod === "0" || selectedPeriod === "1" ? "middle" : "end"}
                   height={60}
                   dy={10}
                 />
