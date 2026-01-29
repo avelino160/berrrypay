@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 export default function Dashboard() {
   const { data: stats, isLoading } = useStats();
   const [, setLocation] = useLocation();
-  const [showValues, setShowValues] = useState(true);
+  const [showSales, setShowSales] = useState(true);
+  const [showQty, setShowQty] = useState(true);
 
   // Mock chart data - in a real app this would come from an API
   const chartData = [
@@ -44,10 +45,10 @@ export default function Dashboard() {
               variant="ghost"
               size="icon"
               className="h-8 w-8 text-zinc-500 hover:text-white transition-colors"
-              onClick={() => setShowValues(!showValues)}
-              data-testid="button-toggle-visibility"
+              onClick={() => setShowSales(!showSales)}
+              data-testid="button-toggle-sales-visibility"
             >
-              {showValues ? (
+              {showSales ? (
                 <Eye className="h-4 w-4" />
               ) : (
                 <EyeOff className="h-4 w-4" />
@@ -56,7 +57,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white mb-1">
-              {showValues 
+              {showSales 
                 ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)
                 : "••••••"
               }
@@ -68,11 +69,23 @@ export default function Dashboard() {
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Quantidade de Vendas</CardTitle>
-            <CheckCircle className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-zinc-500 hover:text-white transition-colors"
+              onClick={() => setShowQty(!showQty)}
+              data-testid="button-toggle-qty-visibility"
+            >
+              {showQty ? (
+                <Eye className="h-4 w-4" />
+              ) : (
+                <EyeOff className="h-4 w-4" />
+              )}
+            </Button>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white mb-1">
-              {showValues ? (stats?.salesApproved || 0) : "••••"}
+              {showQty ? (stats?.salesApproved || 0) : "••••"}
             </div>
             <p className="text-xs text-zinc-500">Transações aprovadas (pago)</p>
           </CardContent>
