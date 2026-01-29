@@ -26,6 +26,15 @@ export default function CreateProduct() {
   });
 
   const handleCreate = async () => {
+    if (!newProduct.name || !newProduct.price) {
+      toast({ 
+        title: "Campos obrigatórios", 
+        description: "Por favor, preencha o nome e o preço do produto.", 
+        variant: "destructive" 
+      });
+      setStep(1);
+      return;
+    }
     try {
       await createProduct.mutateAsync({
         name: newProduct.name,
@@ -38,6 +47,31 @@ export default function CreateProduct() {
     } catch (error: any) {
       toast({ title: "Erro", description: error.message, variant: "destructive" });
     }
+  };
+
+  const isStepValid = () => {
+    if (step === 1) {
+      return newProduct.name.trim() !== "" && newProduct.price.trim() !== "";
+    }
+    if (step === 2) {
+      // If "noEmailDelivery" is NOT checked, we require a delivery URL
+      if (!newProduct.noEmailDelivery) {
+        return newProduct.deliveryUrl.trim() !== "";
+      }
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (!isStepValid()) {
+      toast({
+        title: "Atenção",
+        description: "Preencha as informações obrigatórias para continuar.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setStep(step + 1);
   };
 
   const steps = [
@@ -294,30 +328,30 @@ export default function CreateProduct() {
               </div>
             )}
 
-            <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
-              {step > 1 && (
-                <Button 
-                  variant="ghost" 
-                  className="flex-1 h-12 text-zinc-400 hover:text-white"
-                  onClick={() => setStep(step - 1)}
-                >
-                  Voltar
-                </Button>
-              )}
-              <Button 
-                className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold" 
-                onClick={() => step === 3 ? handleCreate() : setStep(step + 1)}
-                disabled={createProduct.isPending}
-              >
-                {createProduct.isPending ? (
-                  <Loader2 className="animate-spin w-4 h-4" />
-                ) : step === 3 ? (
-                  "Finalizar e Criar Produto"
-                ) : (
-                  "Próximo passo"
+              <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
+                {step > 1 && (
+                  <Button 
+                    variant="ghost" 
+                    className="flex-1 h-12 text-zinc-400 hover:text-white"
+                    onClick={() => setStep(step - 1)}
+                  >
+                    Voltar
+                  </Button>
                 )}
-              </Button>
-            </div>
+                <Button 
+                  className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold" 
+                  onClick={() => step === 3 ? handleCreate() : handleNext()}
+                  disabled={createProduct.isPending}
+                >
+                  {createProduct.isPending ? (
+                    <Loader2 className="animate-spin w-4 h-4" />
+                  ) : step === 3 ? (
+                    "Finalizar e Criar Produto"
+                  ) : (
+                    "Próximo passo"
+                  )}
+                </Button>
+              </div>
           </div>
         </div>
       </div>
