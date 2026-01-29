@@ -18,51 +18,10 @@ export default function Dashboard() {
   const [showQty, setShowQty] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState("all");
 
-  // Mock data generation based on filters
+  // Use real data from backend
   const chartData = useMemo(() => {
-    let days = 30;
-    if (selectedPeriod === "7") days = 7;
-    else if (selectedPeriod === "90") days = 90;
-    else if (selectedPeriod === "0") days = 0; // Hoje
-    else if (selectedPeriod === "1") days = 1; // Ontem
-    else days = parseInt(selectedPeriod) || 30;
-
-    const data = [];
-    const now = new Date();
-    
-    // Varying data based on product and period
-    const baseValue = selectedProduct === "all" ? 100 : (parseInt(selectedProduct) * 50) % 200;
-    
-    if (selectedPeriod === "0") {
-      // For Today, show hourly data
-      for (let i = 0; i < 24; i++) {
-        const name = `${i.toString().padStart(2, '0')}:00`;
-        const sales = Math.floor(baseValue * (Math.sin(i / 4) + 1.5));
-        data.push({ name, sales });
-      }
-      data.push({ name: "23:59", sales: Math.floor(baseValue * (Math.sin(23.9 / 4) + 1.5)) });
-    } else if (selectedPeriod === "1") {
-      // For Yesterday, show hourly data
-      for (let i = 0; i < 24; i++) {
-        const name = `${i.toString().padStart(2, '0')}:00`;
-        const sales = Math.floor(baseValue * (Math.cos(i / 4) + 1.5));
-        data.push({ name, sales });
-      }
-      data.push({ name: "23:59", sales: Math.floor(baseValue * (Math.cos(23.9 / 4) + 1.5)) });
-    } else {
-      for (let i = days; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(now.getDate() - i);
-        const name = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-        
-        const dayFactor = (i % 7) + 1;
-        const sales = Math.floor(baseValue * dayFactor * (selectedPeriod === "7" ? 1.5 : 1));
-        
-        data.push({ name, sales });
-      }
-    }
-    return data;
-  }, [selectedProduct, selectedPeriod]);
+    return stats?.chartData || [];
+  }, [stats]);
 
   if (statsLoading || productsLoading) {
     return (

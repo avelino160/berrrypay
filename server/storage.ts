@@ -154,12 +154,67 @@ export class DatabaseStorage implements IStorage {
       lt(sales.createdAt, new Date(endDate.getTime() + 1))
     ));
 
+    // Get chart data
+    let chartData: { name: string; sales: number }[] = [];
+    
+    if (period === "0" || period === "1") {
+      // Hourly breakdown
+      const hourlyResults = await db.select({
+        hour: sql<number>`EXTRACT(HOUR FROM ${sales.createdAt})`,
+        total: sql<number>`sum(${sales.amount})`
+      })
+      .from(sales)
+      .where(and(
+        eq(sales.status, 'paid'),
+        gte(sales.createdAt, startDate),
+        lt(sales.createdAt, new Date(endDate.getTime() + 1))
+      ))
+      .groupBy(sql`EXTRACT(HOUR FROM ${sales.createdAt})`);
+
+      for (let i = 0; i < 24; i++) {
+        const found = hourlyResults.find(h => Number(h.hour) === i);
+        chartData.push({
+          name: `${i.toString().padStart(2, '0')}:00`,
+          sales: Number(found?.total || 0) / 100 // Convert cents to real
+        });
+      }
+      // Add 23:59
+      const lastHour = hourlyResults.find(h => Number(h.hour) === 23);
+      chartData.push({ name: "23:59", sales: Number(lastHour?.total || 0) / 100 });
+    } else {
+      // Daily breakdown
+      const dailyResults = await db.select({
+        day: sql<string>`TO_CHAR(${sales.createdAt}, 'DD/MM')`,
+        total: sql<number>`sum(${sales.amount})`
+      })
+      .from(sales)
+      .where(and(
+        eq(sales.status, 'paid'),
+        gte(sales.createdAt, startDate),
+        lt(sales.createdAt, new Date(endDate.getTime() + 1))
+      ))
+      .groupBy(sql`TO_CHAR(${sales.createdAt}, 'DD/MM')`);
+
+      const days = period === "7" ? 7 : (period === "90" ? 90 : 30);
+      for (let i = days; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(new Date().getDate() - i);
+        const dayStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+        const found = dailyResults.find(r => r.day === dayStr);
+        chartData.push({
+          name: dayStr,
+          sales: Number(found?.total || 0) / 100
+        });
+      }
+    }
+
     return {
-      salesToday: Number(periodSalesResult?.total || 0),
-      revenuePaid: Number(periodSalesResult?.total || 0),
+      salesToday: Number(periodSalesResult?.total || 0) / 100,
+      revenuePaid: Number(periodSalesResult?.total || 0) / 100,
       salesApproved: Number(periodSalesResult?.count || 0),
-      revenueTarget: 1000000,
-      revenueCurrent: Number(periodSalesResult?.total || 0),
+      revenueTarget: 10000, // 10k in real
+      revenueCurrent: Number(periodSalesResult?.total || 0) / 100,
+      chartData
     };
   }
 }

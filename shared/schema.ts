@@ -85,4 +85,5 @@ export type DashboardStats = {
   salesApproved: number;
   revenueTarget: number; // For the progress bar
   revenueCurrent: number;
+  chartData: { name: string; sales: number }[];
 };

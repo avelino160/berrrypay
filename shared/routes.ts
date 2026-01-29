@@ -113,6 +113,10 @@ export const api = {
           salesApproved: z.number(),
           revenueTarget: z.number(),
           revenueCurrent: z.number(),
+          chartData: z.array(z.object({
+            name: z.string(),
+            sales: z.number(),
+          })),
         }),
       },
     },
