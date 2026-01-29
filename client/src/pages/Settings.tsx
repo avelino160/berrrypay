@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Save, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+import { SiPaypal } from "react-icons/si";
+
 export default function Settings() {
   const { data: settings, isLoading: isLoadingSettings } = useSettings();
   const updateSettings = useUpdateSettings();
@@ -55,10 +57,10 @@ export default function Settings() {
           <CardHeader className="border-b border-zinc-800/50 pb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-[#003087]/10 flex items-center justify-center border border-[#003087]/20">
-                <CreditCard className="w-5 h-5 text-[#003087]" />
+                <SiPaypal className="w-5 h-5 text-[#003087]" />
               </div>
               <div>
-                <CardTitle className="text-lg text-white">Integração PayPal</CardTitle>
+                <CardTitle className="text-lg text-white">PayPal</CardTitle>
                 <CardDescription className="text-zinc-500">
                   Configure suas credenciais de API do PayPal para processar pagamentos.
                 </CardDescription>
