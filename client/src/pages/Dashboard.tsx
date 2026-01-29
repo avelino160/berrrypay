@@ -59,7 +59,7 @@ export default function Dashboard() {
           <CardContent className="pb-4">
             <div className="text-xl font-bold text-white mb-0.5">
               {showSales 
-                ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)
+                ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats?.salesToday || 0)
                 : "••••••"
               }
             </div>
@@ -126,7 +126,7 @@ export default function Dashboard() {
                   tick={{fill: '#71717a', fontSize: 12}} 
                   axisLine={false}
                   tickLine={false}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `R$${value}`}
                   dx={-10}
                 />
                 <Tooltip 
