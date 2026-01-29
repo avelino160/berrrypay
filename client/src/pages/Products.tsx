@@ -84,7 +84,7 @@ export default function Products() {
                   <div>
                     <p className="text-xs text-zinc-500">Preço</p>
                     <p className="text-lg font-bold text-white">
-                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
+                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
                     </p>
                   </div>
                   <div className="flex gap-2">
