@@ -242,11 +242,6 @@ export default function CreateProduct() {
                       }}
                       placeholder="Ex: 19.90"
                     />
-                    {newProduct.price && (
-                      <p className="text-[11px] text-emerald-500 ml-1">
-                        Aprox. {(Number(newProduct.price) * 5.5).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (Câmbio: R$ 5,50)
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
