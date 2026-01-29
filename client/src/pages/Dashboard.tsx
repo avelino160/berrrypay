@@ -207,6 +207,8 @@ export default function Dashboard() {
                   contentStyle={{ backgroundColor: '#18181b', borderColor: '#3f3f46', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
                   itemStyle={{ color: '#a855f7', fontWeight: 'bold' }}
                   cursor={{ stroke: '#a855f7', strokeWidth: 1 }}
+                  labelStyle={{ display: 'none' }}
+                  formatter={(value) => [`R$ ${value}`, ""]}
                 />
                 <Area 
                   type="monotone" 
