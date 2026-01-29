@@ -13,15 +13,7 @@ export default function Products() {
 
   return (
     <Layout title="Produtos" subtitle="Gerencie seus produtos">
-      <div className="flex justify-between items-center mb-6">
-        <div className="relative w-64">
-           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-           <Input 
-             className="pl-9 bg-zinc-900 border-zinc-800 text-sm h-9 focus-visible:ring-purple-500" 
-             placeholder="Buscar produtos..." 
-           />
-        </div>
-
+      <div className="flex justify-end items-center mb-6">
         <Button 
           className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 border-0 outline-none ring-0 focus-visible:ring-0"
           onClick={() => setLocation("/products/new")}
