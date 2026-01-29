@@ -41,32 +41,32 @@ export function Sidebar() {
       {/* Navigation and Widgets Area - No internal scroll, fixed within flex */}
       <div className="flex-1">
         {/* Revenue Widget */}
-        <div className="px-4 py-4">
-          <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50 relative overflow-hidden group">
+        <div className="px-4 py-3">
+          <div className="bg-zinc-900/50 rounded-lg p-3 border border-zinc-800/50 relative overflow-hidden group">
              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-             <div className="relative flex items-center gap-4">
-                <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-purple-500/10 rounded-lg shadow-lg border border-purple-500/20">
-                   <Trophy className="text-purple-500 w-5 h-5" />
+             <div className="relative flex items-center gap-3">
+                <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-purple-500/10 rounded-lg shadow-lg border border-purple-500/20">
+                   <Trophy className="text-purple-500 w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-xs font-bold text-zinc-400 block mb-1 uppercase tracking-wider">Faturamento</span>
+                  <span className="text-[10px] font-bold text-zinc-400 block mb-0.5 uppercase tracking-wider">Faturamento</span>
                   <div className="flex items-baseline gap-1 flex-wrap">
-                    <span className="text-lg font-bold text-white whitespace-nowrap">
+                    <span className="text-base font-bold text-white whitespace-nowrap">
                       {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(currentRevenue)}
                     </span>
-                    <span className="text-xs font-bold text-zinc-500">/ R$ {currentGoal.label}</span>
+                    <span className="text-[10px] font-bold text-zinc-500">/ R$ {currentGoal.label}</span>
                   </div>
                 </div>
              </div>
              
-             <div className="mt-4 flex items-center gap-3">
-                <div className="flex-1 bg-zinc-800/50 rounded-full h-2 overflow-hidden border border-white/5">
+             <div className="mt-3 flex items-center gap-2">
+                <div className="flex-1 bg-zinc-800/50 rounded-full h-1.5 overflow-hidden border border-white/5">
                   <div 
                     className="bg-gradient-to-r from-purple-600 to-purple-400 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(168,85,247,0.4)]" 
                     style={{ width: `${progress}%` }} 
                   />
                 </div>
-                <span className="text-xs font-medium text-white tabular-nums">{Math.floor(progress)}%</span>
+                <span className="text-[10px] font-medium text-white tabular-nums">{Math.floor(progress)}%</span>
              </div>
           </div>
         </div>
