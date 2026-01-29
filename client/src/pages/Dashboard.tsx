@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStats } from "@/hooks/use-stats";
-import { Loader2, TrendingUp, DollarSign, CheckCircle, BarChart3 } from "lucide-react";
+import { Loader2, TrendingUp, CheckCircle, BarChart3 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useLocation } from "wouter";
 import { useMemo } from "react";
@@ -34,7 +34,7 @@ export default function Dashboard() {
   return (
     <Layout title="Dashboard" subtitle="Visão geral das suas vendas">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-zinc-400">Vendas Hoje</CardTitle>
@@ -45,19 +45,6 @@ export default function Dashboard() {
               {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)}
             </div>
             <p className="text-xs text-zinc-500">0 venda(s) hoje</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-zinc-400">Faturamento (Pago)</CardTitle>
-            <DollarSign className="h-4 w-4 text-zinc-500 group-hover:scale-110 transition-transform" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-white mb-1">
-              {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.revenuePaid || 0)}
-            </div>
-            <p className="text-xs text-zinc-500">0 venda(s) confirmadas</p>
           </CardContent>
         </Card>
 
