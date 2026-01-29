@@ -1,15 +1,28 @@
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
-import { useProducts } from "@/hooks/use-products";
+import { useProducts, useDeleteProduct } from "@/hooks/use-products";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus, PackageOpen, Search } from "lucide-react";
+import { Loader2, Plus, PackageOpen, Search, Pencil, Trash2 } from "lucide-react";
 import { useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Products() {
   const { data: products, isLoading } = useProducts();
+  const deleteProduct = useDeleteProduct();
+  const { toast } = useToast();
   const [, setLocation] = useLocation();
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Tem certeza que deseja excluir este produto?")) return;
+    try {
+      await deleteProduct.mutateAsync(id);
+      toast({ title: "Sucesso", description: "Produto excluído com sucesso!" });
+    } catch (error: any) {
+      toast({ title: "Erro", description: error.message, variant: "destructive" });
+    }
+  };
 
   return (
     <Layout title="Produtos" subtitle="Gerencie seus produtos">
@@ -47,7 +60,7 @@ export default function Products() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((product) => (
             <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden">
-              <div className="aspect-video w-full bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
+              <div className="aspect-square w-full bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
                 {product.imageUrl ? (
                   <img src={product.imageUrl} alt={product.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                 ) : (
@@ -70,17 +83,30 @@ export default function Products() {
                       {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
                     </p>
                   </div>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 h-8"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setLocation(`/products/edit/${product.id}`);
-                    }}
-                  >
-                    Editar
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLocation(`/products/edit/${product.id}`);
+                      }}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(product.id);
+                      }}
+                    >
+                      {deleteProduct.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Card>
