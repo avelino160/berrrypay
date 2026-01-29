@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
-import { useProducts, useCreateProduct } from "@/hooks/use-products";
+import { useCreateProduct } from "@/hooks/use-products";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, Plus, PackageOpen, Search, Check, Send, Image as ImageIcon, Globe, FileText, Layout as LayoutIcon, MessageCircle } from "lucide-react";
+import { Loader2, Plus, PackageOpen, Check, Send, Image as ImageIcon, Globe, FileText, Layout as LayoutIcon, MessageCircle, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useLocation } from "wouter";
 
 export default function CreateProduct() {
   const [, setLocation] = useLocation();
@@ -322,63 +321,6 @@ export default function CreateProduct() {
           </div>
         </div>
       </div>
-    </Layout>
-  );
-}
-
-      {isLoading ? (
-        <div className="flex justify-center p-12">
-          <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
-        </div>
-      ) : products?.length === 0 ? (
-        <Card className="bg-[#18181b] border-zinc-800/60 flex flex-col items-center justify-center py-16 text-center">
-          <div className="bg-zinc-900 p-4 rounded-full mb-4">
-            <PackageOpen className="w-8 h-8 text-zinc-500" />
-          </div>
-          <h3 className="text-lg font-medium text-white mb-1">Nenhum produto encontrado</h3>
-          <p className="text-sm text-zinc-500 max-w-sm mx-auto mb-6">
-            Você ainda não criou nenhum produto. Comece criando seu primeiro produto digital.
-          </p>
-          <Button 
-            className="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700"
-            onClick={() => setIsOpen(true)}
-          >
-            Criar meu primeiro produto
-          </Button>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products?.map((product) => (
-            <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group">
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 flex items-center justify-center">
-                    <PackageOpen className="w-5 h-5 text-purple-500" />
-                  </div>
-                  <span className={`text-[10px] px-2 py-1 rounded-full border ${product.active ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-zinc-800 text-zinc-500 border-zinc-700'}`}>
-                    {product.active ? 'Ativo' : 'Inativo'}
-                  </span>
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
-                <p className="text-sm text-zinc-500 line-clamp-2 mb-4 h-10">
-                  {product.description || "Sem descrição definida."}
-                </p>
-                <div className="flex items-end justify-between border-t border-zinc-800/50 pt-4 mt-2">
-                  <div>
-                    <p className="text-xs text-zinc-500">Preço</p>
-                    <p className="text-lg font-bold text-white">
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
-                    </p>
-                  </div>
-                  <Button size="sm" variant="ghost" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 h-8">
-                    Editar
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
     </Layout>
   );
 }
