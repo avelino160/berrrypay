@@ -6,6 +6,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useLocation } from "wouter";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Dashboard() {
   const { data: stats, isLoading } = useStats();
@@ -36,6 +37,37 @@ export default function Dashboard() {
 
   return (
     <Layout title="Dashboard" subtitle="Visão geral das suas vendas">
+      {/* Filters Section */}
+      <div className="flex flex-col sm:flex-row items-end justify-end gap-3 mb-6">
+        <div className="w-full sm:w-48">
+          <Select defaultValue="all">
+            <SelectTrigger className="bg-[#18181b] border-zinc-800 text-zinc-400 h-10">
+              <SelectValue placeholder="Produtos" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#18181b] border-zinc-800 text-white">
+              <SelectItem value="all">Todos os produtos</SelectItem>
+              {stats?.revenueCurrent && <SelectItem value="p1">Produto Principal</SelectItem>}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="w-full sm:w-48">
+          <div className="relative">
+            <span className="absolute -top-2.5 left-3 px-1 bg-[#09090b] text-[10px] text-zinc-500 z-10">Período</span>
+            <Select defaultValue="30">
+              <SelectTrigger className="bg-[#18181b] border-zinc-800 text-white h-10">
+                <SelectValue placeholder="Últimos 30 dias" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#18181b] border-zinc-800 text-white">
+                <SelectItem value="7">Últimos 7 dias</SelectItem>
+                <SelectItem value="30">Últimos 30 dias</SelectItem>
+                <SelectItem value="90">Últimos 90 dias</SelectItem>
+                <SelectItem value="year">Este ano</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group relative overflow-hidden">
