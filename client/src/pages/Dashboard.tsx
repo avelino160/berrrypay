@@ -33,16 +33,6 @@ export default function Dashboard() {
 
   return (
     <Layout title="Dashboard" subtitle="Visão geral das suas vendas">
-      <div className="flex items-center justify-end mb-6">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#18181b] border border-zinc-800 rounded-lg">
-          <BarChart3 className="w-4 h-4 text-zinc-500" />
-          <span className="text-sm text-white font-medium">01/01/2026</span>
-          <span className="text-xs text-zinc-500 px-1 italic">até</span>
-          <BarChart3 className="w-4 h-4 text-zinc-500" />
-          <span className="text-sm text-white font-medium">29/01/2026</span>
-        </div>
-      </div>
-
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-zinc-700 transition-all duration-300 group">
