@@ -20,7 +20,13 @@ export default function Dashboard() {
 
   // Mock data generation based on filters
   const chartData = useMemo(() => {
-    const days = parseInt(selectedPeriod) || 30;
+    let days = 30;
+    if (selectedPeriod === "7") days = 7;
+    else if (selectedPeriod === "90") days = 90;
+    else if (selectedPeriod === "0") days = 0; // Hoje
+    else if (selectedPeriod === "1") days = 1; // Ontem (2 dias: ontem e hoje)
+    else days = parseInt(selectedPeriod) || 30;
+
     const data = [];
     const now = new Date();
     
@@ -78,9 +84,11 @@ export default function Dashboard() {
             <span className="absolute -top-2.5 left-3 px-1 bg-[#09090b] text-[10px] text-zinc-500 z-10 font-medium uppercase tracking-wider">Período</span>
             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
               <SelectTrigger className="bg-[#18181b] border-zinc-800 text-white h-10">
-                <SelectValue placeholder="Últimos 30 dias" />
+                <SelectValue placeholder="Período" />
               </SelectTrigger>
               <SelectContent className="bg-[#18181b] border-zinc-800 text-white">
+                <SelectItem value="0">Hoje</SelectItem>
+                <SelectItem value="1">Ontem</SelectItem>
                 <SelectItem value="7">Últimos 7 dias</SelectItem>
                 <SelectItem value="30">Últimos 30 dias</SelectItem>
                 <SelectItem value="90">Últimos 90 dias</SelectItem>
