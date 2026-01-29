@@ -1,33 +1,47 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStats } from "@/hooks/use-stats";
-import { Loader2, TrendingUp, CheckCircle, BarChart3, Eye, EyeOff } from "lucide-react";
+import { Loader2, TrendingUp, CheckCircle, BarChart3, Eye, EyeOff, PackageX } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useLocation } from "wouter";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useProducts } from "@/hooks/use-products";
 
 export default function Dashboard() {
-  const { data: stats, isLoading } = useStats();
+  const { data: stats, isLoading: statsLoading } = useStats();
+  const { data: products, isLoading: productsLoading } = useProducts();
   const [, setLocation] = useLocation();
   const [showSales, setShowSales] = useState(true);
   const [showQty, setShowQty] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState("all");
+  const [selectedPeriod, setSelectedPeriod] = useState("30");
 
-  // Mock chart data - in a real app this would come from an API
-  const chartData = [
-    { name: '01/01', sales: 0 },
-    { name: '05/01', sales: 0 },
-    { name: '10/01', sales: 0 },
-    { name: '15/01', sales: 0 },
-    { name: '20/01', sales: 0 },
-    { name: '25/01', sales: 0 },
-    { name: '29/01', sales: 0 },
-  ];
+  // Mock data generation based on filters
+  const chartData = useMemo(() => {
+    const days = parseInt(selectedPeriod) || 30;
+    const data = [];
+    const now = new Date();
+    
+    // Varying data based on product and period
+    const baseValue = selectedProduct === "all" ? 100 : (parseInt(selectedProduct) * 50) % 200;
+    
+    for (let i = days; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(now.getDate() - i);
+      const name = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+      
+      // Pseudo-random but deterministic sales based on product and day
+      const dayFactor = (i % 7) + 1;
+      const sales = Math.floor(baseValue * dayFactor * (selectedPeriod === "7" ? 1.5 : 1));
+      
+      data.push({ name, sales });
+    }
+    return data;
+  }, [selectedProduct, selectedPeriod]);
 
-  const dateRangeLabel = "01/01 - 29/01";
-
-  if (isLoading) {
+  if (statsLoading || productsLoading) {
     return (
       <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
@@ -40,20 +54,29 @@ export default function Dashboard() {
       {/* Filters Section */}
       <div className="flex flex-col sm:flex-row items-end justify-end gap-3 mb-6">
         <div className="w-full sm:w-48">
-          <Select defaultValue="all">
+          <Select value={selectedProduct} onValueChange={setSelectedProduct}>
             <SelectTrigger className="bg-[#18181b] border-zinc-800 text-zinc-400 h-10">
               <SelectValue placeholder="Produtos" />
             </SelectTrigger>
             <SelectContent className="bg-[#18181b] border-zinc-800 text-white">
               <SelectItem value="all">Todos os produtos</SelectItem>
-              {stats?.revenueCurrent && <SelectItem value="p1">Produto Principal</SelectItem>}
+              {products && products.length > 0 ? (
+                products.map(p => (
+                  <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center py-6 px-2 text-center">
+                  <PackageX className="w-8 h-8 text-zinc-600 mb-2" />
+                  <p className="text-xs text-zinc-500 font-medium">Nenhum registro encontrado</p>
+                </div>
+              )}
             </SelectContent>
           </Select>
         </div>
         <div className="w-full sm:w-48">
           <div className="relative">
-            <span className="absolute -top-2.5 left-3 px-1 bg-[#09090b] text-[10px] text-zinc-500 z-10">Período</span>
-            <Select defaultValue="30">
+            <span className="absolute -top-2.5 left-3 px-1 bg-[#09090b] text-[10px] text-zinc-500 z-10 font-medium uppercase tracking-wider">Período</span>
+            <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
               <SelectTrigger className="bg-[#18181b] border-zinc-800 text-white h-10">
                 <SelectValue placeholder="Últimos 30 dias" />
               </SelectTrigger>
@@ -61,7 +84,6 @@ export default function Dashboard() {
                 <SelectItem value="7">Últimos 7 dias</SelectItem>
                 <SelectItem value="30">Últimos 30 dias</SelectItem>
                 <SelectItem value="90">Últimos 90 dias</SelectItem>
-                <SelectItem value="year">Este ano</SelectItem>
               </SelectContent>
             </Select>
           </div>
