@@ -1,6 +1,7 @@
 import { db } from "./db";
 import {
-  products, checkouts, settings, sales,
+  users, products, checkouts, settings, sales,
+  type User, type InsertUser,
   type Product, type InsertProduct, type UpdateProductRequest,
   type Checkout, type InsertCheckout, type UpdateCheckoutRequest,
   type Settings, type InsertSettings, type UpdateSettingsRequest,
@@ -9,6 +10,11 @@ import {
 import { eq, sql, and, gte, lt } from "drizzle-orm";
 
 export interface IStorage {
+  // Users
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+
   // Products
   getProducts(): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
@@ -30,6 +36,22 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  // Users
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const [newUser] = await db.insert(users).values(user).returning();
+    return newUser;
+  }
+
   // Products
   async getProducts(): Promise<Product[]> {
     return await db.select().from(products).orderBy(products.createdAt);

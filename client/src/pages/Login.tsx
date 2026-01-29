@@ -28,14 +28,36 @@ export default function Login() {
     });
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Mock login delay
-    setTimeout(() => {
-      setIsLoading(false);
+    
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Erro no login");
+      }
+
+      toast({
+        title: "Sucesso",
+        description: "Login realizado com sucesso!",
+      });
       setLocation("/dashboard");
-    }, 1500);
+    } catch (err: any) {
+      toast({
+        title: "Erro",
+        description: err.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -117,7 +139,7 @@ export default function Login() {
           <Button
             type="button"
             variant="outline"
-            onClick={handleCreateAccount}
+            onClick={() => setLocation("/register")}
             className="h-9 px-4 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium rounded-lg transition-all duration-300"
             data-testid="button-criar-agora"
           >
