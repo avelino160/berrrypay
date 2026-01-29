@@ -13,12 +13,12 @@ export default function Dashboard() {
   // Mock chart data - in a real app this would come from an API
   const chartData = [
     { name: '01/01', sales: 0 },
-    { name: '05/01', sales: 450 },
-    { name: '10/01', sales: 1200 },
-    { name: '15/01', sales: 850 },
-    { name: '20/01', sales: 2400 },
-    { name: '25/01', sales: 1800 },
-    { name: '29/01', sales: 3200 },
+    { name: '05/01', sales: 0 },
+    { name: '10/01', sales: 0 },
+    { name: '15/01', sales: 0 },
+    { name: '20/01', sales: 0 },
+    { name: '25/01', sales: 0 },
+    { name: '29/01', sales: 0 },
   ];
 
   if (isLoading) {
