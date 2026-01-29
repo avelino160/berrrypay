@@ -30,8 +30,8 @@ export default function Login() {
 
       <div className="w-full max-w-md p-8 relative z-10 animate-in fade-in zoom-in-95 duration-500">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">
-            <span className="text-blue-500">Cold</span>
+          <h1 className="text-5xl font-extrabold tracking-tight mb-2">
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
             <span className="text-white">Pay</span>
           </h1>
           <p className="text-zinc-500 text-sm">Entre na sua conta de vendas</p>
@@ -69,7 +69,7 @@ export default function Login() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 transition-all duration-300"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 transition-all duration-300 border-0"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
@@ -85,9 +85,9 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="mt-8 text-center border-t border-zinc-800/50 pt-6">
+          <div className="mt-4 text-center">
             <p className="text-sm text-zinc-500">
-              Não tem uma conta?{" "}
+              Não tem conta?{" "}
               <a href="#" className="text-blue-500 hover:text-blue-400 font-medium transition-colors">
                 Criar agora
               </a>
