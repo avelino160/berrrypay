@@ -52,10 +52,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                 <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
-                 <a href="#" className="text-xs text-blue-500 hover:text-blue-400">Esqueceu?</a>
-              </div>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
               <Input
                 type="password"
                 placeholder="••••••••"
@@ -64,6 +61,9 @@ export default function Login() {
                 className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-blue-500/20 focus:border-blue-500 h-11"
                 required
               />
+              <div className="flex justify-start">
+                <a href="#" className="text-xs text-blue-500 hover:text-blue-400 ml-1">Esqueceu a senha?</a>
+              </div>
             </div>
 
             <Button
@@ -87,12 +87,12 @@ export default function Login() {
 
         </div>
 
-        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl border border-white/5 p-4 rounded-xl flex items-center justify-center gap-3">
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl border border-white/5 p-4 rounded-xl flex flex-col items-center justify-center gap-3">
           <p className="text-sm text-zinc-400">Não tem conta?</p>
           <Button
             type="button"
             variant="outline"
-            className="h-9 px-4 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium rounded-lg transition-all duration-300"
+            className="w-full h-10 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 font-medium rounded-lg transition-all duration-300"
             data-testid="button-criar-agora"
           >
             Criar agora
