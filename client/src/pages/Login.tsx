@@ -28,7 +28,7 @@ export default function Login() {
         <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="w-full max-w-md p-8 relative z-10 animate-in fade-in zoom-in-95 duration-500">
+      <div className="w-full max-w-sm p-6 relative z-10 animate-in fade-in zoom-in-95 duration-500">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-extrabold tracking-tight mb-2">
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">Cold</span>
@@ -37,8 +37,8 @@ export default function Login() {
           <p className="text-zinc-500 text-sm">Entre na sua conta de vendas</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl border border-white/5 p-8 rounded-2xl shadow-2xl shadow-black/50">
-          <form onSubmit={handleLogin} className="space-y-6">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl border border-white/5 p-6 rounded-xl shadow-2xl shadow-black/50">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">E-mail</label>
               <Input
