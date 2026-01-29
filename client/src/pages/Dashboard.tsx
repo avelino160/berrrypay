@@ -1,57 +1,27 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useStats } from "@/hooks/use-stats";
-import { Loader2, TrendingUp, DollarSign, CheckCircle, BarChart3, Plus, Package, ShoppingCart, Calendar as CalendarIcon } from "lucide-react";
+import { Loader2, TrendingUp, DollarSign, CheckCircle, BarChart3 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useLocation } from "wouter";
-import { useState, useMemo } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format, subDays, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
+import { useMemo } from "react";
 
 export default function Dashboard() {
   const { data: stats, isLoading } = useStats();
   const [, setLocation] = useLocation();
-  const [dateRange, setDateRange] = useState("30d");
 
   // Mock chart data - in a real app this would come from an API
-  const allChartData = [
-    { name: '01/01', date: new Date(2026, 0, 1), sales: 0 },
-    { name: '05/01', date: new Date(2026, 0, 5), sales: 0 },
-    { name: '10/01', date: new Date(2026, 0, 10), sales: 0 },
-    { name: '15/01', date: new Date(2026, 0, 15), sales: 0 },
-    { name: '20/01', date: new Date(2026, 0, 20), sales: 0 },
-    { name: '25/01', date: new Date(2026, 0, 25), sales: 0 },
-    { name: '29/01', date: new Date(2026, 0, 29), sales: 0 },
+  const chartData = [
+    { name: '01/01', sales: 0 },
+    { name: '05/01', sales: 0 },
+    { name: '10/01', sales: 0 },
+    { name: '15/01', sales: 0 },
+    { name: '20/01', sales: 0 },
+    { name: '25/01', sales: 0 },
+    { name: '29/01', sales: 0 },
   ];
 
-  const filteredData = useMemo(() => {
-    const now = new Date(2026, 0, 29); // Consistent with the mock data end date
-    let start: Date;
-
-    switch (dateRange) {
-      case "7d":
-        start = subDays(now, 7);
-        break;
-      case "15d":
-        start = subDays(now, 15);
-        break;
-      case "this-month":
-        start = startOfMonth(now);
-        break;
-      case "30d":
-      default:
-        start = subDays(now, 30);
-        break;
-    }
-
-    return allChartData.filter(d => d.date >= start);
-  }, [dateRange]);
-
-  const dateRangeLabel = useMemo(() => {
-    if (filteredData.length === 0) return "";
-    return `${filteredData[0].name} - ${filteredData[filteredData.length - 1].name}`;
-  }, [filteredData]);
+  const dateRangeLabel = "01/01 - 29/01";
 
   if (isLoading) {
     return (
@@ -106,33 +76,16 @@ export default function Dashboard() {
       {/* Chart Section */}
       <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg">
         <CardHeader className="border-b border-zinc-800/50 pb-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <div className="flex items-center gap-2">
-                 <BarChart3 className="w-4 h-4 text-zinc-500" />
-                 <CardTitle className="text-base font-semibold text-white">Faturamento do Período</CardTitle>
-              </div>
-              <p className="text-xs text-zinc-500" data-testid="text-date-range">{dateRangeLabel}</p>
-            </div>
-            
-            <Select value={dateRange} onValueChange={setDateRange}>
-              <SelectTrigger className="w-[180px] bg-zinc-900 border-zinc-800 text-zinc-300" data-testid="select-date-range">
-                <CalendarIcon className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Selecione o período" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
-                <SelectItem value="7d">Últimos 7 dias</SelectItem>
-                <SelectItem value="15d">Últimos 15 dias</SelectItem>
-                <SelectItem value="30d">Últimos 30 dias</SelectItem>
-                <SelectItem value="this-month">Este mês</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex items-center gap-2">
+             <BarChart3 className="w-4 h-4 text-zinc-500" />
+             <CardTitle className="text-base font-semibold text-white">Faturamento do Período</CardTitle>
           </div>
+          <p className="text-xs text-zinc-500" data-testid="text-date-range">{dateRangeLabel}</p>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={filteredData}>
+              <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
