@@ -329,7 +329,10 @@ export default function CreateProduct() {
                        <p className="text-sm text-emerald-500">Este arquivo será enviado via WhatsApp após a compra</p>
                     </div>
 
-                    <div className="border-2 border-dashed border-zinc-800 rounded-2xl p-10 flex flex-col items-center justify-center gap-4 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group">
+                    <div 
+                      className="border-2 border-dashed border-zinc-800 rounded-2xl p-10 flex flex-col items-center justify-center gap-4 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group"
+                      onClick={() => document.getElementById('file-delivery-upload')?.click()}
+                    >
                       <div className="p-4 bg-zinc-800/50 rounded-2xl group-hover:scale-110 transition-transform">
                         <Plus className="w-8 h-8 text-zinc-500" />
                       </div>
@@ -338,54 +341,23 @@ export default function CreateProduct() {
                         <p className="text-sm text-zinc-500">Tamanho máximo: 64MB</p>
                         <p className="text-xs text-zinc-600">Tipos aceitos: PDF, DOC, DOCX, XLS, XLSX, imagens, vídeos, áudios, ZIP</p>
                       </div>
+                      <input 
+                        id="file-delivery-upload" 
+                        type="file" 
+                        className="hidden" 
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            toast({ title: "Arquivo selecionado", description: `Arquivo ${file.name} pronto para upload.` });
+                            // In a real scenario, we would upload to a bucket here
+                          }
+                        }}
+                      />
                     </div>
                   </div>
                 )}
               </div>
-            )}
-
-            {step === 3 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="flex items-center gap-2 text-zinc-300 font-medium pb-2 border-b border-zinc-800/50">
-                  <ImageIcon className="w-4 h-4 text-purple-500" />
-                  Imagem
-                </div>
-
-                <div className="bg-zinc-900/40 p-4 rounded-xl border border-zinc-800/50 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-blue-500/10 rounded-xl">
-                      <ImageIcon className="w-5 h-5 text-blue-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-zinc-200">Imagem do produto (opcional)</p>
-                      <p className="text-[10px] text-zinc-500">Adicione uma imagem para deixar seu checkout mais atrativo</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1 bg-zinc-900/20 border-zinc-800 text-zinc-500 h-11">
-                    <Globe className="w-4 h-4 mr-2" /> Usar URL
-                  </Button>
-                  <Button className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 h-11">
-                    <Plus className="w-4 h-4 mr-2" /> Fazer upload
-                  </Button>
-                </div>
-
-                <div className="border-2 border-dashed border-zinc-800 rounded-2xl p-12 flex flex-col items-center justify-center gap-4 bg-zinc-900/20">
-                  <div className="p-3 bg-zinc-800/50 rounded-xl">
-                    <ImageIcon className="w-6 h-6 text-zinc-500" />
-                  </div>
-                  <div className="text-center space-y-1">
-                    <p className="text-sm font-bold text-zinc-300">Arraste uma imagem ou clique para selecionar</p>
-                    <p className="text-xs text-zinc-500">JPG, PNG, WebP ou GIF (recomendado até ~1MB)</p>
-                    <p className="text-[10px] text-zinc-600">Também aceita imagens arrastadas de outros sites</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
+            )}            <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
               {step > 1 && (
                 <Button 
                   variant="ghost" 
