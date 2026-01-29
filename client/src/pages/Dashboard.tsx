@@ -63,7 +63,6 @@ export default function Dashboard() {
                 : "••••••"
               }
             </div>
-            <p className="text-[10px] text-zinc-500">0 venda(s) hoje</p>
           </CardContent>
         </Card>
 
@@ -89,7 +88,6 @@ export default function Dashboard() {
             <div className="text-xl font-bold text-white mb-0.5">
               {showQty ? (stats?.salesApproved || 0) : "••••"}
             </div>
-            <p className="text-[10px] text-zinc-500">Transações aprovadas</p>
           </CardContent>
         </Card>
       </div>
