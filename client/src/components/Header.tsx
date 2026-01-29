@@ -26,17 +26,7 @@ export function Header({ title, subtitle }: { title: string; subtitle?: string }
       </div>
 
       <div className="flex items-center gap-6">
-        {/* User Pill */}
-        <div className="flex items-center gap-3 pl-6 border-l border-zinc-800">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-medium text-white">Avelino Chissico</p>
-            <p className="text-xs text-zinc-500">Admin</p>
-          </div>
-          <Avatar className="h-9 w-9 border border-zinc-800">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback className="bg-blue-600 text-white font-bold">AC</AvatarFallback>
-          </Avatar>
-        </div>
+        {/* User Pill removed per user request */}
       </div>
     </header>
   );
