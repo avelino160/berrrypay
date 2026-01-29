@@ -14,6 +14,10 @@ export const products = pgTable("products", {
   description: text("description"),
   price: integer("price").notNull(), // in cents
   imageUrl: text("image_url"),
+  deliveryUrl: text("delivery_url"),
+  whatsappUrl: text("whatsapp_url"),
+  deliveryFiles: jsonb("delivery_files").$type<string[]>().default([]),
+  noEmailDelivery: boolean("no_email_delivery").default(false),
   active: boolean("active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
 });

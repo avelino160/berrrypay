@@ -70,7 +70,15 @@ export default function Products() {
                       {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
                     </p>
                   </div>
-                  <Button size="sm" variant="ghost" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 h-8">
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 h-8"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLocation(`/products/edit/${product.id}`);
+                    }}
+                  >
                     Editar
                   </Button>
                 </div>
