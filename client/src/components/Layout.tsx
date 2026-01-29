@@ -10,9 +10,9 @@ interface LayoutProps {
 
 export function Layout({ children, title, subtitle }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-[#09090b] text-foreground flex">
+    <div className="h-screen bg-[#09090b] text-foreground flex overflow-hidden">
       <Sidebar />
-      <div className="flex-1 ml-64 flex flex-col min-h-screen">
+      <div className="flex-1 ml-64 flex flex-col h-screen overflow-hidden">
         <Header title={title} subtitle={subtitle} />
         <main className="flex-1 p-8 overflow-y-auto">
           <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
