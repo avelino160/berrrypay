@@ -113,6 +113,10 @@ export default function Register() {
             </Link>
           </p>
         </div>
+        
+        <p className="text-center text-xs text-zinc-600 mt-8">
+          © 2026 ColdPay Inc. Todos os direitos reservados.
+        </p>
       </div>
     </div>
   );

@@ -99,7 +99,7 @@ export default function Login() {
                    className="text-xs text-blue-500 hover:text-blue-400"
                    data-testid="link-forgot-password"
                  >
-                   Esqueceu?
+                   Esqueceu a senha?
                  </Link>
               </div>
               <Input
