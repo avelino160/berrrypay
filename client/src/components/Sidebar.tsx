@@ -45,8 +45,8 @@ export function Sidebar() {
           <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/50 relative overflow-hidden group">
              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
              <div className="relative flex items-center gap-4">
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-purple-500/10 rounded-lg shadow-lg border border-purple-500/20">
-                   <Trophy className="text-purple-500 w-6 h-6" />
+                <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-purple-500/10 rounded-lg shadow-lg border border-purple-500/20">
+                   <Trophy className="text-purple-500 w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-xs font-bold text-zinc-400 block mb-1 uppercase tracking-wider">Faturamento</span>
@@ -80,13 +80,13 @@ export function Sidebar() {
               <Link key={item.href} href={item.href}>
                 <button
                   className={cn(
-                    "w-full flex items-center gap-4 px-5 py-4 rounded-xl font-bold transition-all duration-200 text-[17px]",
+                    "w-full flex items-center gap-4 px-4 py-3 rounded-xl font-bold transition-all duration-200 text-[15px]",
                     isActive
                       ? "bg-[#8b5cf6] text-white shadow-lg"
                       : "text-zinc-400 hover:text-white hover:bg-zinc-900"
                   )}
                 >
-                  <Icon size={20} strokeWidth={2.5} />
+                  <Icon size={18} strokeWidth={2.5} />
                   {item.label}
                 </button>
               </Link>
