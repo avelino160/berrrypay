@@ -22,7 +22,6 @@ export function Sidebar() {
         </h1>
         <p className="text-sm text-zinc-500 mt-1">Plataforma de Vendas</p>
       </div>
-
       {/* Navigation and Widgets Area - No internal scroll, fixed within flex */}
       <div className="flex-1">
         {/* Revenue Widget */}
@@ -50,12 +49,8 @@ export function Sidebar() {
             return (
               <Link key={item.href} href={item.href}>
                 <button
-                  className={cn(
-                    "w-full flex items-center gap-4 px-5 py-4 rounded-xl text-xl font-bold transition-all duration-200",
-                    isActive
-                      ? "bg-[#3b82f6] text-white shadow-lg"
-                      : "text-zinc-400 hover:text-white hover:bg-zinc-900"
-                  )}
+                  className="w-full flex items-center gap-4 px-5 py-4 rounded-xl font-bold transition-all duration-200 text-zinc-400 hover:text-white hover:bg-zinc-900 text-[17px] pt-[16px] pb-[16px]"
+                  style={{ fontSize: "17px" }}
                 >
                   <Icon size={20} strokeWidth={2.5} />
                   {item.label}
@@ -65,7 +60,6 @@ export function Sidebar() {
           })}
         </nav>
       </div>
-
       {/* Footer - No fixed positioning */}
       <div className="p-4 border-t border-zinc-800/50 flex-shrink-0">
         <div className="px-2">
