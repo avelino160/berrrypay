@@ -54,7 +54,7 @@ export function Sidebar() {
                     <span className="text-lg font-bold text-white whitespace-nowrap">
                       {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(currentRevenue)}
                     </span>
-                    <span className="text-xs font-bold text-zinc-500">/ $ {currentGoal.label}</span>
+                    <span className="text-xs font-bold text-zinc-500">/ ${currentGoal.label}</span>
                   </div>
                 </div>
              </div>
