@@ -71,63 +71,6 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Criar Agora Section */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Plus className="w-5 h-5 text-blue-500" />
-          Criar Agora
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card 
-            className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-blue-500/50 transition-all duration-300 cursor-pointer group"
-            onClick={() => setLocation('/products')}
-            data-testid="card-create-product"
-          >
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
-                <Package className="w-6 h-6 text-blue-500" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-white mb-1">Novo Produto</h3>
-                <p className="text-sm text-zinc-400">Adicione um novo produto para vender</p>
-              </div>
-              <Button 
-                size="sm" 
-                className="bg-blue-600 hover:bg-blue-700"
-                data-testid="button-create-product"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Criar
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card 
-            className="bg-[#18181b] border-zinc-800/60 shadow-lg hover:border-emerald-500/50 transition-all duration-300 cursor-pointer group"
-            onClick={() => setLocation('/checkouts')}
-            data-testid="card-create-checkout"
-          >
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-                <ShoppingCart className="w-6 h-6 text-emerald-500" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-white mb-1">Novo Checkout</h3>
-                <p className="text-sm text-zinc-400">Crie uma nova página de checkout</p>
-              </div>
-              <Button 
-                size="sm" 
-                className="bg-emerald-600 hover:bg-emerald-700"
-                data-testid="button-create-checkout"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Criar
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
       {/* Chart Section */}
       <Card className="bg-[#18181b] border-zinc-800/60 shadow-lg">
         <CardHeader className="border-b border-zinc-800/50 pb-4">
