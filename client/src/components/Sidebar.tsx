@@ -23,8 +23,8 @@ export function Sidebar() {
         <p className="text-xs text-zinc-500 mt-1">Plataforma de Vendas</p>
       </div>
 
-      {/* Navigation and Widgets Scrollable Area */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+      {/* Navigation and Widgets Area - No internal scroll, fixed within flex */}
+      <div className="flex-1">
         {/* Revenue Widget */}
         <div className="px-4 py-6">
           <div className="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800">
