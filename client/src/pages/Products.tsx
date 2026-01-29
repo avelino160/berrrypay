@@ -7,12 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Plus, PackageOpen, Search, Pencil, Trash2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
+import { type Settings } from "@shared/schema";
 
 export default function Products() {
-  const { data: products, isLoading } = useProducts();
-  const deleteProduct = useDeleteProduct();
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const { data: settings } = useQuery<Settings>({ queryKey: ["/api/settings"] });
+  const rate = parseFloat(settings?.exchangeRate || "5.0");
 
   const handleDelete = async (id: number) => {
     if (!confirm("Tem certeza que deseja excluir este produto?")) return;
@@ -78,9 +78,12 @@ export default function Products() {
                 <h3 className="text-lg font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors">{product.name}</h3>
                 <div className="flex items-end justify-between border-t border-zinc-800/50 pt-4 mt-2">
                   <div>
-                    <p className="text-xs text-zinc-500">Preço</p>
+                    <p className="text-xs text-zinc-500">Preço (USD)</p>
                     <p className="text-lg font-bold text-white">
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
+                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
+                    </p>
+                    <p className="text-[10px] text-zinc-500">
+                      ≈ {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((product.price / 100) * rate)}
                     </p>
                   </div>
                   <div className="flex gap-2">

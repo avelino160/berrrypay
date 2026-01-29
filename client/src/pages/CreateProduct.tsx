@@ -211,24 +211,11 @@ export default function CreateProduct() {
                     <div className="p-1.5 bg-zinc-800 rounded-lg">
                       <span className="text-sm font-bold text-zinc-400">$</span>
                     </div>
-                    <label className="text-sm font-bold text-zinc-200">Preço e Moeda</label>
+                    <label className="text-sm font-bold text-zinc-200">Preço (Sempre em USD)</label>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-zinc-500">Moeda do produto</label>
-                    <Select defaultValue="BRL">
-                      <SelectTrigger className="bg-black/40 border-zinc-800 h-11">
-                        <SelectValue placeholder="Selecione a moeda" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                        <SelectItem value="BRL">BRL (R$) - Real Brasileiro</SelectItem>
-                        <SelectItem value="USD">USD ($) - Dólar Americano</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-zinc-500">Valor</label>
+                    <label className="text-xs font-medium text-zinc-500">Valor em Dólar ($)</label>
                     <Input 
                       type="number"
                       min="0"
@@ -240,9 +227,9 @@ export default function CreateProduct() {
                           setNewProduct({...newProduct, price: val});
                         }
                       }}
-                      placeholder="Ex: 97,00"
+                      placeholder="Ex: 19.90"
                     />
-                    <p className="text-[11px] text-zinc-500 ml-1">Digite apenas números. Ex: 19700 = R$ 197,00</p>
+                    <p className="text-[11px] text-zinc-500 ml-1">O cliente pagará este valor convertido para Real.</p>
                   </div>
                 </div>
               </div>
