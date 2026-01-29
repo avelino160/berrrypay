@@ -82,11 +82,8 @@ export default function Products() {
                     <p className="text-lg font-bold text-white">
                       {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
                     </p>
-                    <p className="text-[10px] text-zinc-500">
-                      ~ {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((product.price / 100) * 5.5)}
-                    </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Button 
                       size="icon" 
                       variant="ghost" 
