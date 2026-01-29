@@ -66,7 +66,7 @@ export function Sidebar() {
                     style={{ width: `${progress}%` }} 
                   />
                 </div>
-                <span className="text-xs font-black text-white tabular-nums">{Math.floor(progress)}%</span>
+                <span className="text-xs font-medium text-white tabular-nums">{Math.floor(progress)}%</span>
              </div>
           </div>
         </div>
