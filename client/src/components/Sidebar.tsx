@@ -49,8 +49,12 @@ export function Sidebar() {
             return (
               <Link key={item.href} href={item.href}>
                 <button
-                  className="w-full flex items-center gap-4 px-5 py-4 rounded-xl font-bold transition-all duration-200 text-zinc-400 hover:text-white hover:bg-zinc-900 text-[17px] pt-[16px] pb-[16px]"
-                  style={{ fontSize: "17px" }}
+                  className={cn(
+                    "w-full flex items-center gap-4 px-5 py-4 rounded-xl font-bold transition-all duration-200 text-[17px]",
+                    isActive
+                      ? "bg-[#3b82f6] text-white shadow-lg"
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-900"
+                  )}
                 >
                   <Icon size={20} strokeWidth={2.5} />
                   {item.label}
