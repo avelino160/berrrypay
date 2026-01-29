@@ -11,6 +11,7 @@ import Dashboard from "@/pages/Dashboard";
 import Products from "@/pages/Products";
 import Checkouts from "@/pages/Checkouts";
 import Settings from "@/pages/Settings";
+import CreateProduct from "@/pages/CreateProduct";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/products" component={Products} />
+      <Route path="/products/new" component={CreateProduct} />
       <Route path="/checkouts" component={Checkouts} />
       <Route path="/settings" component={Settings} />
       {/* Fallback to 404 */}
