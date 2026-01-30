@@ -164,14 +164,17 @@ export default function Dashboard() {
                   tick={{fill: '#71717a', fontSize: 11}} 
                   axisLine={false}
                   tickLine={false}
-                  tickFormatter={(value) => `R$${(value * 5.19).toFixed(0)}`}
+                  tickFormatter={(value) => `$${value.toFixed(0)}`}
                   dx={-10}
                 />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#18181b', borderColor: '#3f3f46', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
                   itemStyle={{ color: '#a855f7', fontWeight: 'bold' }}
                   cursor={{ stroke: '#a855f7', strokeWidth: 1 }}
-                  formatter={(value: any) => [`${(value * 5.19).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`, 'Vendas (BRL)']}
+                  formatter={(value: any) => [
+                    `${(value * 5.19).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`, 
+                    'Faturamento'
+                  ]}
                   labelStyle={{ color: '#fff', fontWeight: 'bold' }}
                   separator=""
                 />
