@@ -10,9 +10,14 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  setupAuth(app);
-  registerObjectStorageRoutes(app);
+  // Auth routes already registered via setupAuth(app)
   
+  app.get("/api/users", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    const users = await storage.getUsers();
+    res.json(users);
+  });
+
   // Products
   app.get(api.products.list.path, async (req, res) => {
     const products = await storage.getProducts();

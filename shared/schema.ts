@@ -38,6 +38,8 @@ export const settings = pgTable("settings", {
   paypalClientId: text("paypal_client_id"),
   paypalClientSecret: text("paypal_client_secret"),
   paypalWebhookId: text("paypal_webhook_id"),
+  facebookPixelId: text("facebook_pixel_id"),
+  utmfyToken: text("utmfy_token"),
   environment: text("environment").default("sandbox"), // sandbox or production
 });
 
