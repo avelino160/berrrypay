@@ -3,7 +3,7 @@ import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy, Chevr
 import { cn } from "@/lib/utils";
 import { useStats } from "@/hooks/use-stats";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 export function Sidebar() {
   const [location, setLocation] = useLocation();
