@@ -28,7 +28,7 @@ export default function CheckoutEditor() {
   
   // State for editor fields
   const [config, setConfig] = useState({
-    name: "CHECKOUT PRO",
+    name: "",
     product: "",
     orderBump: "",
     bannerUrl: "",
@@ -38,12 +38,48 @@ export default function CheckoutEditor() {
     requireCpf: false,
     primaryColor: "#9333ea",
     backgroundColor: "#ffffff",
+    timerColor: "#f59e0b",
     showTitle: true,
     title: "Finalize sua Compra",
     subtitle: "Ambiente 100% seguro",
-    timerMinutes: 15,
+    timerMinutes: 0,
     showTimer: true,
+    socialProofs: [] as { id: string; name: string; text: string; stars: number }[],
   });
+
+  const [timerSeconds, setTimerSeconds] = useState(config.timerMinutes * 60);
+
+  useEffect(() => {
+    setTimerSeconds(config.timerMinutes * 60);
+  }, [config.timerMinutes]);
+
+  useEffect(() => {
+    if (timerSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setTimerSeconds(s => s - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timerSeconds]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const addSocialProof = () => {
+    const newProof = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: "Novo Cliente",
+      text: "Excelente produto!",
+      stars: 5
+    };
+    setConfig({ ...config, socialProofs: [...config.socialProofs, newProof] });
+  };
+
+  const removeSocialProof = (id: string) => {
+    setConfig({ ...config, socialProofs: config.socialProofs.filter(p => p.id !== id) });
+  };
 
   useEffect(() => {
     if (checkout) {
@@ -193,11 +229,20 @@ export default function CheckoutEditor() {
 
               <div className="space-y-2">
                 <Label className="text-xs text-zinc-400">Texto do Timer *</Label>
-                <Input 
-                  value={config.timerText}
-                  onChange={(e) => setConfig({...config, timerText: e.target.value})}
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                />
+                <div className="flex gap-2">
+                  <Input 
+                    value={config.timerText}
+                    onChange={(e) => setConfig({...config, timerText: e.target.value})}
+                    className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  />
+                  <Input 
+                    type="number"
+                    value={config.timerMinutes}
+                    onChange={(e) => setConfig({...config, timerMinutes: parseInt(e.target.value) || 0})}
+                    className="bg-zinc-900/50 border-zinc-800 h-9 text-sm w-20"
+                    placeholder="Min"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -243,7 +288,43 @@ export default function CheckoutEditor() {
               <User className="w-4 h-4" />
               <h2 className="text-sm font-bold">Provas Sociais</h2>
             </div>
-            <Button variant="outline" className="w-full border-zinc-800 bg-zinc-900/50 text-xs border-dashed hover:bg-zinc-800 h-10">
+            
+            <div className="space-y-3">
+              {config.socialProofs.map((proof) => (
+                <div key={proof.id} className="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-2 relative group">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute top-2 right-2 h-6 w-6 text-zinc-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => removeSocialProof(proof.id)}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                  <Input 
+                    value={proof.name} 
+                    onChange={(e) => {
+                      const newProofs = config.socialProofs.map(p => p.id === proof.id ? { ...p, name: e.target.value } : p);
+                      setConfig({ ...config, socialProofs: newProofs });
+                    }}
+                    className="bg-transparent border-none p-0 h-auto text-xs font-bold focus-visible:ring-0" 
+                  />
+                  <textarea 
+                    value={proof.text} 
+                    onChange={(e) => {
+                      const newProofs = config.socialProofs.map(p => p.id === proof.id ? { ...p, text: e.target.value } : p);
+                      setConfig({ ...config, socialProofs: newProofs });
+                    }}
+                    className="bg-transparent border-none p-0 w-full resize-none text-[10px] text-zinc-400 focus:outline-none" 
+                  />
+                </div>
+              ))}
+            </div>
+
+            <Button 
+              variant="outline" 
+              className="w-full border-zinc-800 bg-zinc-900/50 text-xs border-dashed hover:bg-zinc-800 h-10"
+              onClick={addSocialProof}
+            >
               <Plus className="w-3 h-3 mr-2" /> Adicionar Avaliação
             </Button>
           </TabsContent>
@@ -257,16 +338,40 @@ export default function CheckoutEditor() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-xs text-zinc-400">Cor de Destaque</Label>
-                <div className="flex gap-2">
-                  <div className="w-9 h-9 rounded-md border border-zinc-800" style={{ backgroundColor: config.primaryColor }} />
-                  <Input value={config.primaryColor} onChange={(e) => setConfig({...config, primaryColor: e.target.value})} className="flex-1 bg-zinc-900 border-zinc-800 h-9 text-xs" />
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <div className="w-9 h-9 rounded-md border border-zinc-800 shrink-0" style={{ backgroundColor: config.primaryColor }} />
+                    <Input value={config.primaryColor} onChange={(e) => setConfig({...config, primaryColor: e.target.value})} className="flex-1 bg-zinc-900 border-zinc-800 h-9 text-xs" />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['#9333ea', '#2563eb', '#16a34a', '#dc2626', '#d97706', '#000000'].map(color => (
+                      <button 
+                        key={color} 
+                        className="w-5 h-5 rounded-full border border-white/10" 
+                        style={{ backgroundColor: color }}
+                        onClick={() => setConfig({...config, primaryColor: color})}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Cor de Fundo</Label>
-                <div className="flex gap-2">
-                  <div className="w-9 h-9 rounded-md border border-zinc-800" style={{ backgroundColor: config.backgroundColor }} />
-                  <Input value={config.backgroundColor} onChange={(e) => setConfig({...config, backgroundColor: e.target.value})} className="flex-1 bg-zinc-900 border-zinc-800 h-9 text-xs" />
+                <Label className="text-xs text-zinc-400">Cor do Timer</Label>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <div className="w-9 h-9 rounded-md border border-zinc-800 shrink-0" style={{ backgroundColor: config.timerColor }} />
+                    <Input value={config.timerColor} onChange={(e) => setConfig({...config, timerColor: e.target.value})} className="flex-1 bg-zinc-900 border-zinc-800 h-9 text-xs" />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['#f59e0b', '#ef4444', '#000000', '#9333ea', '#ffffff'].map(color => (
+                      <button 
+                        key={color} 
+                        className="w-5 h-5 rounded-full border border-white/10" 
+                        style={{ backgroundColor: color }}
+                        onClick={() => setConfig({...config, timerColor: color})}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -301,13 +406,16 @@ export default function CheckoutEditor() {
             style={{ backgroundColor: config.backgroundColor }}
           >
             {/* Real Checkout Preview Content */}
-            <div className="bg-[#f59e0b] p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold">
+            <div 
+              className="p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold"
+              style={{ backgroundColor: config.timerColor }}
+            >
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 <span>{config.timerText}</span>
               </div>
-              <div className="bg-black/20 px-3 py-1 rounded flex items-center gap-1 font-mono">
-                <span>06</span>:<span>31</span>
+              <div className="bg-black/20 px-3 py-1 rounded-md flex items-center gap-1 font-mono text-base tracking-widest shadow-inner">
+                {formatTime(timerSeconds)}
               </div>
             </div>
 
@@ -322,26 +430,51 @@ export default function CheckoutEditor() {
                     </div>
                   )}
                   <div>
-                    <h2 className="text-xl font-bold text-zinc-900">{selectedProduct?.name || "Curso Checkout"}</h2>
+                    <h2 className="text-xl font-bold text-zinc-900">{selectedProduct?.name || "Produto Principal"}</h2>
                     <p className="text-lg font-bold" style={{ color: config.primaryColor }}>
-                      {selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}
+                      {selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}
                     </p>
                   </div>
                 </div>
                 <div className="bg-zinc-50/50 p-4 rounded-xl min-w-[240px] border border-zinc-100">
                   <h3 className="text-sm font-bold text-zinc-900 mb-3">Resumo da compra</h3>
                   <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b border-zinc-100">
-                    <span>{selectedProduct?.name || "Curso Checkout"}</span>
-                    <span>{selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}</span>
+                    <span>{selectedProduct?.name || "Produto Principal"}</span>
+                    <span>{selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}</span>
                   </div>
                   <div className="flex justify-between items-center font-bold">
                     <span className="text-zinc-900">Total a pagar</span>
                     <span className="text-xl" style={{ color: config.primaryColor }}>
-                      {selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}
+                      {selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}
                     </span>
                   </div>
                 </div>
               </div>
+
+              {/* Social Proofs in Preview */}
+              {config.socialProofs.length > 0 && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b border-zinc-100 pb-2">
+                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    <h3>O que dizem nossos clientes</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {config.socialProofs.map(proof => (
+                      <div key={proof.id} className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-bold text-zinc-900">{proof.name}</span>
+                          <div className="flex gap-0.5">
+                            {Array.from({ length: proof.stars }).map((_, i) => (
+                              <Star key={i} className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-xs text-zinc-600 italic leading-relaxed">"{proof.text}"</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="max-w-[500px] space-y-6">
                 <div className="space-y-4">
