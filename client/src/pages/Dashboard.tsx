@@ -97,7 +97,7 @@ export default function Dashboard() {
           <CardContent className="pb-4">
             <div className="text-xl font-bold text-white mb-0.5">
               {showSales 
-                ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)
+                ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stats?.salesToday || 0)
                 : "••••••"
               }
             </div>
