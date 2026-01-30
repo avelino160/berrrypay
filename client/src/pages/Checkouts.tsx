@@ -50,7 +50,7 @@ export default function Checkouts() {
         <div className="flex justify-center p-12">
           <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
         </div>
-      ) : checkouts?.length === 0 ? (
+      ) : !checkouts || checkouts.length === 0 ? (
         <Card className="bg-[#18181b] border-zinc-800/60 flex flex-col items-center justify-center py-16 text-center">
           <div className="bg-zinc-900 p-4 rounded-full mb-4">
             <ShoppingCart className="w-8 h-8 text-zinc-500" />
@@ -61,7 +61,7 @@ export default function Checkouts() {
           </p>
           <Button 
             className="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700"
-            onClick={() => setIsOpen(true)}
+            onClick={handleCreate}
           >
             Criar meu primeiro checkout
           </Button>
