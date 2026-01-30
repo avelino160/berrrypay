@@ -3,15 +3,17 @@ import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy, Chevr
 import { cn } from "@/lib/utils";
 import { useStats } from "@/hooks/use-stats";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export function Sidebar() {
   const [location, setLocation] = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
 
   // To make search params reactive, we rely on useLocation triggering re-renders
-  const searchParams = new URLSearchParams(window.location.search);
-  const currentTab = searchParams.get("tab") || "gateway";
+  const currentTab = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("tab") || "gateway";
+  }, [location, window.location.search]);
 
   const { data: user } = useQuery<any>({
     queryKey: ["/api/user"],

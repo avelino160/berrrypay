@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Layout } from "@/components/Layout";
 import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,8 +15,11 @@ import paypalLogo from "@assets/paypal-logo-icon-png_44635_1769721723658.jpg";
 
 export default function Settings() {
   const [location] = useLocation();
-  const searchParams = new URLSearchParams(window.location.search);
-  const activeTab = searchParams.get("tab") || "gateway";
+  
+  const activeTab = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("tab") || "gateway";
+  }, [location, window.location.search]);
 
   const { data: settings, isLoading: isLoadingSettings } = useSettings();
   const updateSettings = useUpdateSettings();
