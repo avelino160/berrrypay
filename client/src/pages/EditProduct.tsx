@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLocation, useRoute } from "wouter";
+import { useUpload } from "@/hooks/use-upload";
 
 export default function EditProduct() {
   const [, setLocation] = useLocation();
@@ -17,9 +18,11 @@ export default function EditProduct() {
   const { data: product, isLoading: isLoadingProduct } = useProduct(id!);
   const updateProduct = useUpdateProduct();
   const { toast } = useToast();
+  const { uploadFile, isUploading: isUploadingImage } = useUpload();
   
   const [step, setStep] = useState(1);
   const [deliveryMethod, setDeliveryMethod] = useState<"link" | "file">("link");
+  const [imagePreview, setImagePreview] = useState<string>("");
   const [formData, setFormData] = useState({ 
     name: "", 
     price: "", 
@@ -45,11 +48,24 @@ export default function EditProduct() {
         noEmailDelivery: product.noEmailDelivery || false,
         active: product.active ?? true
       });
+      setImagePreview(product.imageUrl || "");
       if (product.deliveryFiles && product.deliveryFiles.length > 0) {
         setDeliveryMethod("file");
       }
     }
   }, [product]);
+
+  const handleImageUpload = async (file: File) => {
+    setImagePreview(URL.createObjectURL(file));
+    const result = await uploadFile(file);
+    if (result) {
+      setFormData(prev => ({...prev, imageUrl: result.objectPath}));
+      toast({ title: "Imagem carregada", description: "A imagem foi salva com sucesso!" });
+    } else {
+      setImagePreview(formData.imageUrl);
+      toast({ title: "Erro", description: "Falha ao carregar imagem", variant: "destructive" });
+    }
+  };
 
   const handleUpdate = async () => {
     if (!formData.name || !formData.price) {
@@ -123,18 +139,30 @@ export default function EditProduct() {
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-zinc-200">Capa do Produto</label>
                   <div 
-                    className="border-2 border-dashed border-zinc-800 rounded-2xl w-[200px] h-[200px] mx-auto overflow-hidden cursor-pointer relative group"
-                    onClick={() => document.getElementById('edit-image')?.click()}
+                    className={`border-2 border-dashed border-zinc-800 rounded-2xl w-[200px] h-[200px] mx-auto overflow-hidden cursor-pointer relative group ${isUploadingImage ? 'pointer-events-none opacity-70' : ''}`}
+                    onClick={() => !isUploadingImage && document.getElementById('edit-image')?.click()}
                   >
-                    {formData.imageUrl ? (
-                      <img src={formData.imageUrl} className="w-full h-full object-cover" />
+                    {isUploadingImage && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+                      </div>
+                    )}
+                    {imagePreview ? (
+                      <img src={imagePreview} className="w-full h-full object-cover" alt="Capa do produto" />
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full text-zinc-500"><Plus /></div>
                     )}
-                    <input id="edit-image" type="file" className="hidden" accept="image/*" onChange={e => {
-                      const file = e.target.files?.[0];
-                      if (file) setFormData({...formData, imageUrl: URL.createObjectURL(file)});
-                    }} />
+                    <input 
+                      id="edit-image" 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*" 
+                      disabled={isUploadingImage}
+                      onChange={e => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file);
+                      }} 
+                    />
                   </div>
                 </div>
 

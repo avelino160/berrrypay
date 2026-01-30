@@ -8,14 +8,17 @@ import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLocation } from "wouter";
+import { useUpload } from "@/hooks/use-upload";
 
 export default function CreateProduct() {
   const [, setLocation] = useLocation();
   const createProduct = useCreateProduct();
   const { toast } = useToast();
+  const { uploadFile, isUploading: isUploadingImage } = useUpload();
   const [step, setStep] = useState(1);
   const [deliveryMethod, setDeliveryMethod] = useState<"link" | "file">("link");
   const [deliveryFiles, setDeliveryFiles] = useState<File[]>([]);
+  const [imagePreview, setImagePreview] = useState<string>("");
   const [newProduct, setNewProduct] = useState({ 
     name: "", 
     price: "", 
@@ -26,6 +29,18 @@ export default function CreateProduct() {
     enableCustomSupport: false,
     noEmailDelivery: false
   });
+
+  const handleImageUpload = async (file: File) => {
+    setImagePreview(URL.createObjectURL(file));
+    const result = await uploadFile(file);
+    if (result) {
+      setNewProduct(prev => ({...prev, imageUrl: result.objectPath}));
+      toast({ title: "Imagem carregada", description: "A imagem foi salva com sucesso!" });
+    } else {
+      setImagePreview("");
+      toast({ title: "Erro", description: "Falha ao carregar imagem", variant: "destructive" });
+    }
+  };
 
   const handleCreate = async () => {
     if (!newProduct.name || !newProduct.price) {
@@ -135,12 +150,17 @@ export default function CreateProduct() {
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-zinc-200">Capa do Produto</label>
                   <div 
-                    className="border-2 border-dashed border-zinc-800 rounded-2xl p-0 flex flex-col items-center justify-center bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group relative overflow-hidden w-[200px] h-[200px] mx-auto"
-                    onClick={() => document.getElementById('image-upload')?.click()}
+                    className={`border-2 border-dashed border-zinc-800 rounded-2xl p-0 flex flex-col items-center justify-center bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors cursor-pointer group relative overflow-hidden w-[200px] h-[200px] mx-auto ${isUploadingImage ? 'pointer-events-none opacity-70' : ''}`}
+                    onClick={() => !isUploadingImage && document.getElementById('image-upload')?.click()}
                   >
-                    {newProduct.imageUrl ? (
+                    {isUploadingImage && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+                      </div>
+                    )}
+                    {imagePreview ? (
                       <>
-                        <img src={newProduct.imageUrl} alt="Capa" className="absolute inset-0 w-full h-full object-cover" />
+                        <img src={imagePreview} alt="Capa" className="absolute inset-0 w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 z-10">
                           <ImageIcon className="w-8 h-8 text-white" />
                           <p className="text-xs font-bold text-white text-center px-2">Alterar capa</p>
@@ -162,11 +182,11 @@ export default function CreateProduct() {
                       type="file" 
                       accept="image/*" 
                       className="hidden" 
+                      disabled={isUploadingImage}
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          const url = URL.createObjectURL(file);
-                          setNewProduct({...newProduct, imageUrl: url});
+                          handleImageUpload(file);
                         }
                       }}
                     />
