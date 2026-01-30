@@ -6,13 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useProducts } from "@/hooks/use-products";
 import { ArrowLeft, Save, Layout as LayoutIcon, Palette, Settings, Eye, Monitor, Smartphone, Plus, Trash2, Clock, Bell, User, Star } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export default function CheckoutEditor() {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/checkouts/edit/:id");
+  const { data: products } = useProducts();
   const isNew = !params?.id;
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   
@@ -34,6 +36,10 @@ export default function CheckoutEditor() {
     timerMinutes: 15,
     showTimer: true,
   });
+
+  const selectedProduct = useMemo(() => 
+    products?.find(p => p.id.toString() === config.product),
+  [products, config.product]);
 
   return (
     <div className="flex h-screen bg-[#09090b] overflow-hidden">
@@ -78,24 +84,34 @@ export default function CheckoutEditor() {
 
               <div className="space-y-2">
                 <Label className="text-xs text-zinc-400">Produto Principal</Label>
-                <Select>
+                <Select 
+                  value={config.product} 
+                  onValueChange={(v) => setConfig({...config, product: v})}
+                >
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-800 h-9 text-sm">
-                    <SelectValue placeholder="Nenhum produto específico" />
+                    <SelectValue placeholder="Selecione um produto" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-900 border-zinc-800">
-                    <SelectItem value="p1">Produto X</SelectItem>
+                    {products?.map((p) => (
+                      <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
                 <Label className="text-xs text-zinc-400">Produtos de Order Bump (Opcional)</Label>
-                <Select>
+                <Select 
+                  value={config.orderBump} 
+                  onValueChange={(v) => setConfig({...config, orderBump: v})}
+                >
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-800 h-9 text-sm">
                     <SelectValue placeholder="Nenhum order bump selecionado" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-900 border-zinc-800">
-                    <SelectItem value="bump1">Produto Y</SelectItem>
+                    {products?.map((p) => (
+                      <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -231,21 +247,31 @@ export default function CheckoutEditor() {
             <div className="p-8 space-y-8">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center text-white font-bold text-2xl">g</div>
+                  {selectedProduct?.imageUrl ? (
+                    <img src={selectedProduct.imageUrl} className="w-16 h-16 rounded-xl object-cover" alt="" />
+                  ) : (
+                    <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center text-white font-bold text-2xl">
+                      {selectedProduct?.name?.charAt(0) || 'g'}
+                    </div>
+                  )}
                   <div>
-                    <h2 className="text-xl font-bold text-zinc-900">Curso Checkout</h2>
-                    <p className="text-lg font-bold text-purple-600">R$ 99,00</p>
+                    <h2 className="text-xl font-bold text-zinc-900">{selectedProduct?.name || "Curso Checkout"}</h2>
+                    <p className="text-lg font-bold text-purple-600">
+                      {selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}
+                    </p>
                   </div>
                 </div>
                 <div className="bg-zinc-50 p-4 rounded-xl min-w-[240px]">
                   <h3 className="text-sm font-bold text-zinc-900 mb-3">Resumo da compra</h3>
                   <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b border-zinc-100">
-                    <span>Curso Checkout</span>
-                    <span>R$ 99,00</span>
+                    <span>{selectedProduct?.name || "Curso Checkout"}</span>
+                    <span>{selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}</span>
                   </div>
                   <div className="flex justify-between items-center font-bold">
                     <span className="text-zinc-900">Total a pagar</span>
-                    <span className="text-xl text-purple-600">R$ 99,00</span>
+                    <span className="text-xl text-purple-600">
+                      {selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}
+                    </span>
                   </div>
                 </div>
               </div>
