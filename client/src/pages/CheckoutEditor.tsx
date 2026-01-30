@@ -151,7 +151,7 @@ export default function CheckoutEditor() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h1 className="text-xl font-black text-white leading-tight uppercase tracking-tighter">Editor de Checkout</h1>
+              <h1 className="text-xl font-bold text-white leading-tight uppercase tracking-tight">Editor de Checkout</h1>
             </div>
           </div>
         </div>
