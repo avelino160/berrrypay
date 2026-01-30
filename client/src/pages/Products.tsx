@@ -68,11 +68,6 @@ export default function Products() {
                     <PackageOpen className="w-8 h-8 text-zinc-700" />
                   </div>
                 )}
-                <div className="absolute top-3 right-3">
-                  <span className={`text-[10px] px-2 py-1 rounded-full border backdrop-blur-md ${product.active ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-zinc-800 text-zinc-500 border-zinc-700'}`}>
-                    {product.active ? 'Ativo' : 'Inativo'}
-                  </span>
-                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
