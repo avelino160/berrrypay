@@ -97,13 +97,13 @@ export default function Dashboard() {
           <CardContent className="pb-4">
             <div className="text-xl font-bold text-white mb-0.5">
               {showSales 
-                ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((stats?.salesToday || 0) * 5.5)
+                ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((stats?.salesToday || 0) * 5.19)
                 : "••••••"
               }
             </div>
             {showSales && (
               <p className="text-[10px] text-zinc-500">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)} (Câmbio: R$ 5,50)
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)}
               </p>
             )}
           </CardContent>
@@ -169,14 +169,14 @@ export default function Dashboard() {
                   tick={{fill: '#71717a', fontSize: 11}} 
                   axisLine={false}
                   tickLine={false}
-                  tickFormatter={(value) => `R$${value * 5.5}`}
+                  tickFormatter={(value) => `R$${(value * 5.19).toFixed(2)}`}
                   dx={-10}
                 />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#18181b', borderColor: '#3f3f46', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
                   itemStyle={{ color: '#a855f7', fontWeight: 'bold' }}
                   cursor={{ stroke: '#a855f7', strokeWidth: 1 }}
-                  formatter={(value: any) => [`${(value * 5.5).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`, 'Vendas (BRL)']}
+                  formatter={(value: any) => [`${(value * 5.19).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`, 'Vendas (BRL)']}
                   labelStyle={{ color: '#fff', fontWeight: 'bold' }}
                   separator=""
                 />
