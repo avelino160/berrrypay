@@ -9,24 +9,7 @@ export function Sidebar() {
   const [location] = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
 
-  const { data: user } = useQuery<any>({
-    queryKey: ["/api/user"],
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-  });
-
-  const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/products", label: "Produtos", icon: Package },
-    { href: "/checkouts", label: "Checkouts", icon: ShoppingCart },
-  ];
-
-  const settingSubItems = [
-    { href: "/settings?tab=gateway", label: "Gateway", icon: Wallet },
-    { href: "/settings?tab=usuario", label: "Usuário", icon: User },
-    { href: "/settings?tab=metricas", label: "Métricas", icon: BarChart3 },
-  ];
-
+  // To make search params reactive, we rely on useLocation triggering re-renders
   const searchParams = new URLSearchParams(window.location.search);
   const currentTab = searchParams.get("tab") || "gateway";
 
