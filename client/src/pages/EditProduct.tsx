@@ -212,7 +212,7 @@ export default function EditProduct() {
                       <label className="text-sm font-bold text-zinc-200 uppercase tracking-wider">Arquivos de entrega</label>
                       <div className="bg-black/40 border border-zinc-800 rounded-xl p-4 min-h-[100px] flex flex-col items-center justify-center gap-3">
                         <FileText className="w-8 h-8 text-zinc-600" />
-                        <p className="text-sm text-zinc-500">O upload de novos arquivos não está disponível na edição.</p>
+                        <p className="text-sm text-zinc-500">O upload de novos arquivos não está disponível na edição. Os arquivos atuais serão enviados no e-mail de entrega após a compra.</p>
                       </div>
                       {formData.deliveryFiles.length > 0 && (
                         <div className="mt-4 space-y-2">

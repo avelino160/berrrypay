@@ -313,7 +313,7 @@ export default function CreateProduct() {
                   <div className="space-y-4 animate-in fade-in duration-300">
                     <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg flex items-center gap-3">
                        <MessageCircle className="w-4 h-4 text-emerald-500" />
-                       <p className="text-sm text-emerald-500">Este arquivo será enviado via WhatsApp após a compra</p>
+                       <p className="text-sm text-emerald-500">Este arquivo será enviado automaticamente no e-mail de entrega do cliente após a compra</p>
                     </div>
 
                     <div 
