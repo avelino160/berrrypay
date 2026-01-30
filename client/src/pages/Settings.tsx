@@ -333,34 +333,6 @@ export default function Settings() {
       subtitle={activeTab === "gateway" ? "Gerencie suas credenciais de pagamento" : activeTab === "usuario" ? "Personalize sua conta e segurança" : "Acompanhe a performance do seu negócio"}
     >
       <div className="flex flex-col gap-6">
-        {/* Tab Selection Header (Desktop Only maybe, but useful for context) */}
-        <div className="flex items-center gap-1 p-1 bg-zinc-900/50 border border-zinc-800 rounded-xl w-fit">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => window.history.pushState({}, "", "/settings?tab=gateway")}
-            className={cn("h-8 px-4 rounded-lg text-xs font-bold transition-all", activeTab === "gateway" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-500")}
-          >
-            <Wallet className="w-3 h-3 mr-2" /> Gateway
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => window.history.pushState({}, "", "/settings?tab=usuario")}
-            className={cn("h-8 px-4 rounded-lg text-xs font-bold transition-all", activeTab === "usuario" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-500")}
-          >
-            <User className="w-3 h-3 mr-2" /> Usuário
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => window.history.pushState({}, "", "/settings?tab=metricas")}
-            className={cn("h-8 px-4 rounded-lg text-xs font-bold transition-all", activeTab === "metricas" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-500")}
-          >
-            <BarChart3 className="w-3 h-3 mr-2" /> Métricas
-          </Button>
-        </div>
-
         {activeTab === "gateway" && renderGateway()}
         {activeTab === "usuario" && renderUsuario()}
         {activeTab === "metricas" && renderMetricas()}
