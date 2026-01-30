@@ -36,6 +36,30 @@ export function useCreateCheckout() {
   });
 }
 
+export function useUpdateCheckout() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: UpdateCheckoutRequest }) => {
+      const url = buildUrl(api.checkouts.get.path, { id });
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update checkout");
+      }
+      return await res.json();
+    },
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: [api.checkouts.list.path] });
+      queryClient.invalidateQueries({ queryKey: [api.checkouts.get.path, id] });
+    },
+  });
+}
+
 export function useCheckout(id: number) {
   return useQuery({
     queryKey: [api.checkouts.get.path, id],

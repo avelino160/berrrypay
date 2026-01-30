@@ -7,15 +7,23 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useProducts } from "@/hooks/use-products";
+import { useCheckout, useCreateCheckout, useUpdateCheckout } from "@/hooks/use-checkouts";
 import { ArrowLeft, Save, Layout as LayoutIcon, Palette, Settings, Eye, Monitor, Smartphone, Plus, Trash2, Clock, Bell, User, Star } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CheckoutEditor() {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/checkouts/edit/:id");
+  const checkoutId = params?.id ? parseInt(params.id) : null;
   const { data: products } = useProducts();
-  const isNew = !params?.id;
+  const { data: checkout, isLoading: loadingCheckout } = useCheckout(checkoutId!);
+  const createMutation = useCreateCheckout();
+  const updateMutation = useUpdateCheckout();
+  const { toast } = useToast();
+  
+  const isNew = !checkoutId;
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   
   // State for editor fields
@@ -29,7 +37,7 @@ export default function CheckoutEditor() {
     requirePhone: false,
     requireCpf: false,
     primaryColor: "#9333ea",
-    backgroundColor: "#f34ef6",
+    backgroundColor: "#ffffff",
     showTitle: true,
     title: "Finalize sua Compra",
     subtitle: "Ambiente 100% seguro",
@@ -37,9 +45,61 @@ export default function CheckoutEditor() {
     showTimer: true,
   });
 
+  useEffect(() => {
+    if (checkout) {
+      setConfig({
+        ...config,
+        name: checkout.name,
+        product: checkout.productId.toString(),
+        // Since we don't have all these fields in the schema yet, we'll use defaults or mock them
+        // In a real app, you'd extend the schema to support these visual configs
+      });
+    }
+  }, [checkout]);
+
+  const handleSave = async () => {
+    if (!config.product) {
+      toast({ title: "Erro", description: "Selecione um produto principal", variant: "destructive" });
+      return;
+    }
+
+    try {
+      if (isNew) {
+        const slug = config.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        await createMutation.mutateAsync({
+          name: config.name,
+          productId: parseInt(config.product),
+          slug: slug + '-' + Math.random().toString(36).substring(2, 7),
+          active: true,
+        });
+        toast({ title: "Sucesso", description: "Checkout criado com sucesso!" });
+      } else {
+        await updateMutation.mutateAsync({
+          id: checkoutId!,
+          data: {
+            name: config.name,
+            productId: parseInt(config.product),
+          }
+        });
+        toast({ title: "Sucesso", description: "Checkout atualizado com sucesso!" });
+      }
+      setLocation("/checkouts");
+    } catch (error: any) {
+      toast({ title: "Erro", description: error.message, variant: "destructive" });
+    }
+  };
+
   const selectedProduct = useMemo(() => 
     products?.find(p => p.id.toString() === config.product),
   [products, config.product]);
+
+  if (checkoutId && loadingCheckout) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#09090b]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-[#09090b] overflow-hidden">
@@ -167,7 +227,11 @@ export default function CheckoutEditor() {
               </div>
 
               <div className="pt-4">
-                <Button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10 border-0 ring-0 focus-visible:ring-0">
+                <Button 
+                  className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10 border-0 ring-0 focus-visible:ring-0"
+                  onClick={handleSave}
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                >
                   <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
                 </Button>
               </div>
@@ -232,7 +296,10 @@ export default function CheckoutEditor() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-8 flex justify-center custom-scrollbar">
-          <div className={`bg-white transition-all duration-300 shadow-2xl rounded-xl overflow-hidden h-fit ${device === 'desktop' ? 'w-full max-w-[900px]' : 'w-[375px]'}`}>
+          <div 
+            className={`transition-all duration-300 shadow-2xl rounded-xl overflow-hidden h-fit ${device === 'desktop' ? 'w-full max-w-[900px]' : 'w-[375px]'}`}
+            style={{ backgroundColor: config.backgroundColor }}
+          >
             {/* Real Checkout Preview Content */}
             <div className="bg-[#f59e0b] p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold">
               <div className="flex items-center gap-2">
@@ -256,12 +323,12 @@ export default function CheckoutEditor() {
                   )}
                   <div>
                     <h2 className="text-xl font-bold text-zinc-900">{selectedProduct?.name || "Curso Checkout"}</h2>
-                    <p className="text-lg font-bold text-purple-600">
+                    <p className="text-lg font-bold" style={{ color: config.primaryColor }}>
                       {selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}
                     </p>
                   </div>
                 </div>
-                <div className="bg-zinc-50 p-4 rounded-xl min-w-[240px]">
+                <div className="bg-zinc-50/50 p-4 rounded-xl min-w-[240px] border border-zinc-100">
                   <h3 className="text-sm font-bold text-zinc-900 mb-3">Resumo da compra</h3>
                   <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b border-zinc-100">
                     <span>{selectedProduct?.name || "Curso Checkout"}</span>
@@ -269,7 +336,7 @@ export default function CheckoutEditor() {
                   </div>
                   <div className="flex justify-between items-center font-bold">
                     <span className="text-zinc-900">Total a pagar</span>
-                    <span className="text-xl text-purple-600">
+                    <span className="text-xl" style={{ color: config.primaryColor }}>
                       {selectedProduct ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedProduct.price / 100 * 5.5) : "R$ 99,00"}
                     </span>
                   </div>
@@ -300,9 +367,21 @@ export default function CheckoutEditor() {
                     <h3>Escolha a forma de pagamento</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="border-2 border-purple-500 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer bg-zinc-50">
-                      <div className="w-8 h-8 bg-purple-500/10 rounded-full flex items-center justify-center">
-                        <div className="w-4 h-4 bg-purple-500 rotate-45" />
+                    <div 
+                      className="border-2 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer"
+                      style={{ 
+                        borderColor: config.primaryColor,
+                        backgroundColor: `${config.primaryColor}08`
+                      }}
+                    >
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: `${config.primaryColor}15` }}
+                      >
+                        <div 
+                          className="w-4 h-4 rotate-45"
+                          style={{ backgroundColor: config.primaryColor }}
+                        />
                       </div>
                       <span className="text-sm font-bold text-zinc-900">Pix</span>
                     </div>
@@ -313,7 +392,10 @@ export default function CheckoutEditor() {
                   </div>
                 </div>
 
-                <Button className="w-full h-14 bg-purple-600 hover:bg-purple-500 text-white text-lg font-black rounded-xl uppercase tracking-wider">
+                <Button 
+                  className="w-full h-14 text-white text-lg font-black rounded-xl uppercase tracking-wider"
+                  style={{ backgroundColor: config.primaryColor }}
+                >
                   {config.paymentButtonText}
                 </Button>
                 
