@@ -47,7 +47,6 @@ export default function Checkouts() {
           Novo Checkout
         </Button>
       </div>
-
       {isLoading && checkouts === undefined ? (
         <div className="flex justify-center p-12">
           <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
@@ -80,7 +79,7 @@ export default function Checkouts() {
                 <h3 className="text-3xl font-extrabold text-white group-hover:text-purple-400 transition-colors line-clamp-1">
                   {checkout.name}
                 </h3>
-                <p className="text-sm text-zinc-500 mt-1 line-clamp-1">
+                <p className="mt-1 line-clamp-1 font-extrabold text-[#ffffff] text-[20px]">
                   {products?.find(p => p.id === checkout.productId)?.name || 'Produto desconhecido'}
                 </p>
                 <div className="flex items-center gap-4 mt-2">
