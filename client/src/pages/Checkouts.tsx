@@ -77,7 +77,7 @@ export default function Checkouts() {
               </div>
               
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors line-clamp-1">
+                <h3 className="text-2xl font-bold text-white group-hover:text-purple-400 transition-colors line-clamp-1">
                   {checkout.name}
                 </h3>
                 <p className="text-sm text-zinc-500 mt-1 line-clamp-1">
@@ -85,7 +85,7 @@ export default function Checkouts() {
                 </p>
                 <div className="flex items-center gap-4 mt-2">
                   <div className="flex flex-col">
-                    <p className="text-sm font-bold text-white">{checkout.views} visualizações</p>
+                    <p className="text-xs font-medium text-zinc-500">{checkout.views} visualizações</p>
                   </div>
                 </div>
               </div>
