@@ -76,6 +76,11 @@ export async function registerRoutes(
   });
 
   // Checkouts
+  app.get(api.checkouts.list.path, async (req, res) => {
+    const checkoutsList = await storage.getCheckouts();
+    res.json(checkoutsList);
+  });
+
   app.post(api.checkouts.create.path, async (req, res) => {
     try {
       const input = api.checkouts.create.input.parse(req.body);
