@@ -45,7 +45,7 @@ export default function Products() {
           <div className="bg-zinc-900 p-4 rounded-full mb-4">
             <PackageOpen className="w-8 h-8 text-zinc-500" />
           </div>
-          <h3 className="text-lg font-medium text-white mb-1">Nenhum produto criado</h3>
+          <h3 className="text-lg font-medium text-white mb-1">Nenhum produto</h3>
           <p className="text-sm text-zinc-500 max-w-sm mx-auto mb-6">
             Você ainda não criou nenhum produto. Comece criando seu primeiro produto digital para gerar links de checkout.
           </p>
