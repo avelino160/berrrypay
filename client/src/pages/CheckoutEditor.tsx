@@ -237,7 +237,7 @@ export default function CheckoutEditor() {
                     <p className="text-lg font-bold text-purple-600">R$ 99,00</p>
                   </div>
                 </div>
-                <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 min-w-[240px]">
+                <div className="bg-zinc-50 p-4 rounded-xl border-zinc-100 min-w-[240px]">
                   <h3 className="text-sm font-bold text-zinc-900 mb-3">Resumo da compra</h3>
                   <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b">
                     <span>Curso Checkout</span>
