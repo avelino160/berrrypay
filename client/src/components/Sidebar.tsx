@@ -6,22 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useMemo, useEffect } from "react";
 
 export function Sidebar() {
-  const [location, setLocation] = useLocation();
+  const [location] = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
 
-  const [currentTab, setCurrentTab] = useState(() => {
-    return new URLSearchParams(window.location.search).get("tab") || "gateway";
-  });
-
-  useEffect(() => {
-    const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      setCurrentTab(params.get("tab") || "gateway");
-    };
-    window.addEventListener("popstate", handlePopState);
-    handlePopState();
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [location]);
+  const searchParams = new URLSearchParams(window.location.search);
+  const currentTab = searchParams.get("tab") || "gateway";
 
   const { data: user } = useQuery<any>({
     queryKey: ["/api/user"],
@@ -149,19 +138,19 @@ export function Sidebar() {
                   const isActive = location === "/settings" && currentTab === itemTab;
                   
                   return (
-                    <button
-                      key={item.href}
-                      onClick={() => setLocation(item.href)}
-                      className={cn(
-                        "w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm",
-                        isActive
-                          ? "bg-purple-500/10 text-purple-400"
-                          : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
-                      )}
-                    >
-                      <Icon size={14} />
-                      {item.label}
-                    </button>
+                    <Link key={item.href} href={item.href}>
+                      <button
+                        className={cn(
+                          "w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm",
+                          isActive
+                            ? "bg-purple-500/10 text-purple-400"
+                            : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
+                        )}
+                      >
+                        <Icon size={14} />
+                        {item.label}
+                      </button>
+                    </Link>
                   );
                 })}
               </div>
