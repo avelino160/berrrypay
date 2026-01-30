@@ -426,20 +426,19 @@ export default function CheckoutEditor() {
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-8 flex justify-center custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-8 flex justify-center custom-scrollbar bg-zinc-100">
           <div 
-            className={`transition-all duration-300 shadow-2xl rounded-xl overflow-hidden h-fit ${device === 'desktop' ? 'w-full max-w-[900px]' : 'w-[375px]'}`}
-            style={{ backgroundColor: config.backgroundColor }}
+            className={`transition-all duration-300 shadow-2xl rounded-xl overflow-hidden h-fit bg-white ${device === 'desktop' ? 'w-full max-w-[1000px]' : 'w-[375px]'}`}
           >
-            {/* Real Checkout Preview Content */}
+            {/* Header / Timer */}
             <div 
-              className="p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold"
+              className="p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold shadow-md"
               style={{ backgroundColor: config.timerColor }}
             >
               <div className="flex items-center gap-4 bg-black/20 px-6 py-2 rounded-2xl shadow-inner border border-white/10">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 animate-pulse" />
-                  <span className="uppercase tracking-widest text-xs opacity-80">{config.timerText}</span>
+                  <span className="uppercase tracking-widest text-[10px] opacity-80">{config.timerText}</span>
                 </div>
                 <div className="font-mono text-2xl font-black tracking-[0.2em] text-white tabular-nums">
                   {formatTime(timerSeconds)}
@@ -447,150 +446,151 @@ export default function CheckoutEditor() {
               </div>
             </div>
 
-            <div className="p-8 space-y-10">
-              <div className="space-y-8">
-                <div className="flex items-center gap-6">
-                  {selectedProduct?.imageUrl ? (
-                    <img src={selectedProduct.imageUrl} className="w-24 h-24 rounded-2xl object-cover shadow-lg border border-zinc-100" alt="" />
-                  ) : (
-                    <div className="w-24 h-24 bg-zinc-900 rounded-2xl flex items-center justify-center text-white font-black text-4xl shadow-lg border border-zinc-100">
-                      {selectedProduct?.name?.charAt(0) || 'P'}
+            <div className={`p-4 md:p-8 grid grid-cols-1 ${device === 'desktop' ? 'lg:grid-cols-12' : ''} gap-8 text-zinc-900`}>
+              {/* Coluna da Esquerda - Dados e Pagamento */}
+              <div className={device === 'desktop' ? 'lg:col-span-7 space-y-6' : 'space-y-6'}>
+                <div className="bg-zinc-50 border border-zinc-100 p-6 rounded-2xl shadow-sm">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-purple-600" />
                     </div>
-                  )}
-                  <div className="space-y-1">
-                    <h2 className="text-2xl font-black text-zinc-900 tracking-tight">{selectedProduct?.name || "Produto Principal"}</h2>
-                    <p className="text-2xl font-black" style={{ color: config.primaryColor }}>
-                      {selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}
-                    </p>
+                    <h2 className="text-lg font-black text-zinc-900 uppercase tracking-tight">Dados de Acesso</h2>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className={`grid grid-cols-1 ${device === 'desktop' ? 'md:grid-cols-2' : ''} gap-4`}>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Nome Completo</label>
+                        <div className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white flex items-center text-zinc-400 text-sm italic">Seu nome completo</div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">E-mail para Acesso</label>
+                        <div className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white flex items-center text-zinc-400 text-sm italic">exemplo@email.com</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-zinc-50/80 backdrop-blur-sm p-6 rounded-2xl border border-zinc-100 shadow-sm space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-900 font-black uppercase text-xs tracking-widest opacity-60">
-                    <Settings className="w-3 h-3" />
-                    <span>Resumo do Pedido</span>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between text-sm font-bold text-zinc-600">
-                      <span>{selectedProduct?.name || "Produto Principal"}</span>
-                      <span>{selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}</span>
+                <div className="bg-zinc-50 border border-zinc-100 p-6 rounded-2xl shadow-sm">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-purple-600" />
                     </div>
-                    {orderBumpProduct && (
-                      <div className="flex justify-between text-sm font-bold text-zinc-600">
-                        <span>{orderBumpProduct.name} (Order Bump)</span>
-                        <span>${(orderBumpProduct.price / 100).toFixed(2)}</span>
+                    <h2 className="text-lg font-black text-zinc-900 uppercase tracking-tight">Pagamento Seguro</h2>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div className="p-4 rounded-xl border-2 border-purple-500 bg-purple-50 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 rounded-full border-4 border-purple-500 bg-white" />
+                        <span className="font-bold text-zinc-900">PayPal</span>
                       </div>
-                    )}
-                    <div className="pt-4 border-t border-zinc-200/50 flex justify-between items-center">
-                      <span className="text-zinc-900 font-black uppercase text-xs tracking-widest">Total</span>
-                      <span className="text-2xl font-black" style={{ color: config.primaryColor }}>
-                        ${(( (selectedProduct?.price || 0) + (orderBumpProduct?.price || 0) ) / 100).toFixed(2)}
-                      </span>
+                      <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" className="h-6 opacity-80" alt="PayPal" />
+                    </div>
+
+                    <Button 
+                      className="w-full h-16 text-xl font-black rounded-2xl shadow-xl border-0"
+                      style={{ backgroundColor: config.primaryColor }}
+                    >
+                      {config.paymentButtonText}
+                    </Button>
+
+                    <div className="flex items-center justify-center gap-6 py-4 border-t border-zinc-200/50">
+                      <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
+                        <Shield className="w-3 h-3 text-green-500" />
+                        <span>Criptografia SSL</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
+                        <Lock className="w-3 h-3 text-green-500" />
+                        <span>Compra Segura</span>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Provas Sociais */}
+                {config.socialProofs.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest px-2">O que dizem nossos clientes</h3>
+                    <div className={`grid grid-cols-1 ${device === 'desktop' ? 'md:grid-cols-2' : ''} gap-4`}>
+                      {config.socialProofs.map((proof) => (
+                        <div key={proof.id} className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl shadow-sm">
+                          <div className="flex gap-0.5 mb-2">
+                            {[...Array(proof.stars)].map((_, s) => <Star key={s} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
+                          </div>
+                          <p className="text-xs font-bold text-zinc-900 mb-1">{proof.name}</p>
+                          <p className="text-[11px] text-zinc-500 leading-relaxed italic">"{proof.text}"</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Order Bump Preview */}
-              {orderBumpProduct && (
-                <div className="bg-purple-50 border-2 border-dashed border-purple-200 p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 bg-purple-500 text-white text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-widest">Oferta Especial</div>
-                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-purple-100 shadow-sm">
-                    <Plus className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-sm font-black text-zinc-900">Sim! Eu quero adicionar {orderBumpProduct.name}</h4>
-                    <p className="text-xs text-zinc-500 font-bold">Por apenas <span className="text-purple-600">${(orderBumpProduct.price / 100).toFixed(2)}</span></p>
-                  </div>
-                  <Switch checked={true} className="data-[state=checked]:bg-purple-500" />
-                </div>
-              )}
-
-              {/* Social Proofs in Preview */}
-              {config.socialProofs.length > 0 && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b border-zinc-100 pb-2">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <h3>O que dizem nossos clientes</h3>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {config.socialProofs.map(proof => (
-                      <div key={proof.id} className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-bold text-zinc-900">{proof.name}</span>
-                          <div className="flex gap-0.5">
-                            {Array.from({ length: proof.stars }).map((_, i) => (
-                              <Star key={i} className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                            ))}
-                          </div>
+              {/* Coluna da Direita - Resumo */}
+              <div className={device === 'desktop' ? 'lg:col-span-5' : ''}>
+                <div className="space-y-6">
+                  <div className="bg-zinc-50 border border-zinc-100 p-8 rounded-3xl shadow-sm space-y-8">
+                    <div className="flex items-center gap-4">
+                      {selectedProduct?.imageUrl ? (
+                        <img src={selectedProduct.imageUrl} className="w-20 h-20 rounded-2xl object-cover shadow-md border border-zinc-100" alt="" />
+                      ) : (
+                        <div className="w-20 h-20 bg-zinc-900 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-lg border border-zinc-100">
+                          {selectedProduct?.name?.charAt(0) || 'P'}
                         </div>
-                        <p className="text-xs text-zinc-600 italic leading-relaxed">"{proof.text}"</p>
+                      )}
+                      <div>
+                        <h2 className="text-xl font-black text-zinc-900 tracking-tight leading-tight">{selectedProduct?.name || "Produto Principal"}</h2>
+                        <p className="text-lg font-black mt-1" style={{ color: config.primaryColor }}>
+                          {selectedProduct ? `R$ ${(selectedProduct.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : "R$ 0,00"}
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="max-w-[500px] space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b border-zinc-100 pb-2">
-                    <User className="w-4 h-4" />
-                    <h3>Seus dados</h3>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="space-y-1.5">
-                      <Label className="text-xs text-zinc-500">Qual é o seu nome completo?</Label>
-                      <Input placeholder="Nome da Silva" className="h-11 bg-zinc-50 border-zinc-100" />
                     </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs text-zinc-500">Qual é o seu e-mail?</Label>
-                      <Input placeholder="Digite o e-mail que receberá o produto" className="h-11 bg-zinc-50 border-zinc-100" />
-                    </div>
-                  </div>
-                </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b border-zinc-100 pb-2">
-                    <Settings className="w-4 h-4" />
-                    <h3>Escolha a forma de pagamento</h3>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div 
-                      className="border-2 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer"
-                      style={{ 
-                        borderColor: config.primaryColor,
-                        backgroundColor: `${config.primaryColor}08`
-                      }}
-                    >
-                      <div 
-                        className="w-8 h-8 rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: `${config.primaryColor}15` }}
-                      >
-                        <div 
-                          className="w-4 h-4 rotate-45"
-                          style={{ backgroundColor: config.primaryColor }}
-                        />
+                    <div className="space-y-4 pt-6 border-t border-zinc-200/50">
+                      <div className="flex items-center gap-2 text-zinc-900 font-black uppercase text-[10px] tracking-widest opacity-40">
+                        <Settings className="w-3 h-3" />
+                        <span>Resumo do Pedido</span>
                       </div>
-                      <span className="text-sm font-bold text-zinc-900">Pix</span>
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-sm font-bold text-zinc-600">
+                          <span>{selectedProduct?.name || "Produto Principal"}</span>
+                          <span>{selectedProduct ? `R$ ${(selectedProduct.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : "R$ 0,00"}</span>
+                        </div>
+                        {orderBumpProduct && (
+                          <div className="flex justify-between text-sm font-bold text-zinc-600">
+                            <span>{orderBumpProduct.name} (Order Bump)</span>
+                            <span>R$ {(orderBumpProduct.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                          </div>
+                        )}
+                        <div className="pt-4 border-t border-zinc-200/50 flex justify-between items-center">
+                          <span className="text-zinc-900 font-black uppercase text-xs tracking-widest">Total</span>
+                          <span className="text-3xl font-black" style={{ color: config.primaryColor }}>
+                            {`R$ ${(((selectedProduct?.price || 0) + (orderBumpProduct?.price || 0)) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="border border-zinc-100 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-zinc-200">
-                      <Smartphone className="w-8 h-8 text-zinc-400" />
-                      <span className="text-sm font-bold text-zinc-500">Cartão de Crédito</span>
+
+                    <div className="pt-2">
+                      <div className="p-4 bg-green-50 border border-green-100 rounded-2xl space-y-2">
+                        <div className="flex items-center gap-2 text-green-700">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span className="text-xs font-bold uppercase tracking-wider">Acesso Imediato</span>
+                        </div>
+                        <p className="text-[11px] text-green-600/80 leading-relaxed">
+                          Seu acesso será enviado para o e-mail informado assim que o pagamento for aprovado.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <Button 
-                  className="w-full h-14 text-white text-lg font-black rounded-xl uppercase tracking-wider"
-                  style={{ backgroundColor: config.primaryColor }}
-                >
-                  {config.paymentButtonText}
-                </Button>
-                
-                <div className="text-center">
-                  <p className="text-[10px] text-zinc-400 uppercase font-bold flex items-center justify-center gap-1">
-                    <Settings className="w-3 h-3" /> Compra segura
-                  </p>
+                  <footer className="text-center px-4">
+                    <p className="text-[10px] text-zinc-400 font-medium leading-relaxed">
+                      BerryPay - Tecnologia de Pagamentos Seguros<br />
+                      Todos os direitos reservados &copy; {new Date().getFullYear()}
+                    </p>
+                  </footer>
                 </div>
               </div>
             </div>
