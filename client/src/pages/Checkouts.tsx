@@ -77,7 +77,7 @@ export default function Checkouts() {
               </div>
               
               <div className="flex-1 min-w-0">
-                <h3 className="text-2xl font-bold text-white group-hover:text-purple-400 transition-colors line-clamp-1">
+                <h3 className="text-3xl font-extrabold text-white group-hover:text-purple-400 transition-colors line-clamp-1">
                   {checkout.name}
                 </h3>
                 <p className="text-sm text-zinc-500 mt-1 line-clamp-1">
