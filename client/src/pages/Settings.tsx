@@ -15,11 +15,22 @@ import paypalLogo from "@assets/paypal-logo-icon-png_44635_1769721723658.jpg";
 
 export default function Settings() {
   const [location] = useLocation();
-  
-  const activeTab = useMemo(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("tab") || "gateway";
-  }, [location, window.location.search]);
+  const [activeTab, setActiveTab] = useState(() => {
+    return new URLSearchParams(window.location.search).get("tab") || "gateway";
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setActiveTab(params.get("tab") || "gateway");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    // Also update when location changes (wouter navigation)
+    handlePopState();
+    
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [location]);
 
   const { data: settings, isLoading: isLoadingSettings } = useSettings();
   const updateSettings = useUpdateSettings();

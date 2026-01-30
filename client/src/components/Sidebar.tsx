@@ -9,11 +9,19 @@ export function Sidebar() {
   const [location, setLocation] = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
 
-  // To make search params reactive, we rely on useLocation triggering re-renders
-  const currentTab = useMemo(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("tab") || "gateway";
-  }, [location, window.location.search]);
+  const [currentTab, setCurrentTab] = useState(() => {
+    return new URLSearchParams(window.location.search).get("tab") || "gateway";
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setCurrentTab(params.get("tab") || "gateway");
+    };
+    window.addEventListener("popstate", handlePopState);
+    handlePopState();
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [location]);
 
   const { data: user } = useQuery<any>({
     queryKey: ["/api/user"],
