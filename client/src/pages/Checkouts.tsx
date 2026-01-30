@@ -86,7 +86,6 @@ export default function Checkouts() {
                 <div className="flex items-center gap-4 mt-2">
                   <div className="flex flex-col">
                     <p className="text-sm font-bold text-white">{checkout.views} visualizações</p>
-                    <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">Performance</p>
                   </div>
                 </div>
               </div>
