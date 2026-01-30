@@ -15,8 +15,20 @@ import paypalLogo from "@assets/paypal-logo-icon-png_44635_1769721723658.jpg";
 
 export default function Settings() {
   const [location] = useLocation();
-  const searchParams = new URLSearchParams(window.location.search);
-  const activeTab = searchParams.get("tab") || "gateway";
+  // Using a separate state for activeTab that syncs with URL
+  const [activeTab, setActiveTab] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("tab") || "gateway";
+  });
+
+  // Sync state with URL changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab") || "gateway";
+    if (tab !== activeTab) {
+      setActiveTab(tab);
+    }
+  }, [window.location.search]);
 
   const { data: settings, isLoading: isLoadingSettings } = useSettings();
   const updateSettings = useUpdateSettings();
