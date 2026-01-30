@@ -1,11 +1,13 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy, ChevronDown, User, BarChart3, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useStats } from "@/hooks/use-stats";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export function Sidebar() {
   const [location] = useLocation();
+  const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
 
   const { data: user } = useQuery<any>({
     queryKey: ["/api/user"],
@@ -17,7 +19,12 @@ export function Sidebar() {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/products", label: "Produtos", icon: Package },
     { href: "/checkouts", label: "Checkouts", icon: ShoppingCart },
-    { href: "/settings", label: "Configurações", icon: Settings },
+  ];
+
+  const settingSubItems = [
+    { href: "/settings?tab=gateway", label: "Gateway", icon: Wallet },
+    { href: "/settings?tab=usuario", label: "Usuário", icon: User },
+    { href: "/settings?tab=metricas", label: "Métricas", icon: BarChart3 },
   ];
 
   const { data: stats } = useStats();
@@ -79,7 +86,7 @@ export function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="px-4 py-2 space-y-4">
+        <nav className="px-4 py-2 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location === item.href;
@@ -99,6 +106,54 @@ export function Sidebar() {
               </Link>
             );
           })}
+
+          <div className="space-y-1">
+            <button
+              onClick={() => setSettingsOpen(!settingsOpen)}
+              className={cn(
+                "w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold transition-all duration-200 text-[15px]",
+                location.startsWith("/settings")
+                  ? "text-white"
+                  : "text-zinc-400 hover:text-white hover:bg-zinc-900"
+              )}
+            >
+              <div className="flex items-center gap-4">
+                <Settings size={18} strokeWidth={2.5} />
+                Configurações
+              </div>
+              <ChevronDown 
+                size={16} 
+                className={cn("transition-transform duration-200", settingsOpen && "rotate-180")} 
+              />
+            </button>
+            
+            {settingsOpen && (
+              <div className="space-y-1 ml-4 border-l border-zinc-800 pl-2">
+                {settingSubItems.map((item) => {
+                  const Icon = item.icon;
+                  // Handle both exact path and path with search params
+                  const isActive = location + window.location.search === item.href || 
+                                 (item.href === "/settings?tab=gateway" && location === "/settings" && !window.location.search);
+                  
+                  return (
+                    <Link key={item.href} href={item.href}>
+                      <button
+                        className={cn(
+                          "w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm",
+                          isActive
+                            ? "bg-purple-500/10 text-purple-400"
+                            : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
+                        )}
+                      >
+                        <Icon size={14} />
+                        {item.label}
+                      </button>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </nav>
       </div>
       {/* Footer - No fixed positioning */}
