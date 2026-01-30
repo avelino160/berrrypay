@@ -101,11 +101,6 @@ export default function Dashboard() {
                 : "••••••"
               }
             </div>
-            {showSales && (
-              <p className="text-[10px] text-zinc-500">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats?.salesToday || 0)}
-              </p>
-            )}
           </CardContent>
         </Card>
 
