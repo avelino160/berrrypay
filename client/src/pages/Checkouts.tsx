@@ -24,7 +24,7 @@ export default function Checkouts() {
   });
 
   const handleCreate = () => {
-    window.open("/checkouts/new", "_blank");
+    setLocation("/checkouts/new");
   };
 
   const copyLink = (slug: string) => {
@@ -102,7 +102,7 @@ export default function Checkouts() {
                     size="sm" 
                     variant="ghost" 
                     className="h-9 w-9 p-0 text-zinc-500 hover:text-purple-500"
-                    onClick={() => window.open(`/checkouts/edit/${checkout.id}`, "_blank")}
+                    onClick={() => setLocation(`/checkouts/edit/${checkout.id}`)}
                   >
                     <Pencil className="w-4 h-4" />
                   </Button>
