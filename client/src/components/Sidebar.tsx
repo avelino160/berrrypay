@@ -13,6 +13,24 @@ export function Sidebar() {
   const searchParams = new URLSearchParams(window.location.search);
   const currentTab = searchParams.get("tab") || "gateway";
 
+  const { data: user } = useQuery<any>({
+    queryKey: ["/api/user"],
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
+
+  const navItems = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/products", label: "Produtos", icon: Package },
+    { href: "/checkouts", label: "Checkouts", icon: ShoppingCart },
+  ];
+
+  const settingSubItems = [
+    { href: "/settings?tab=gateway", label: "Gateway", icon: Wallet },
+    { href: "/settings?tab=usuario", label: "Usuário", icon: User },
+    { href: "/settings?tab=metricas", label: "Métricas", icon: BarChart3 },
+  ];
+
   const { data: stats } = useStats();
   const currentRevenue = stats?.revenuePaid || 0;
 
