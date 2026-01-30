@@ -49,9 +49,6 @@ export default function CheckoutEditor() {
               <p className="text-[10px] text-zinc-500 uppercase tracking-wider">{config.name || "Curso Checkout"}</p>
             </div>
           </div>
-          <Button size="sm" className="bg-[#3de148] hover:bg-[#34c740] text-black font-bold h-8">
-            <Save className="w-3.5 h-3.5 mr-1.5" /> Criar Checkout
-          </Button>
         </div>
 
         <Tabs defaultValue="geral" className="flex-1 flex flex-col overflow-hidden">
@@ -151,6 +148,12 @@ export default function CheckoutEditor() {
                   </div>
                   <Switch checked={config.requireCpf} onCheckedChange={(v) => setConfig({...config, requireCpf: v})} />
                 </div>
+              </div>
+
+              <div className="pt-4">
+                <Button className="w-full bg-[#3de148] hover:bg-[#34c740] text-black font-bold h-10">
+                  <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
+                </Button>
               </div>
             </section>
           </TabsContent>
