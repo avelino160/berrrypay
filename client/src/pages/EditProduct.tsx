@@ -188,9 +188,22 @@ export default function EditProduct() {
                   <Button variant="outline" className={`flex-1 h-11 ${deliveryMethod === "file" ? "border-purple-500 text-purple-400" : ""}`} onClick={() => setDeliveryMethod("file")}>Arquivo</Button>
                 </div>
                 {deliveryMethod === "link" && (
-                  <div className="space-y-4">
-                    <Input className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" placeholder="URL de entrega" value={formData.deliveryUrl} onChange={e => setFormData({...formData, deliveryUrl: e.target.value})} />
-                    <Input className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" placeholder="WhatsApp (opcional)" value={formData.whatsappUrl} onChange={e => setFormData({...formData, whatsappUrl: e.target.value})} />
+                  <div className="space-y-6 animate-in fade-in duration-300">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 bg-zinc-800 rounded-lg">
+                          <Globe className="w-3.5 h-3.5 text-zinc-400" />
+                        </div>
+                        <label className="text-sm font-bold text-zinc-200">Link de Acesso</label>
+                      </div>
+                      <Input 
+                        className="bg-black/40 border-zinc-800 h-11 focus-visible:ring-purple-500" 
+                        placeholder="https://exemplo.com/acesso"
+                        value={formData.deliveryUrl}
+                        onChange={e => setFormData({...formData, deliveryUrl: e.target.value})}
+                      />
+                      <p className="text-[11px] text-zinc-500 ml-1">Insira o link que o cliente receberá automaticamente após a compra</p>
+                    </div>
                   </div>
                 )}
                 {deliveryMethod === "file" && (
