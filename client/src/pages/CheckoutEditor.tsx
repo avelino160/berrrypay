@@ -301,5 +301,3 @@ export default function CheckoutEditor() {
     </div>
   );
 }
-  );
-}
