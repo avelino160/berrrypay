@@ -57,7 +57,7 @@ export default function Products() {
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {products?.map((product) => (
             <Card key={product.id} className="bg-[#18181b] border-zinc-800/60 hover:border-purple-500/30 transition-all cursor-pointer group overflow-hidden w-full">
               <div className="w-full aspect-square bg-zinc-900 relative overflow-hidden border-b border-zinc-800/50">
@@ -74,12 +74,12 @@ export default function Products() {
                   </span>
                 </div>
               </div>
-              <div className="p-5">
-                <h3 className="text-lg font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors">{product.name}</h3>
-                <div className="flex items-end justify-between border-t border-zinc-800/50 pt-4 mt-2">
+              <div className="p-3">
+                <h3 className="text-sm font-semibold text-white mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
+                <div className="flex items-center justify-between border-t border-zinc-800/50 pt-2 mt-1">
                   <div>
-                    <p className="text-xs text-zinc-500">Preço (USD)</p>
-                    <p className="text-lg font-bold text-white">
+                    <p className="text-[10px] text-zinc-500">USD</p>
+                    <p className="text-sm font-bold text-white">
                       {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
                     </p>
                   </div>
