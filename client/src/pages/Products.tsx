@@ -73,9 +73,9 @@ export default function Products() {
                 <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
                 <div className="flex items-center justify-between border-t border-zinc-800/50 pt-4 mt-2">
                   <div>
-                    <p className="text-sm text-zinc-500">BRL</p>
+                    <p className="text-sm text-zinc-500">USD</p>
                     <p className="text-xl font-bold text-white">
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price / 100)}
+                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price / 100)}
                     </p>
                   </div>
                   <div className="flex gap-1">

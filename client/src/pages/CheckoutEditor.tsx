@@ -437,7 +437,7 @@ export default function CheckoutEditor() {
                   <div className="space-y-1">
                     <h2 className="text-2xl font-black text-zinc-900 tracking-tight">{selectedProduct?.name || "Produto Principal"}</h2>
                     <p className="text-2xl font-black" style={{ color: config.primaryColor }}>
-                      {selectedProduct ? `R$ ${(selectedProduct.price / 100).toFixed(2).replace('.', ',')}` : "R$ 0,00"}
+                      {selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}
                     </p>
                   </div>
                 </div>
@@ -450,18 +450,18 @@ export default function CheckoutEditor() {
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm font-bold text-zinc-600">
                       <span>{selectedProduct?.name || "Produto Principal"}</span>
-                      <span>{selectedProduct ? `R$ ${(selectedProduct.price / 100).toFixed(2).replace('.', ',')}` : "R$ 0,00"}</span>
+                      <span>{selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}</span>
                     </div>
                     {orderBumpProduct && (
                       <div className="flex justify-between text-sm font-bold text-zinc-600">
                         <span>{orderBumpProduct.name} (Order Bump)</span>
-                        <span>R$ {(orderBumpProduct.price / 100).toFixed(2).replace('.', ',')}</span>
+                        <span>${(orderBumpProduct.price / 100).toFixed(2)}</span>
                       </div>
                     )}
                     <div className="pt-4 border-t border-zinc-200/50 flex justify-between items-center">
                       <span className="text-zinc-900 font-black uppercase text-xs tracking-widest">Total</span>
                       <span className="text-2xl font-black" style={{ color: config.primaryColor }}>
-                        R$ {(( (selectedProduct?.price || 0) + (orderBumpProduct?.price || 0) ) / 100).toFixed(2).replace('.', ',')}
+                        ${(( (selectedProduct?.price || 0) + (orderBumpProduct?.price || 0) ) / 100).toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -477,7 +477,7 @@ export default function CheckoutEditor() {
                   </div>
                   <div className="flex-1">
                     <h4 className="text-sm font-black text-zinc-900">Sim! Eu quero adicionar {orderBumpProduct.name}</h4>
-                    <p className="text-xs text-zinc-500 font-bold">Por apenas <span className="text-purple-600">R$ {(orderBumpProduct.price / 100).toFixed(2).replace('.', ',')}</span></p>
+                    <p className="text-xs text-zinc-500 font-bold">Por apenas <span className="text-purple-600">${(orderBumpProduct.price / 100).toFixed(2)}</span></p>
                   </div>
                   <Switch checked={true} className="data-[state=checked]:bg-purple-500" />
                 </div>
