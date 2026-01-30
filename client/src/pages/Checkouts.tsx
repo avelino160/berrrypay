@@ -9,8 +9,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Plus, ShoppingCart, ExternalLink, Copy, Pencil } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
 export default function Checkouts() {
+  const [, setLocation] = useLocation();
   const { data: checkouts, isLoading } = useCheckouts();
   const { data: products } = useProducts();
   const createCheckout = useCreateCheckout();
