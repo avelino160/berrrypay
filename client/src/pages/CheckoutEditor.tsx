@@ -125,9 +125,9 @@ export default function CheckoutEditor() {
     }
   };
 
-  const selectedProduct = useMemo(() => 
-    products?.find(p => p.id.toString() === config.product),
-  [products, config.product]);
+  const orderBumpProduct = useMemo(() => 
+    products?.find(p => p.id.toString() === config.orderBump),
+  [products, config.orderBump]);
 
   if (checkoutId && loadingCheckout) {
     return (
@@ -147,8 +147,7 @@ export default function CheckoutEditor() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h1 className="text-sm font-bold text-white leading-tight">Editor de Checkout</h1>
-              <p className="text-[10px] text-zinc-500 uppercase tracking-wider">{config.name || "Curso Checkout"}</p>
+              <h1 className="text-xl font-black text-white leading-tight uppercase tracking-tighter">Editor de Checkout</h1>
             </div>
           </div>
         </div>
@@ -410,46 +409,75 @@ export default function CheckoutEditor() {
               className="p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold"
               style={{ backgroundColor: config.timerColor }}
             >
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span>{config.timerText}</span>
-              </div>
-              <div className="bg-black/20 px-3 py-1 rounded-md flex items-center gap-1 font-mono text-base tracking-widest shadow-inner">
-                {formatTime(timerSeconds)}
+              <div className="flex items-center gap-4 bg-black/20 px-6 py-2 rounded-2xl shadow-inner border border-white/10">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 animate-pulse" />
+                  <span className="uppercase tracking-widest text-xs opacity-80">{config.timerText}</span>
+                </div>
+                <div className="font-mono text-2xl font-black tracking-[0.2em] text-white tabular-nums">
+                  {formatTime(timerSeconds)}
+                </div>
               </div>
             </div>
 
-            <div className="p-8 space-y-8">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
+            <div className="p-8 space-y-10">
+              <div className="space-y-8">
+                <div className="flex items-center gap-6">
                   {selectedProduct?.imageUrl ? (
-                    <img src={selectedProduct.imageUrl} className="w-16 h-16 rounded-xl object-cover" alt="" />
+                    <img src={selectedProduct.imageUrl} className="w-24 h-24 rounded-2xl object-cover shadow-lg border border-zinc-100" alt="" />
                   ) : (
-                    <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center text-white font-bold text-2xl">
-                      {selectedProduct?.name?.charAt(0) || 'g'}
+                    <div className="w-24 h-24 bg-zinc-900 rounded-2xl flex items-center justify-center text-white font-black text-4xl shadow-lg border border-zinc-100">
+                      {selectedProduct?.name?.charAt(0) || 'P'}
                     </div>
                   )}
-                  <div>
-                    <h2 className="text-xl font-bold text-zinc-900">{selectedProduct?.name || "Produto Principal"}</h2>
-                    <p className="text-lg font-bold" style={{ color: config.primaryColor }}>
+                  <div className="space-y-1">
+                    <h2 className="text-2xl font-black text-zinc-900 tracking-tight">{selectedProduct?.name || "Produto Principal"}</h2>
+                    <p className="text-2xl font-black" style={{ color: config.primaryColor }}>
                       {selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}
                     </p>
                   </div>
                 </div>
-                <div className="bg-zinc-50/50 p-4 rounded-xl min-w-[240px] border border-zinc-100">
-                  <h3 className="text-sm font-bold text-zinc-900 mb-3">Resumo da compra</h3>
-                  <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b border-zinc-100">
-                    <span>{selectedProduct?.name || "Produto Principal"}</span>
-                    <span>{selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}</span>
+
+                <div className="bg-zinc-50/80 backdrop-blur-sm p-6 rounded-2xl border border-zinc-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-2 text-zinc-900 font-black uppercase text-xs tracking-widest opacity-60">
+                    <Settings className="w-3 h-3" />
+                    <span>Resumo do Pedido</span>
                   </div>
-                  <div className="flex justify-between items-center font-bold">
-                    <span className="text-zinc-900">Total a pagar</span>
-                    <span className="text-xl" style={{ color: config.primaryColor }}>
-                      {selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}
-                    </span>
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm font-bold text-zinc-600">
+                      <span>{selectedProduct?.name || "Produto Principal"}</span>
+                      <span>{selectedProduct ? `$${(selectedProduct.price / 100).toFixed(2)}` : "$0.00"}</span>
+                    </div>
+                    {orderBumpProduct && (
+                      <div className="flex justify-between text-sm font-bold text-zinc-600">
+                        <span>{orderBumpProduct.name} (Order Bump)</span>
+                        <span>${(orderBumpProduct.price / 100).toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="pt-4 border-t border-zinc-200/50 flex justify-between items-center">
+                      <span className="text-zinc-900 font-black uppercase text-xs tracking-widest">Total</span>
+                      <span className="text-2xl font-black" style={{ color: config.primaryColor }}>
+                        ${(( (selectedProduct?.price || 0) + (orderBumpProduct?.price || 0) ) / 100).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Order Bump Preview */}
+              {orderBumpProduct && (
+                <div className="bg-purple-50 border-2 border-dashed border-purple-200 p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 bg-purple-500 text-white text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-widest">Oferta Especial</div>
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-purple-100 shadow-sm">
+                    <Plus className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-black text-zinc-900">Sim! Eu quero adicionar {orderBumpProduct.name}</h4>
+                    <p className="text-xs text-zinc-500 font-bold">Por apenas <span className="text-purple-600">${(orderBumpProduct.price / 100).toFixed(2)}</span></p>
+                  </div>
+                  <Switch checked={true} className="data-[state=checked]:bg-purple-500" />
+                </div>
+              )}
 
               {/* Social Proofs in Preview */}
               {config.socialProofs.length > 0 && (
