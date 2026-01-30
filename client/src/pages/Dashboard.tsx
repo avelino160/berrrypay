@@ -164,7 +164,7 @@ export default function Dashboard() {
                   tick={{fill: '#71717a', fontSize: 11}} 
                   axisLine={false}
                   tickLine={false}
-                  tickFormatter={(value) => `$${value.toFixed(0)}`}
+                  tickFormatter={(value) => `R$${(value * 5.19).toFixed(0)}`}
                   dx={-10}
                 />
                 <Tooltip 
