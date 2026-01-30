@@ -274,15 +274,38 @@ export default function CheckoutEditor() {
                 </div>
               </div>
 
-              <div className="pt-4">
-                <Button 
-                  className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10 border-0 ring-0 focus-visible:ring-0"
-                  onClick={handleSave}
-                  disabled={createMutation.isPending || updateMutation.isPending}
-                >
-                  <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
-                </Button>
-              </div>
+            <div className="pt-4 space-y-4">
+              {checkout?.publicUrl && (
+                <div className="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-2">
+                  <Label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Link Público</Label>
+                  <div className="flex gap-2">
+                    <Input 
+                      readOnly 
+                      value={checkout.publicUrl} 
+                      className="bg-zinc-950 border-zinc-800 h-8 text-[10px] focus:ring-0" 
+                    />
+                    <Button 
+                      size="icon" 
+                      variant="outline" 
+                      className="h-8 w-8 border-zinc-800 bg-zinc-900 hover:bg-zinc-800"
+                      onClick={() => {
+                        navigator.clipboard.writeText(checkout.publicUrl!);
+                        toast({ title: "Copiado!" });
+                      }}
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+              <Button 
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10 border-0 ring-0 focus-visible:ring-0"
+                onClick={handleSave}
+                disabled={createMutation.isPending || updateMutation.isPending}
+              >
+                <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
+              </Button>
+            </div>
             </section>
           </TabsContent>
 

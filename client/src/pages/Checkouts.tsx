@@ -29,8 +29,9 @@ export default function Checkouts() {
     setLocation("/checkouts/new");
   };
 
-  const copyLink = (slug: string) => {
-    navigator.clipboard.writeText(`https://coldpay.app/${slug}`);
+  const copyLink = (publicUrl: string | null, slug: string) => {
+    const link = publicUrl || `${window.location.origin}/checkout/${slug}`;
+    navigator.clipboard.writeText(link);
     toast({ title: "Copiado!", description: "Link do checkout copiado para a área de transferência." });
   };
 
@@ -99,7 +100,7 @@ export default function Checkouts() {
                       className="text-zinc-400 hover:text-white"
                       onClick={(e) => {
                         e.stopPropagation();
-                        copyLink(checkout.slug);
+                        copyLink(checkout.publicUrl, checkout.slug);
                       }}
                     >
                       <Copy className="w-4 h-4" />
