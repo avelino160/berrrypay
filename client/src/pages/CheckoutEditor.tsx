@@ -26,7 +26,7 @@ export default function CheckoutEditor() {
     paymentButtonText: "PAGAR AGORA",
     requirePhone: false,
     requireCpf: false,
-    primaryColor: "#3de148",
+    primaryColor: "#9333ea",
     backgroundColor: "#f34ef6",
     showTitle: true,
     title: "Finalize sua Compra",
@@ -72,7 +72,7 @@ export default function CheckoutEditor() {
                 <Input 
                   value={config.name}
                   onChange={(e) => setConfig({...config, name: e.target.value})}
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm focus:ring-1 focus:ring-[#3de148]"
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm focus:ring-1 focus:ring-purple-500"
                 />
               </div>
 
@@ -151,7 +151,7 @@ export default function CheckoutEditor() {
               </div>
 
               <div className="pt-4">
-                <Button className="w-full bg-[#3de148] hover:bg-[#34c740] text-black font-bold h-10">
+                <Button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10">
                   <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
                 </Button>
               </div>
@@ -200,7 +200,7 @@ export default function CheckoutEditor() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className={`h-8 w-8 ${device === 'desktop' ? 'bg-zinc-800 text-[#3de148]' : 'text-zinc-500'}`}
+            className={`h-8 w-8 ${device === 'desktop' ? 'bg-zinc-800 text-purple-500' : 'text-zinc-500'}`}
             onClick={() => setDevice('desktop')}
           >
             <Monitor className="h-4 w-4" />
@@ -208,7 +208,7 @@ export default function CheckoutEditor() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className={`h-8 w-8 ${device === 'mobile' ? 'bg-zinc-800 text-[#3de148]' : 'text-zinc-500'}`}
+            className={`h-8 w-8 ${device === 'mobile' ? 'bg-zinc-800 text-purple-500' : 'text-zinc-500'}`}
             onClick={() => setDevice('mobile')}
           >
             <Smartphone className="h-4 w-4" />
@@ -234,7 +234,7 @@ export default function CheckoutEditor() {
                   <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center text-white font-bold text-2xl">g</div>
                   <div>
                     <h2 className="text-xl font-bold text-zinc-900">Curso Checkout</h2>
-                    <p className="text-lg font-bold text-[#3de148]">R$ 99,00</p>
+                    <p className="text-lg font-bold text-purple-600">R$ 99,00</p>
                   </div>
                 </div>
                 <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 min-w-[240px]">
@@ -245,7 +245,7 @@ export default function CheckoutEditor() {
                   </div>
                   <div className="flex justify-between items-center font-bold">
                     <span className="text-zinc-900">Total a pagar</span>
-                    <span className="text-xl text-[#3de148]">R$ 99,00</span>
+                    <span className="text-xl text-purple-600">R$ 99,00</span>
                   </div>
                 </div>
               </div>
@@ -274,9 +274,9 @@ export default function CheckoutEditor() {
                     <h3>Escolha a forma de pagamento</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="border-2 border-[#3de148] rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer bg-zinc-50">
-                      <div className="w-8 h-8 bg-[#3de148]/10 rounded-full flex items-center justify-center">
-                        <div className="w-4 h-4 bg-[#3de148] rotate-45" />
+                    <div className="border-2 border-purple-500 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer bg-zinc-50">
+                      <div className="w-8 h-8 bg-purple-500/10 rounded-full flex items-center justify-center">
+                        <div className="w-4 h-4 bg-purple-500 rotate-45" />
                       </div>
                       <span className="text-sm font-bold text-zinc-900">Pix</span>
                     </div>
@@ -287,7 +287,7 @@ export default function CheckoutEditor() {
                   </div>
                 </div>
 
-                <Button className="w-full h-14 bg-[#3de148] hover:bg-[#34c740] text-black text-lg font-black rounded-xl uppercase tracking-wider">
+                <Button className="w-full h-14 bg-purple-600 hover:bg-purple-500 text-white text-lg font-black rounded-xl uppercase tracking-wider">
                   {config.paymentButtonText}
                 </Button>
                 
