@@ -27,6 +27,7 @@ export const checkouts = pgTable("checkouts", {
   productId: integer("product_id").notNull(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
+  publicUrl: text("public_url"),
   views: integer("views").default(0),
   active: boolean("active").default(true),
   createdAt: timestamp("created_at").defaultNow(),

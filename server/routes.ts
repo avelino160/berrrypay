@@ -76,11 +76,22 @@ export async function registerRoutes(
   });
 
   // Checkouts
-
   app.post(api.checkouts.create.path, async (req, res) => {
     try {
       const input = api.checkouts.create.input.parse(req.body);
-      const checkout = await storage.createCheckout(input);
+      
+      // Get the current domain
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+      const host = req.headers.host;
+      const baseUrl = `${protocol}://${host}`;
+      
+      // Auto-generate public URL based on slug
+      const publicUrl = `${baseUrl}/checkout/${input.slug}`;
+      
+      const checkout = await storage.createCheckout({
+        ...input,
+        publicUrl
+      });
       res.status(201).json(checkout);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -89,6 +100,7 @@ export async function registerRoutes(
           field: err.errors[0].path.join('.'),
         });
       } else {
+        console.error("Create checkout error:", err);
         res.status(500).json({ message: "Internal server error" });
       }
     }
