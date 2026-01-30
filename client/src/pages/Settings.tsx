@@ -15,9 +15,6 @@ import paypalLogo from "@assets/paypal-logo-icon-png_44635_1769721723658.jpg";
 
 export default function Settings() {
   const [location] = useLocation();
-  // Use a simple state or just parse window.location.search
-  // To make it reactive to search param changes in wouter, we can use the fact that
-  // useLocation triggers a re-render on any navigation.
   const searchParams = new URLSearchParams(window.location.search);
   const activeTab = searchParams.get("tab") || "gateway";
 

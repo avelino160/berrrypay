@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export function Sidebar() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
 
   // To make search params reactive, we rely on useLocation triggering re-renders
@@ -139,19 +139,19 @@ export function Sidebar() {
                   const isActive = location === "/settings" && currentTab === itemTab;
                   
                   return (
-                    <Link key={item.href} href={item.href}>
-                      <button
-                        className={cn(
-                          "w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm",
-                          isActive
-                            ? "bg-purple-500/10 text-purple-400"
-                            : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
-                        )}
-                      >
-                        <Icon size={14} />
-                        {item.label}
-                      </button>
-                    </Link>
+                    <button
+                      key={item.href}
+                      onClick={() => setLocation(item.href)}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm",
+                        isActive
+                          ? "bg-purple-500/10 text-purple-400"
+                          : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
+                      )}
+                    >
+                      <Icon size={14} />
+                      {item.label}
+                    </button>
                   );
                 })}
               </div>
