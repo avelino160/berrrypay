@@ -151,7 +151,7 @@ export default function CheckoutEditor() {
               </div>
 
               <div className="pt-4">
-                <Button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10">
+                <Button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10 border-0 ring-0 focus-visible:ring-0">
                   <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
                 </Button>
               </div>
