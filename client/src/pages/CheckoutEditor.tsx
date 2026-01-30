@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useProducts } from "@/hooks/use-products";
 import { useCheckout, useCreateCheckout, useUpdateCheckout } from "@/hooks/use-checkouts";
-import { ArrowLeft, Save, Layout as LayoutIcon, Palette, Settings, Eye, Monitor, Smartphone, Plus, Trash2, Clock, Bell, User, Star } from "lucide-react";
+import { ArrowLeft, Save, Layout as LayoutIcon, Palette, Settings, Eye, Monitor, Smartphone, Plus, Trash2, Clock, Bell, User, Star, Copy } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
 import { useState, useMemo, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
