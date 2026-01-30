@@ -202,7 +202,7 @@ export default function EditProduct() {
                         value={formData.deliveryUrl}
                         onChange={e => setFormData({...formData, deliveryUrl: e.target.value})}
                       />
-                      <p className="text-[11px] text-zinc-500 ml-1">Insira o link que o cliente receberá automaticamente após a compra</p>
+                      <p className="text-[11px] text-zinc-500 ml-1 font-medium text-purple-400/80">Este é o link que o cliente receberá automaticamente no e-mail de entrega assim que o pagamento for aprovado.</p>
                     </div>
                   </div>
                 )}
