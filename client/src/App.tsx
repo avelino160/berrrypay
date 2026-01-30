@@ -14,6 +14,7 @@ import Checkouts from "@/pages/Checkouts";
 import Settings from "@/pages/Settings";
 import CreateProduct from "@/pages/CreateProduct";
 import CheckoutEditor from "@/pages/CheckoutEditor";
+import PublicCheckout from "./pages/PublicCheckout";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/checkouts" component={Checkouts} />
       <Route path="/checkouts/new" component={CheckoutEditor} />
       <Route path="/checkouts/edit/:id" component={CheckoutEditor} />
+      <Route path="/checkout/:slug" component={PublicCheckout} />
       <Route path="/settings" component={Settings} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />

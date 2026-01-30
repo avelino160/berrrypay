@@ -30,9 +30,10 @@ export default function Checkouts() {
   };
 
   const copyLink = (publicUrl: string | null, slug: string) => {
-    const link = publicUrl || `${window.location.origin}/checkout/${slug}`;
+    // Sempre construir o link baseado no host atual para garantir que seja funcional
+    const link = `${window.location.origin}/checkout/${slug}`;
     navigator.clipboard.writeText(link);
-    toast({ title: "Copiado!", description: "Link do checkout copiado para a área de transferência." });
+    toast({ title: "Link Copiado!", description: "Link de checkout público copiado." });
   };
 
   return (

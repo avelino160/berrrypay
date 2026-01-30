@@ -81,6 +81,22 @@ export async function registerRoutes(
     res.json(checkoutsList);
   });
 
+  app.get("/api/checkouts/public/:slug", async (req, res) => {
+    try {
+      const checkout = await (storage as any).getCheckoutBySlug(req.params.slug);
+      if (!checkout) return res.status(404).json({ message: "Checkout não encontrado" });
+      
+      const product = await storage.getProduct(checkout.productId);
+      if (!product) return res.status(404).json({ message: "Produto não encontrado" });
+
+      await (storage as any).incrementCheckoutViews(checkout.id);
+      
+      res.json({ checkout, product });
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   app.post(api.checkouts.create.path, async (req, res) => {
     try {
       const input = api.checkouts.create.input.parse(req.body);

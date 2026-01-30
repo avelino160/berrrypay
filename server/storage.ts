@@ -31,6 +31,10 @@ export interface IStorage {
   getSettings(): Promise<Settings | undefined>;
   updateSettings(updates: UpdateSettingsRequest): Promise<Settings>;
 
+  // Adicionando assinaturas para os métodos extras usados dinamicamente
+  getCheckoutBySlug(slug: string): Promise<Checkout | undefined>;
+  incrementCheckoutViews(id: number): Promise<void>;
+
   // Stats
   getDashboardStats(period?: string): Promise<DashboardStats>;
 }
@@ -85,6 +89,17 @@ export class DatabaseStorage implements IStorage {
   async getCheckout(id: number): Promise<Checkout | undefined> {
     const [checkout] = await db.select().from(checkouts).where(eq(checkouts.id, id));
     return checkout;
+  }
+
+  async getCheckoutBySlug(slug: string): Promise<Checkout | undefined> {
+    const [checkout] = await db.select().from(checkouts).where(eq(checkouts.slug, slug));
+    return checkout;
+  }
+
+  async incrementCheckoutViews(id: number): Promise<void> {
+    await db.update(checkouts)
+      .set({ views: sql`${checkouts.views} + 1` })
+      .where(eq(checkouts.id, id));
   }
 
   async createCheckout(checkout: InsertCheckout): Promise<Checkout> {
