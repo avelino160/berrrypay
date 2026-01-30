@@ -125,6 +125,10 @@ export default function CheckoutEditor() {
     }
   };
 
+  const selectedProduct = useMemo(() => 
+    products?.find(p => p.id.toString() === config.product),
+  [products, config.product]);
+
   const orderBumpProduct = useMemo(() => 
     products?.find(p => p.id.toString() === config.orderBump),
   [products, config.orderBump]);
