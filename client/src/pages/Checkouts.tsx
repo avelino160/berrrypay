@@ -46,7 +46,7 @@ export default function Checkouts() {
         </Button>
       </div>
 
-      {isLoading ? (
+      {isLoading && !checkouts ? (
         <div className="flex justify-center p-12">
           <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
         </div>
