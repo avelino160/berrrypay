@@ -96,10 +96,11 @@ export default function Checkouts() {
                   className="text-zinc-400 hover:text-white h-10 w-10"
                   onClick={(e) => {
                     e.stopPropagation();
-                    copyLink(checkout.publicUrl, checkout.slug);
+                    const link = `${window.location.origin}/checkout/${checkout.slug}`;
+                    window.open(link, '_blank');
                   }}
                 >
-                  <Copy className="w-4 h-4" />
+                  <ExternalLink className="w-4 h-4" />
                 </Button>
                 <Button 
                   size="icon" 
