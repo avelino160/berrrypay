@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy, Loader2 } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useStats } from "@/hooks/use-stats";
 import { useQuery } from "@tanstack/react-query";
@@ -7,8 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 export function Sidebar() {
   const [location] = useLocation();
 
-  const { data: user, isLoading: userLoading } = useQuery<any>({
+  const { data: user } = useQuery<any>({
     queryKey: ["/api/user"],
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
 
   const navItems = [
@@ -102,14 +104,7 @@ export function Sidebar() {
       {/* Footer - No fixed positioning */}
       <div className="p-4 border-t border-zinc-800/50 flex-shrink-0">
         <div className="px-2">
-          {userLoading ? (
-            <div className="flex items-center gap-2 mb-2">
-              <Loader2 className="w-3 h-3 animate-spin text-zinc-500" />
-              <span className="text-[10px] text-zinc-500">Carregando...</span>
-            </div>
-          ) : (
-            <p className="text-xs text-zinc-500 truncate mb-2">{user?.username}</p>
-          )}
+            <p className="text-xs text-zinc-500 truncate mb-2">{user?.username || ''}</p>
           <Link href="/">
             <button className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-md transition-colors border border-zinc-700">
               <LogOut size={16} />

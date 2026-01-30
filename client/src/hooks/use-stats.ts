@@ -12,5 +12,7 @@ export function useStats(period?: string) {
       if (!res.ok) throw new Error("Failed to fetch stats");
       return api.stats.get.responses[200].parse(await res.json());
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
 }
