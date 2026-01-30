@@ -113,7 +113,7 @@ export function Sidebar() {
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold transition-all duration-200 text-[15px]",
                 location.startsWith("/settings")
-                  ? "text-white"
+                  ? "bg-[#8b5cf6] text-white shadow-lg"
                   : "text-zinc-400 hover:text-white hover:bg-zinc-900"
               )}
             >
