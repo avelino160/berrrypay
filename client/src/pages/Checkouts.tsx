@@ -55,9 +55,9 @@ export default function Checkouts() {
           <div className="bg-zinc-900 p-4 rounded-full mb-4">
             <ShoppingCart className="w-8 h-8 text-zinc-500" />
           </div>
-          <h3 className="text-lg font-medium text-white mb-1">Nenhum checkout encontrado</h3>
+          <h3 className="text-lg font-medium text-white mb-1">Nenhum checkout criado</h3>
           <p className="text-sm text-zinc-500 max-w-sm mx-auto mb-6">
-            Crie páginas de checkout personalizadas para seus produtos e aumente sua conversão.
+            Você ainda não possui checkouts. Crie páginas de venda personalizadas para seus produtos e aumente sua conversão.
           </p>
           <Button 
             className="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700"
