@@ -237,9 +237,9 @@ export default function CheckoutEditor() {
                     <p className="text-lg font-bold text-purple-600">R$ 99,00</p>
                   </div>
                 </div>
-                <div className="bg-zinc-50 p-4 rounded-xl border-zinc-100 min-w-[240px]">
+                <div className="bg-zinc-50 p-4 rounded-xl min-w-[240px]">
                   <h3 className="text-sm font-bold text-zinc-900 mb-3">Resumo da compra</h3>
-                  <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b">
+                  <div className="flex justify-between text-sm text-zinc-600 mb-4 pb-4 border-b border-zinc-100">
                     <span>Curso Checkout</span>
                     <span>R$ 99,00</span>
                   </div>
@@ -252,24 +252,24 @@ export default function CheckoutEditor() {
 
               <div className="max-w-[500px] space-y-6">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b pb-2">
+                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b border-zinc-100 pb-2">
                     <User className="w-4 h-4" />
                     <h3>Seus dados</h3>
                   </div>
                   <div className="space-y-3">
                     <div className="space-y-1.5">
                       <Label className="text-xs text-zinc-500">Qual é o seu nome completo?</Label>
-                      <Input placeholder="Nome da Silva" className="h-11 bg-zinc-50 border-zinc-200" />
+                      <Input placeholder="Nome da Silva" className="h-11 bg-zinc-50 border-zinc-100" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-xs text-zinc-500">Qual é o seu e-mail?</Label>
-                      <Input placeholder="Digite o e-mail que receberá o produto" className="h-11 bg-zinc-50 border-zinc-200" />
+                      <Input placeholder="Digite o e-mail que receberá o produto" className="h-11 bg-zinc-50 border-zinc-100" />
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b pb-2">
+                  <div className="flex items-center gap-2 text-zinc-900 font-bold border-b border-zinc-100 pb-2">
                     <Settings className="w-4 h-4" />
                     <h3>Escolha a forma de pagamento</h3>
                   </div>
@@ -280,7 +280,7 @@ export default function CheckoutEditor() {
                       </div>
                       <span className="text-sm font-bold text-zinc-900">Pix</span>
                     </div>
-                    <div className="border border-zinc-200 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-zinc-300">
+                    <div className="border border-zinc-100 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-zinc-200">
                       <Smartphone className="w-8 h-8 text-zinc-400" />
                       <span className="text-sm font-bold text-zinc-500">Cartão de Crédito</span>
                     </div>
