@@ -27,6 +27,9 @@ export function Sidebar() {
     { href: "/settings?tab=metricas", label: "Métricas", icon: BarChart3 },
   ];
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const currentTab = searchParams.get("tab") || "gateway";
+
   const { data: stats } = useStats();
   const currentRevenue = stats?.revenuePaid || 0;
 
@@ -131,9 +134,8 @@ export function Sidebar() {
               <div className="space-y-1 ml-4 border-l border-zinc-800 pl-2">
                 {settingSubItems.map((item) => {
                   const Icon = item.icon;
-                  // Handle both exact path and path with search params
-                  const isActive = location + window.location.search === item.href || 
-                                 (item.href === "/settings?tab=gateway" && location === "/settings" && !window.location.search);
+                  const itemTab = new URLSearchParams(item.href.split('?')[1]).get("tab");
+                  const isActive = location === "/settings" && currentTab === itemTab;
                   
                   return (
                     <Link key={item.href} href={item.href}>
