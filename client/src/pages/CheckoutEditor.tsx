@@ -61,7 +61,7 @@ export default function CheckoutEditor() {
   const [name, setName] = useState("");
   const [productId, setProductId] = useState("");
   const [config, setConfig] = useState<CheckoutConfig>(defaultConfig);
-  const [timerSeconds, setTimerSeconds] = useState(config.timerMinutes * 60);
+  const [timerSeconds, setTimerSeconds] = useState(547); // 9 minutes and 7 seconds
 
   useEffect(() => {
     setTimerSeconds(config.timerMinutes * 60);
@@ -437,7 +437,7 @@ export default function CheckoutEditor() {
               className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[33px] pb-[33px]"
               style={{ backgroundColor: config.primaryColor }}
             >
-              <span className="font-mono text-4xl font-extrabold tabular-nums leading-none">
+              <span className="font-mono tabular-nums text-[31px] font-extrabold bg-[transparent] text-justify">
                 {formatTime(timerSeconds)}
               </span>
               <Timer className="w-8 h-8 animate-pulse" />
