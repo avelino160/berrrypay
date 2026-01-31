@@ -17,6 +17,7 @@ declare global {
 const defaultConfig: CheckoutConfig = {
   timerMinutes: 10,
   timerText: "Oferta Especial por Tempo Limitado!",
+  timerColor: "#dc2626",
   heroTitle: "Promoção por tempo limitado",
   heroBadgeText: "7 DIAS",
   heroImageUrl: "",
@@ -163,7 +164,7 @@ export default function PublicCheckout() {
       {config.showTimer && (
         <div 
           className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[20px] pb-[20px]"
-          style={{ backgroundColor: config.primaryColor }}
+          style={{ backgroundColor: config.timerColor }}
           data-testid="timer-bar"
         >
           <span className="font-mono tabular-nums text-[31px] font-extrabold bg-[transparent] text-justify" data-testid="timer-countdown">

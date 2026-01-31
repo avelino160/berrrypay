@@ -34,6 +34,7 @@ export const checkouts = pgTable("checkouts", {
   config: jsonb("config").$type<CheckoutConfig>().default({
     timerMinutes: 10,
     timerText: "Oferta Especial por Tempo Limitado!",
+    timerColor: "#dc2626",
     heroTitle: "Promoção por tempo limitado",
     heroBadgeText: "7 DIAS",
     heroImageUrl: "",
@@ -70,6 +71,7 @@ export const checkouts = pgTable("checkouts", {
 export type CheckoutConfig = {
   timerMinutes: number;
   timerText: string;
+  timerColor: string;
   heroTitle: string;
   heroBadgeText: string;
   heroImageUrl: string;

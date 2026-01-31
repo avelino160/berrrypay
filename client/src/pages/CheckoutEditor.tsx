@@ -18,6 +18,7 @@ import { SiPaypal } from "react-icons/si";
 const defaultConfig: CheckoutConfig = {
   timerMinutes: 10,
   timerText: "Oferta Especial por Tempo Limitado!",
+  timerColor: "#dc2626",
   heroTitle: "Promoção por tempo limitado",
   heroBadgeText: "7 DIAS",
   heroImageUrl: "",
@@ -375,6 +376,29 @@ export default function CheckoutEditor() {
 
           <TabsContent value="visual" className="flex-1 overflow-y-auto p-4 space-y-4">
             <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor do Timer</Label>
+              <div className="flex gap-2">
+                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.timerColor }} />
+                <Input 
+                  value={config.timerColor} 
+                  onChange={(e) => setConfig({...config, timerColor: e.target.value})} 
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  data-testid="input-timer-color"
+                />
+              </div>
+              <div className="flex gap-1 mt-2">
+                {['#dc2626', '#ef4444', '#f97316', '#22a559', '#2563eb', '#9333ea'].map(color => (
+                  <button 
+                    key={color} 
+                    className="w-6 h-6 rounded-full border border-white/20" 
+                    style={{ backgroundColor: color }}
+                    onClick={() => setConfig({...config, timerColor: color})}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Cor Principal (Botões e Destaques)</Label>
               <div className="flex gap-2">
                 <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.primaryColor }} />
@@ -660,7 +684,7 @@ export default function CheckoutEditor() {
             {config.showTimer && (
               <div 
                 className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[20px] pb-[20px]"
-                style={{ backgroundColor: config.primaryColor }}
+                style={{ backgroundColor: config.timerColor }}
               >
                 <span className="font-mono tabular-nums text-[31px] font-extrabold bg-[transparent] text-justify">
                   {formatTime(timerSeconds)}
