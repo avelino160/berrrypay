@@ -725,7 +725,7 @@ export default function CheckoutEditor() {
 
                   <div className="p-4 space-y-4">
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Seu e-mail</label>
+                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>seu e-mail</label>
                       <input 
                         type="email"
                         placeholder="Digite o e-mail para receber sua compra"
@@ -735,7 +735,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Confirme seu e-mail</label>
+                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>confirme seu e-mail</label>
                       <input 
                         type="email"
                         placeholder="Digite seu e-mail novamente"
@@ -745,7 +745,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>nome completo</label>
+                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>nome completo</label>
                       <input 
                         type="text"
                         placeholder="Digite seu nome completo"
@@ -756,7 +756,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Telefone</label>
+                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>telefone</label>
                       <input 
                         type="tel"
                         placeholder="(00) 00000-0000"
