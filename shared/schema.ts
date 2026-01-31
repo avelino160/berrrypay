@@ -51,6 +51,15 @@ export const checkouts = pgTable("checkouts", {
       rating: 5,
       text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
     },
+    testimonials: [
+      {
+        id: "1",
+        name: "Marisa Correia",
+        imageUrl: "",
+        rating: 5,
+        text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
+      }
+    ],
     upsellProducts: [] as number[],
     payButtonText: "Buy now",
     footerText: "BerryPay © 2026. All rights reserved.",
@@ -77,6 +86,13 @@ export type CheckoutConfig = {
     rating: number;
     text: string;
   };
+  testimonials: {
+    id: string;
+    name: string;
+    imageUrl: string;
+    rating: number;
+    text: string;
+  }[];
   upsellProducts: number[];
   payButtonText: string;
   footerText: string;

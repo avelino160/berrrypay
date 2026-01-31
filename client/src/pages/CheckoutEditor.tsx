@@ -35,6 +35,24 @@ const defaultConfig: CheckoutConfig = {
     rating: 5,
     text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
   },
+  testimonials: [
+    {
+      id: "1",
+      name: "Marisa Correia",
+      imageUrl: "",
+      rating: 5,
+      text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
+    }
+  ],
+  testimonials: [
+    {
+      id: "1",
+      name: "Marisa Correia",
+      imageUrl: "",
+      rating: 5,
+      text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
+    }
+  ],
   upsellProducts: [],
   payButtonText: "Buy now",
   footerText: "BerryPay © 2026. All rights reserved.",
@@ -392,49 +410,128 @@ export default function CheckoutEditor() {
             </div>
           </TabsContent>
 
-          <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-4">
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Nome do Cliente</Label>
-              <Input 
-                value={config.testimonial.name}
-                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, name: e.target.value}})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-testimonial-name"
-              />
+          <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-6">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs text-zinc-400 font-bold uppercase tracking-tight">Depoimentos</Label>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
+                onClick={() => {
+                  const newId = Math.random().toString(36).substring(2, 9);
+                  const newList = [...(config.testimonials || []), {
+                    id: newId,
+                    name: "Novo Cliente",
+                    imageUrl: "",
+                    rating: 5,
+                    text: "Escreva aqui o depoimento..."
+                  }];
+                  setConfig({...config, testimonials: newList});
+                }}
+              >
+                <Plus className="w-3 h-3 mr-1" /> Adicionar Depoimento
+              </Button>
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">URL da Foto</Label>
-              <Input 
-                value={config.testimonial.imageUrl}
-                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, imageUrl: e.target.value}})}
-                placeholder="https://..."
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-testimonial-image"
-              />
-            </div>
+            <div className="space-y-4">
+              {(config.testimonials || []).map((t, index) => (
+                <div key={t.id} className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-4 relative group">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute top-2 right-2 h-6 w-6 text-zinc-500 hover:text-red-400"
+                    onClick={() => {
+                      const newList = config.testimonials.filter(x => x.id !== t.id);
+                      setConfig({...config, testimonials: newList});
+                    }}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
 
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Avaliação (1-5 estrelas)</Label>
-              <Input 
-                type="number"
-                min={1}
-                max={5}
-                value={config.testimonial.rating}
-                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, rating: parseInt(e.target.value) || 5}})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-testimonial-rating"
-              />
-            </div>
+                  <div className="space-y-2">
+                    <Label className="text-[10px] text-zinc-500 uppercase font-bold">Foto do Cliente</Label>
+                    <div className="flex gap-3 items-center">
+                      <div className="w-12 h-12 rounded-full bg-zinc-800 border border-zinc-700 overflow-hidden flex-shrink-0">
+                        {t.imageUrl ? (
+                          <img src={t.imageUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-zinc-600 font-bold text-lg">
+                            {t.name.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <Input 
+                        type="file"
+                        accept="image/*"
+                        className="bg-zinc-950 border-zinc-800 h-8 text-[10px] flex-1"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const formData = new FormData();
+                            formData.append("file", file);
+                            try {
+                              const res = await fetch("/api/upload", {
+                                method: "POST",
+                                body: formData
+                              });
+                              const data = await res.json();
+                              const newList = [...config.testimonials];
+                              newList[index].imageUrl = data.url;
+                              setConfig({...config, testimonials: newList});
+                              toast({ title: "Sucesso", description: "Imagem enviada!" });
+                            } catch (err) {
+                              toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
 
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto do Depoimento</Label>
-              <Textarea 
-                value={config.testimonial.text}
-                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, text: e.target.value}})}
-                className="bg-zinc-900/50 border-zinc-800 text-sm min-h-[100px]"
-                data-testid="input-testimonial-text"
-              />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-[10px] text-zinc-500 uppercase font-bold">Nome</Label>
+                      <Input 
+                        value={t.name}
+                        onChange={(e) => {
+                          const newList = [...config.testimonials];
+                          newList[index].name = e.target.value;
+                          setConfig({...config, testimonials: newList});
+                        }}
+                        className="bg-zinc-950 border-zinc-800 h-8 text-xs"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-[10px] text-zinc-500 uppercase font-bold">Avaliação (1-5)</Label>
+                      <Input 
+                        type="number"
+                        min={1}
+                        max={5}
+                        value={t.rating}
+                        onChange={(e) => {
+                          const newList = [...config.testimonials];
+                          newList[index].rating = parseInt(e.target.value) || 5;
+                          setConfig({...config, testimonials: newList});
+                        }}
+                        className="bg-zinc-950 border-zinc-800 h-8 text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label className="text-[10px] text-zinc-500 uppercase font-bold">Depoimento</Label>
+                    <Textarea 
+                      value={t.text}
+                      onChange={(e) => {
+                        const newList = [...config.testimonials];
+                        newList[index].text = e.target.value;
+                        setConfig({...config, testimonials: newList});
+                      }}
+                      className="bg-zinc-950 border-zinc-800 text-xs min-h-[60px] resize-none"
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </TabsContent>
 
@@ -693,30 +790,30 @@ export default function CheckoutEditor() {
               </div>
 
                   <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
-                    {config.testimonial && (
-                      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                    {(config.testimonials || []).map((t) => (
+                      <div key={t.id} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                         <div className="flex flex-col items-center text-center">
                           <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden mb-4 border-2 border-white shadow-md">
-                            {config.testimonial.imageUrl ? (
-                              <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
+                            {t.imageUrl ? (
+                              <img src={t.imageUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">
-                                {config.testimonial.name.charAt(0)}
+                                {t.name.charAt(0)}
                               </div>
                             )}
                           </div>
-                          <h4 className="font-bold text-gray-900 text-lg mb-1">{config.testimonial.name}</h4>
+                          <h4 className="font-bold text-gray-900 text-lg mb-1">{t.name}</h4>
                           <div className="flex gap-1 mb-4">
-                            {[...Array(config.testimonial.rating)].map((_, i) => (
+                            {[...Array(t.rating)].map((_, i) => (
                               <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                             ))}
                           </div>
                           <p className="text-sm text-gray-700 font-medium leading-relaxed italic">
-                            "{config.testimonial.text.replace(/^["']|["']$/g, '')}"
+                            "{t.text.replace(/^["']|["']$/g, '')}"
                           </p>
                         </div>
                       </div>
-                    )}
+                    ))}
 
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
