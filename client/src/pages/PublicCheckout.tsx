@@ -169,15 +169,15 @@ export default function PublicCheckout() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <div 
-        className="py-2 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-3"
+        className="py-4 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-4"
         style={{ backgroundColor: config.primaryColor }}
         data-testid="timer-bar"
       >
-        <span className="font-mono text-lg font-bold tracking-wider tabular-nums" data-testid="timer-countdown">
+        <span className="font-mono text-2xl lg:text-3xl font-bold tracking-wider tabular-nums" data-testid="timer-countdown">
           {formatTime(timerSeconds)}
         </span>
-        <Clock className="w-4 h-4" />
-        <span className="text-sm font-medium" data-testid="timer-text">{config.timerText}</span>
+        <Clock className="w-6 h-6" />
+        <span className="text-base lg:text-lg font-medium" data-testid="timer-text">{config.timerText}</span>
       </div>
 
       <div className="bg-[#1a3a2a] py-8 px-4">
