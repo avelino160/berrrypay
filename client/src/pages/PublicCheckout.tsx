@@ -3,7 +3,7 @@ import { useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Star, Timer } from "lucide-react";
+import { Loader2, Star, Timer, CheckCircle2, Zap } from "lucide-react";
 import { Product, Checkout, CheckoutConfig } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
 import { SiPaypal } from "react-icons/si";
@@ -33,7 +33,7 @@ const defaultConfig: CheckoutConfig = {
   upsellProducts: [],
   orderBumpProduct: null,
   payButtonText: "Buy now",
-  footerText: "BerryPay © 2026. All rights reserved.",
+  footerText: "BerryPay © 2026. Todos os direitos reservados.",
   primaryColor: "#22a559",
   backgroundColor: "#f9fafb",
   highlightColor: "#f3f4f6",
@@ -47,8 +47,8 @@ const defaultConfig: CheckoutConfig = {
 export default function PublicCheckout() {
   const { slug } = useParams();
   const [sdkLoaded, setSdkLoaded] = useState(false);
-  const paypalContainerRef = useRef<HTMLDivElement>(null);
   const [orderBumpSelected, setOrderBumpSelected] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
 
   const { data, isLoading, error } = useQuery<{ checkout: Checkout, product: Product }>({
     queryKey: [`/api/checkouts/public/${slug}`],
@@ -63,7 +63,6 @@ export default function PublicCheckout() {
   });
 
   const config: CheckoutConfig = data?.checkout?.config || defaultConfig;
-
   const [timerSeconds, setTimerSeconds] = useState(config.timerMinutes * 60);
 
   useEffect(() => {
@@ -116,8 +115,7 @@ export default function PublicCheckout() {
           })
             .then((res) => res.json())
             .then(() => {
-              alert("Pagamento aprovado com sucesso!");
-              window.location.reload();
+              setIsPaid(true);
             });
         }
       }).render("#paypal-button-container");
@@ -152,6 +150,62 @@ export default function PublicCheckout() {
   const upsellProducts = allProducts?.filter(p => config.upsellProducts.includes(p.id)) || [];
   const orderBumpProductData = allProducts?.find(p => p.id === config.orderBumpProduct);
   const testimonials = config.testimonials || [];
+
+  if (isPaid) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
+        <div className="max-w-2xl w-full bg-white rounded-2xl p-10 shadow-xl border border-gray-100">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="w-10 h-10 text-green-500" />
+          </div>
+          <h1 className="text-3xl font-bold mb-4">Pagamento Confirmado!</h1>
+          <p className="text-lg opacity-80 mb-8">Obrigado pela sua compra. Verifique seu e-mail para acessar o produto.</p>
+          
+          {upsellProducts.length > 0 && (
+            <div className="mt-8 pt-8 border-t border-gray-100 text-left">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <Zap className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+                Espere! Aproveite esta oferta exclusiva
+              </h2>
+              <div className="grid grid-cols-1 gap-4">
+                {upsellProducts.map(p => (
+                  <div key={p.id} className="flex gap-4 p-4 rounded-xl border-2 border-dashed border-gray-200 hover:border-primary/50 transition-colors group">
+                    {p.imageUrl ? (
+                      <img src={p.imageUrl} alt="" className="w-24 h-24 object-cover rounded-lg" />
+                    ) : (
+                      <div className="w-24 h-24 rounded-lg bg-gray-100 flex items-center justify-center font-bold text-xl text-gray-400">
+                        {p.name.charAt(0)}
+                      </div>
+                    )}
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="font-bold text-lg group-hover:text-primary transition-colors">{p.name}</h3>
+                        <p className="text-sm opacity-70 line-clamp-2">{p.description}</p>
+                      </div>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-xl font-bold text-primary">{(p.price/100).toFixed(2).replace('.', ',')} US$</span>
+                        <Button size="sm" onClick={() => window.open(p.deliveryUrl || '#', '_blank')}>
+                          Comprar Agora
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <Button 
+            variant="outline" 
+            className="mt-10"
+            onClick={() => window.location.reload()}
+          >
+            Voltar para o Início
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const calculateTotal = () => {
     let total = product.price;
