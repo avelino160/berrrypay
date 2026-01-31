@@ -608,7 +608,7 @@ export default function CheckoutEditor() {
                   {formatTime(timerSeconds)}
                 </span>
                 <Timer className="w-8 h-8 animate-pulse" />
-                <span className="uppercase tracking-tight font-normal text-[16px]">{config.timerText}</span>
+                <span className="tracking-tight font-normal text-[16px]">{config.timerText}</span>
               </div>
             )}
 
