@@ -57,6 +57,7 @@ export default function CheckoutEditor() {
   const isNew = !checkoutId;
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'transfer' | 'paypal'>('paypal');
+  const [orderBumpSelected, setOrderBumpSelected] = useState(false);
   
   const [name, setName] = useState("");
   const [productId, setProductId] = useState("");
@@ -784,12 +785,12 @@ export default function CheckoutEditor() {
 
                   {orderBumpProductData && (
                     <div className="p-4">
-                      <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                          <span className="font-bold text-gray-900 text-sm">Você também pode gostar de:</span>
-                        </div>
-                        <div className="flex items-start gap-3 bg-white rounded-lg p-3 border border-gray-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Star className="w-4 h-4" style={{ fill: config.primaryColor, color: config.primaryColor }} />
+                        <span className="font-bold text-gray-900 text-sm">Você também pode gostar de:</span>
+                      </div>
+                      <div className="bg-white rounded-lg overflow-hidden border-2" style={{ borderColor: config.primaryColor }}>
+                        <div className="flex items-start gap-3 p-3">
                           {orderBumpProductData.imageUrl ? (
                             <img src={orderBumpProductData.imageUrl} alt="" className="w-14 h-14 object-cover rounded bg-gray-900" />
                           ) : (
@@ -805,9 +806,18 @@ export default function CheckoutEditor() {
                             </div>
                           </div>
                         </div>
-                        <label className="flex items-center gap-2 mt-3 cursor-pointer">
-                          <Checkbox checked={false} className="border-gray-300" data-testid="checkbox-order-bump-preview" />
-                          <span className="text-sm text-gray-700">Quero comprar também!</span>
+                        <label 
+                          className="flex items-center gap-2 p-3 cursor-pointer" 
+                          style={{ backgroundColor: `${config.primaryColor}15`, borderTop: `1px solid ${config.primaryColor}30` }}
+                        >
+                          <Checkbox 
+                            checked={orderBumpSelected} 
+                            onCheckedChange={(checked) => setOrderBumpSelected(!!checked)}
+                            className="border-gray-400"
+                            style={{ borderColor: config.primaryColor }}
+                            data-testid="checkbox-order-bump-preview" 
+                          />
+                          <span className="text-sm text-gray-700 font-medium">Quero comprar também!</span>
                         </label>
                       </div>
                     </div>
@@ -853,10 +863,20 @@ export default function CheckoutEditor() {
                           <span className="text-gray-600">{selectedProduct?.name || 'Produto Principal'}</span>
                           <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$</span>
                         </div>
-                        <div className="flex justify-between items-center">
+                        {orderBumpSelected && orderBumpProductData && (
+                          <div className="flex justify-between items-center text-xs mb-2">
+                            <span className="text-gray-600">{orderBumpProductData.name}</span>
+                            <span className="font-medium">{(orderBumpProductData.price / 100).toFixed(2).replace('.', ',')} US$</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between items-center pt-2 border-t border-gray-100">
                           <span className="font-bold text-gray-900 text-xs">Total</span>
                           <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
-                            {selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$
+                            {(() => {
+                              const productPrice = selectedProduct?.price || 0;
+                              const bumpPrice = orderBumpSelected && orderBumpProductData ? orderBumpProductData.price : 0;
+                              return ((productPrice + bumpPrice) / 100).toFixed(2).replace('.', ',');
+                            })()} US$
                           </span>
                         </div>
                         <Button 
