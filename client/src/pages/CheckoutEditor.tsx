@@ -29,21 +29,6 @@ const defaultConfig: CheckoutConfig = {
   safeText: "Safe purchase",
   deliveryText: "Delivery via E-mail",
   approvedText: "Approved content",
-  testimonial: {
-    name: "Marisa Correia",
-    imageUrl: "",
-    rating: 5,
-    text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
-  },
-  testimonials: [
-    {
-      id: "1",
-      name: "Marisa Correia",
-      imageUrl: "",
-      rating: 5,
-      text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
-    }
-  ],
   testimonials: [
     {
       id: "1",
