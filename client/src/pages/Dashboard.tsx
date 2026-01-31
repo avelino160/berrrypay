@@ -168,15 +168,22 @@ export default function Dashboard() {
                   dx={-10}
                 />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#18181b', borderColor: '#3f3f46', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
-                  itemStyle={{ color: '#a855f7', fontWeight: 'bold' }}
+                  contentStyle={{ 
+                    backgroundColor: '#18181b', 
+                    borderColor: '#3f3f46', 
+                    borderRadius: '12px', 
+                    color: '#fff', 
+                    fontSize: '12px',
+                    padding: '12px',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                  }}
+                  itemStyle={{ color: '#a855f7', fontWeight: 'bold', marginTop: '4px' }}
                   cursor={{ stroke: '#a855f7', strokeWidth: 1 }}
                   formatter={(value: any) => [
                     `${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`, 
                     'Faturamento'
                   ]}
-                  labelStyle={{ color: '#fff', fontWeight: 'bold' }}
-                  separator=""
+                  labelStyle={{ color: '#fff', fontWeight: 'bold', borderBottom: '1px solid #27272a', paddingBottom: '8px', marginBottom: '8px' }}
                 />
                 <Area 
                   type="monotone" 
