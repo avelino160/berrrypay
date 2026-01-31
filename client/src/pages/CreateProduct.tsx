@@ -390,7 +390,7 @@ export default function CreateProduct() {
                   </div>
                 )}
               </div>
-            )}            <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/50 mt-6">
+            )}            <div className="flex items-center gap-3 pt-6 mt-6">
               {step > 1 && (
                 <Button 
                   variant="ghost" 
@@ -401,7 +401,7 @@ export default function CreateProduct() {
                 </Button>
               )}
               <Button 
-                className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold" 
+                className="flex-[2] h-12 bg-purple-600 hover:bg-purple-500 text-white font-bold border-0 shadow-none" 
                 onClick={() => step === 2 ? handleCreate() : handleNext()}
                 disabled={createProduct.isPending}
               >
