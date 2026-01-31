@@ -4,7 +4,6 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth } from "./auth";
-import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -88,13 +87,13 @@ export async function registerRoutes(
 
   app.get("/api/checkouts/public/:slug", async (req, res) => {
     try {
-      const checkout = await (storage as any).getCheckoutBySlug(req.params.slug);
+      const checkout = await storage.getCheckoutBySlug(req.params.slug);
       if (!checkout) return res.status(404).json({ message: "Checkout não encontrado" });
       
       const product = await storage.getProduct(checkout.productId);
       if (!product) return res.status(404).json({ message: "Produto não encontrado" });
 
-      await (storage as any).incrementCheckoutViews(checkout.id);
+      await storage.incrementCheckoutViews(checkout.id);
       
       res.json({ checkout, product });
     } catch (err) {
@@ -179,8 +178,6 @@ export async function registerRoutes(
         return res.status(500).json({ message: "PayPal não configurado" });
       }
 
-      // In a real app, you'd call PayPal API here to create an order
-      // For this demo, we'll return a mock order ID
       const mockOrderId = `PAYPAL-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
       
       await storage.createSale({
@@ -201,11 +198,9 @@ export async function registerRoutes(
   app.post("/api/paypal/capture-order/:orderId", async (req, res) => {
     try {
       const { orderId } = req.params;
-      // In a real app, call PayPal API to capture the order
-      // Then update sale status in DB
-      const sale = await (storage as any).getSaleByPaypalOrderId(orderId);
+      const sale = await storage.getSaleByPaypalOrderId(orderId);
       if (sale) {
-        await (storage as any).updateSaleStatus(sale.id, "paid");
+        await storage.updateSaleStatus(sale.id, "paid");
       }
       res.json({ status: "COMPLETED" });
     } catch (err) {
@@ -221,7 +216,6 @@ export async function registerRoutes(
 }
 
 async function seedDatabase() {
-  const products = await storage.getProducts();
   const settings = await storage.getSettings();
   
   if (!settings) {

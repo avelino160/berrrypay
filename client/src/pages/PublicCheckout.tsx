@@ -4,14 +4,109 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, ShoppingCart, ShieldCheck, CheckCircle2, Clock, Settings, Plus, Star, User, Shield, Lock, CreditCard } from "lucide-react";
 import { Product, Checkout } from "@shared/schema";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+
+declare global {
+  interface Window {
+    paypal: any;
+  }
+}
 
 export default function PublicCheckout() {
   const { slug } = useParams();
+  const [sdkLoaded, setSdkLoaded] = useState(false);
+  const paypalContainerRef = useRef<HTMLDivElement>(null);
+  const [paymentStep, setPaymentStep] = useState<'info' | 'payment'>('info');
 
   const { data, isLoading, error } = useQuery<{ checkout: Checkout, product: Product }>({
     queryKey: [`/api/checkouts/public/${slug}`],
   });
+
+  const { data: settings } = useQuery<any>({
+    queryKey: ["/api/settings"],
+  });
+
+  useEffect(() => {
+    if (settings?.paypalClientId && !sdkLoaded) {
+      const script = document.createElement("script");
+      script.src = `https://www.paypal.com/sdk/js?client-id=${settings.paypalClientId}&components=buttons,card-fields&currency=BRL`;
+      script.async = true;
+      script.onload = () => setSdkLoaded(true);
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [settings, sdkLoaded]);
+
+  useEffect(() => {
+    if (sdkLoaded && data && paymentStep === 'payment' && window.paypal) {
+      // Buttons
+      window.paypal.Buttons({
+        createOrder: () => {
+          return fetch("/api/paypal/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              checkoutId: data.checkout.id,
+              productId: data.product.id,
+            }),
+          })
+            .then((res) => res.json())
+            .then((order) => order.id);
+        },
+        onApprove: (data: any) => {
+          return fetch(`/api/paypal/capture-order/${data.orderID}`, {
+            method: "POST",
+          })
+            .then((res) => res.json())
+            .then(() => {
+              alert("Pagamento aprovado com sucesso!");
+              window.location.reload();
+            });
+        }
+      }).render("#paypal-button-container");
+
+      // Card Fields
+      const cardField = window.paypal.CardFields({
+        createOrder: () => {
+          return fetch("/api/paypal/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              checkoutId: data.checkout.id,
+              productId: data.product.id,
+            }),
+          })
+            .then((res) => res.json())
+            .then((order) => order.id);
+        },
+        onApprove: (data: any) => {
+          return fetch(`/api/paypal/capture-order/${data.orderID}`, {
+            method: "POST",
+          })
+            .then((res) => res.json())
+            .then(() => {
+              alert("Pagamento aprovado com sucesso!");
+              window.location.reload();
+            });
+        }
+      });
+
+      if (cardField.isEligible()) {
+        cardField.NameField().render("#card-name-field-container");
+        cardField.NumberField().render("#card-number-field-container");
+        cardField.ExpiryField().render("#card-expiry-field-container");
+        cardField.CVVField().render("#card-cvv-field-container");
+
+        document.getElementById("card-field-submit-button")?.addEventListener("click", () => {
+          cardField.submit().then(() => {
+            console.log("Card submit successful");
+          });
+        });
+      }
+    }
+  }, [sdkLoaded, data, paymentStep]);
 
   const [timerSeconds, setTimerSeconds] = useState(15 * 60); // 15 minutos padrão
   const primaryColor = "#9333ea";
@@ -102,23 +197,54 @@ export default function PublicCheckout() {
             </div>
             
             <div className="space-y-6">
-              <div className="p-4 rounded-xl border-2 border-purple-500 bg-purple-50 flex items-center justify-between cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full border-4 border-purple-500 bg-white" />
-                  <span className="font-bold text-zinc-900">PayPal</span>
+              {paymentStep === 'info' ? (
+                <div className="space-y-4">
+                  <Button 
+                    className="w-full h-16 text-xl font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] border-0"
+                    style={{ backgroundColor: primaryColor }}
+                    onClick={() => setPaymentStep('payment')}
+                  >
+                    CONTINUAR PARA PAGAMENTO
+                  </Button>
                 </div>
-                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" className="h-6 opacity-80" alt="PayPal" />
-              </div>
+              ) : (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div id="paypal-button-container" className="mb-6"></div>
+                  
+                  <div className="relative py-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t border-zinc-200"></span>
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-zinc-50 px-2 text-zinc-400 font-bold">Ou pague com cartão</span>
+                    </div>
+                  </div>
 
-              <Button 
-                className="w-full h-16 text-xl font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] border-0"
-                style={{ backgroundColor: primaryColor }}
-                onClick={() => {
-                  window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&amount=${product.price / 100}&currency_code=BRL&item_name=${encodeURIComponent(product.name)}`;
-                }}
-              >
-                PAGAR AGORA
-              </Button>
+                  <div className="space-y-4 bg-white p-4 rounded-xl border border-zinc-200 shadow-inner">
+                    <div id="card-name-field-container" className="h-12"></div>
+                    <div id="card-number-field-container" className="h-12"></div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div id="card-expiry-field-container" className="h-12"></div>
+                      <div id="card-cvv-field-container" className="h-12"></div>
+                    </div>
+                    <Button 
+                      id="card-field-submit-button"
+                      className="w-full h-14 text-lg font-black rounded-xl shadow-lg border-0 mt-4"
+                      style={{ backgroundColor: primaryColor }}
+                    >
+                      PAGAR COM CARTÃO
+                    </Button>
+                  </div>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full text-zinc-400 font-bold text-xs"
+                    onClick={() => setPaymentStep('info')}
+                  >
+                    ← VOLTAR
+                  </Button>
+                </div>
+              )}
 
               <div className="flex items-center justify-center gap-6 py-4 border-t border-zinc-200/50">
                 <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
