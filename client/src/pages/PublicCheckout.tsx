@@ -180,17 +180,13 @@ export default function PublicCheckout() {
         <span className="text-sm lg:text-base font-medium" data-testid="timer-text">{config.timerText}</span>
       </div>
 
-      <div className="bg-white py-4 px-4">
-        <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
-          {config.heroImageUrl ? (
+      {config.heroImageUrl && (
+        <div className="bg-white py-4 px-4">
+          <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
             <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain transition-opacity duration-300" />
-          ) : (
-            <div className="w-full max-w-4xl h-48 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
-              <span className="text-gray-400 font-sans">Logo/Banner</span>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -443,17 +443,13 @@ export default function CheckoutEditor() {
               <span className="text-xs font-medium">{config.timerText}</span>
             </div>
 
-            <div className="bg-white py-4 px-4">
-              <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
-                {config.heroImageUrl ? (
+            {config.heroImageUrl && (
+              <div className="bg-white py-4 px-4">
+                <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
                   <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain transition-opacity duration-300" />
-                ) : (
-                  <div className="w-full max-w-4xl h-48 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
-                    <span className="text-gray-400 text-sm font-sans">Logo/Banner</span>
-                  </div>
-                )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className={`max-w-5xl mx-auto px-4 py-6 ${device === 'mobile' ? 'space-y-4' : 'grid grid-cols-3 gap-6'}`}>
               <div className={device === 'mobile' ? 'space-y-4' : 'col-span-2 space-y-4'}>
