@@ -23,12 +23,34 @@ export default function Settings() {
 
   // Sync state with URL changes
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tab = params.get("tab") || "gateway";
-    if (tab !== activeTab) {
+    const handleLocationChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab") || "gateway";
       setActiveTab(tab);
-    }
-  }, [window.location.search]);
+    };
+
+    // Listen for popstate (browser back/forward)
+    window.addEventListener('popstate', handleLocationChange);
+    
+    // Create a custom event for pushState/replaceState since wouter uses them
+    const originalPushState = window.history.pushState;
+    window.history.pushState = function(data: any, unused: string, url?: string | URL | null) {
+      originalPushState.apply(this, [data, unused, url]);
+      handleLocationChange();
+    };
+
+    const originalReplaceState = window.history.replaceState;
+    window.history.replaceState = function(data: any, unused: string, url?: string | URL | null) {
+      originalReplaceState.apply(this, [data, unused, url]);
+      handleLocationChange();
+    };
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
+    };
+  }, []);
 
   const { data: settings, isLoading: isLoadingSettings } = useSettings();
   const updateSettings = useUpdateSettings();
