@@ -194,11 +194,11 @@ export default function PublicCheckout() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex flex-col gap-6 mb-6">
+              <div className="flex items-center gap-6">
                 {product.imageUrl ? (
-                  <img src={product.imageUrl} alt={product.name} className="w-full h-auto object-contain rounded-lg shadow-sm" />
+                  <img src={product.imageUrl} alt={product.name} className="w-32 h-32 object-contain rounded-lg shadow-sm" />
                 ) : (
-                  <div className="w-full aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 font-bold text-xl">
+                  <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 font-bold text-xl">
                     {product.name.charAt(0)}
                   </div>
                 )}
