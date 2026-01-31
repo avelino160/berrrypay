@@ -754,61 +754,6 @@ export default function CheckoutEditor() {
                         data-testid="input-fullname"
                       />
                     </div>
-                    <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Número de telefone</label>
-                      <div className="flex gap-2">
-                        <Select defaultValue="BR">
-                          <SelectTrigger className="w-[100px] h-11 border-gray-200 text-xs font-medium focus:ring-1 focus:ring-primary/20 focus:border-primary" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent style={{ backgroundColor: config.highlightColor }}>
-                            <SelectItem value="BR">
-                              <div className="flex items-center gap-2">
-                                <span>🇧🇷</span>
-                                <span>+55</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="US">
-                              <div className="flex items-center gap-2">
-                                <span>🇺🇸</span>
-                                <span>+1</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="PT">
-                              <div className="flex items-center gap-2">
-                                <span>🇵🇹</span>
-                                <span>+351</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="AR">
-                              <div className="flex items-center gap-2">
-                                <span>🇦🇷</span>
-                                <span>+54</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="ES">
-                              <div className="flex items-center gap-2">
-                                <span>🇪🇸</span>
-                                <span>+34</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="UK">
-                              <div className="flex items-center gap-2">
-                                <span>🇬🇧</span>
-                                <span>+44</span>
-                              </div>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <input 
-                          type="tel"
-                          placeholder="(00) 00000-0000"
-                          className="flex-1 h-11 px-3 rounded-md border border-gray-200 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
-                          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
-                          data-testid="input-phone"
-                        />
-                      </div>
-                    </div>
                   </div>
 
                   {orderBumpProductData && (
