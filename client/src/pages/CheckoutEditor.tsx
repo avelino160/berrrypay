@@ -653,26 +653,26 @@ export default function CheckoutEditor() {
 
                   <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
                     {config.testimonial && (
-                      <div className="bg-white rounded-lg border border-gray-200 p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+                      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                        <div className="flex flex-col items-center text-center">
+                          <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden mb-4 border-2 border-white shadow-md">
                             {config.testimonial.imageUrl ? (
                               <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xs">
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">
                                 {config.testimonial.name.charAt(0)}
                               </div>
                             )}
                           </div>
-                          <div className="flex-1">
-                            <h4 className="font-bold text-gray-900 text-xs">{config.testimonial.name}</h4>
-                            <div className="flex gap-0.5 my-1">
-                              {[...Array(config.testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" />
-                              ))}
-                            </div>
-                            <p className="text-[10px] text-gray-600 italic leading-tight">{config.testimonial.text}</p>
+                          <h4 className="font-bold text-gray-900 text-lg mb-1">{config.testimonial.name}</h4>
+                          <div className="flex gap-1 mb-4">
+                            {[...Array(config.testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                            ))}
                           </div>
+                          <p className="text-sm text-gray-700 font-medium leading-relaxed italic">
+                            "{config.testimonial.text.replace(/^["']|["']$/g, '')}"
+                          </p>
                         </div>
                       </div>
                     )}
