@@ -555,9 +555,49 @@ export default function CheckoutEditor() {
                     <div className="space-y-1">
                       <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Phone number</label>
                       <div className="flex gap-2">
-                        <div className="flex items-center gap-1.5 border border-gray-200 rounded-md px-3 h-11 bg-gray-50 text-xs font-medium text-gray-600">
-                          <span>🇧🇷</span> +55
-                        </div>
+                        <Select defaultValue="BR">
+                          <SelectTrigger className="w-[100px] h-11 bg-gray-50 border-gray-200 text-xs font-medium text-gray-600 focus:ring-1 focus:ring-primary/20 focus:border-primary">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white border-gray-200">
+                            <SelectItem value="BR">
+                              <div className="flex items-center gap-2">
+                                <span>🇧🇷</span>
+                                <span>+55</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="US">
+                              <div className="flex items-center gap-2">
+                                <span>🇺🇸</span>
+                                <span>+1</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="PT">
+                              <div className="flex items-center gap-2">
+                                <span>🇵🇹</span>
+                                <span>+351</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="AR">
+                              <div className="flex items-center gap-2">
+                                <span>🇦🇷</span>
+                                <span>+54</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="ES">
+                              <div className="flex items-center gap-2">
+                                <span>🇪🇸</span>
+                                <span>+34</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="UK">
+                              <div className="flex items-center gap-2">
+                                <span>🇬🇧</span>
+                                <span>+44</span>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                         <input 
                           type="tel"
                           placeholder="(00) 00000-0000"
