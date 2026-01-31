@@ -41,6 +41,7 @@ const defaultConfig: CheckoutConfig = {
   textColor: "#111827",
   showChangeCountry: true,
   showTimer: false,
+  showPhone: true,
 };
 
 import { timerIcon } from "@/lib/assets";
