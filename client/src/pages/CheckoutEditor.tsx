@@ -602,30 +602,6 @@ export default function CheckoutEditor() {
                     </div>
                   </div>
 
-                  {config.testimonial && (
-                    <div className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
-                          {config.testimonial.imageUrl ? (
-                            <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold">
-                              {config.testimonial.name.charAt(0)}
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-bold text-gray-900 text-sm">{config.testimonial.name}</h4>
-                          <div className="flex gap-0.5 my-1">
-                            {[...Array(config.testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            ))}
-                          </div>
-                          <p className="text-[11px] text-gray-600 italic">{config.testimonial.text}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
 
                   {upsellProducts.length > 0 && (
                     <div className="p-4">
@@ -656,29 +632,54 @@ export default function CheckoutEditor() {
                 </div>
               </div>
 
-              <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
-                  <div className="flex justify-between items-center text-xs mb-2">
-                    <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
-                    <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
-                  </div>
-                  <div className="border-t border-gray-100 pt-2 mt-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-bold text-gray-900 text-xs">Total</span>
-                      <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
-                        {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
-                      </span>
+                  <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
+                    <div className="bg-white rounded-lg border border-gray-200 p-4">
+                      <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
+                      <div className="flex justify-between items-center text-xs mb-2">
+                        <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
+                        <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
+                      </div>
+                      <div className="border-t border-gray-100 pt-2 mt-2">
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-gray-900 text-xs">Total</span>
+                          <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
+                            {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <Button 
-                  className="w-full h-12 text-base font-bold"
-                  style={{ backgroundColor: config.primaryColor }}
-                >
-                  {config.payButtonText}
-                </Button>
+                    {config.testimonial && (
+                      <div className="bg-white rounded-lg border border-gray-200 p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+                            {config.testimonial.imageUrl ? (
+                              <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xs">
+                                {config.testimonial.name.charAt(0)}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-bold text-gray-900 text-xs">{config.testimonial.name}</h4>
+                            <div className="flex gap-0.5 my-1">
+                              {[...Array(config.testimonial.rating)].map((_, i) => (
+                                <Star key={i} className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" />
+                              ))}
+                            </div>
+                            <p className="text-[10px] text-gray-600 italic leading-tight">{config.testimonial.text}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Button 
+                      className="w-full h-12 text-base font-bold"
+                      style={{ backgroundColor: config.primaryColor }}
+                    >
+                      {config.payButtonText}
+                    </Button>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
