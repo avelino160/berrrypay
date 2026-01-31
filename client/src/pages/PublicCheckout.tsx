@@ -314,16 +314,15 @@ export default function PublicCheckout() {
                   </div>
                   <label 
                     className="flex items-center gap-2 p-3 cursor-pointer" 
-                    style={{ backgroundColor: `${config.primaryColor}15`, borderTop: `1px solid ${config.primaryColor}30` }}
+                    style={{ backgroundColor: config.primaryColor, borderTop: `1px solid ${config.primaryColor}30` }}
                   >
                     <Checkbox 
                       checked={orderBumpSelected} 
                       onCheckedChange={(checked) => setOrderBumpSelected(!!checked)}
-                      className="border-gray-400"
-                      style={{ borderColor: config.primaryColor }}
+                      className="border-white/50 bg-white/20 data-[state=checked]:bg-white data-[state=checked]:text-black"
                       data-testid="checkbox-order-bump" 
                     />
-                    <span className="text-sm font-medium" style={{ color: config.textColor }}>Quero comprar também!</span>
+                    <span className="text-sm font-bold text-white">Quero comprar também!</span>
                   </label>
                 </div>
               </div>
