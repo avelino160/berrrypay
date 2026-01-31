@@ -11,12 +11,12 @@ import { useProducts } from "@/hooks/use-products";
 
 export default function Dashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState("0");
-  const { data: stats, isLoading: statsLoading } = useStats(selectedPeriod);
+  const [selectedProduct, setSelectedProduct] = useState("all");
+  const { data: stats, isLoading: statsLoading } = useStats(selectedPeriod, selectedProduct);
   const { data: products, isLoading: productsLoading } = useProducts();
   const [, setLocation] = useLocation();
   const [showSales, setShowSales] = useState(true);
   const [showQty, setShowQty] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState("all");
 
   // Use real data from backend
   const chartData = useMemo(() => {

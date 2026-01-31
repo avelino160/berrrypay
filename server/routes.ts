@@ -162,7 +162,8 @@ export async function registerRoutes(
   // Stats
   app.get(api.stats.get.path, async (req, res) => {
     const period = req.query.period as string;
-    const stats = await storage.getDashboardStats(period);
+    const productId = req.query.productId as string;
+    const stats = await storage.getDashboardStats(period, productId);
     res.json(stats);
   });
 

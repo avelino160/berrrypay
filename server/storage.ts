@@ -37,7 +37,7 @@ export interface IStorage {
   incrementCheckoutViews(id: number): Promise<void>;
 
   // Stats
-  getDashboardStats(period?: string): Promise<DashboardStats>;
+  getDashboardStats(period?: string, productId?: string): Promise<DashboardStats>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -138,7 +138,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Stats
-  async getDashboardStats(period?: string): Promise<DashboardStats> {
+  async getDashboardStats(period?: string, productId?: string): Promise<DashboardStats> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -166,17 +166,23 @@ export class DatabaseStorage implements IStorage {
       startDate.setDate(today.getDate() - 30);
     }
 
+    const whereConditions = [
+      eq(sales.status, 'paid'),
+      gte(sales.createdAt, startDate),
+      lt(sales.createdAt, new Date(endDate.getTime() + 1))
+    ];
+
+    if (productId && productId !== "all") {
+      whereConditions.push(eq(sales.productId, parseInt(productId)));
+    }
+
     // Sales for the period
     const [periodSalesResult] = await db.select({
       count: sql<number>`count(*)`,
       total: sql<number>`sum(${sales.amount})`
     })
     .from(sales)
-    .where(and(
-      eq(sales.status, 'paid'),
-      gte(sales.createdAt, startDate),
-      lt(sales.createdAt, new Date(endDate.getTime() + 1))
-    ));
+    .where(and(...whereConditions));
 
     // Get chart data
     let chartData: { name: string; sales: number }[] = [];
@@ -188,11 +194,7 @@ export class DatabaseStorage implements IStorage {
         total: sql<number>`sum(${sales.amount})`
       })
       .from(sales)
-      .where(and(
-        eq(sales.status, 'paid'),
-        gte(sales.createdAt, startDate),
-        lt(sales.createdAt, new Date(endDate.getTime() + 1))
-      ))
+      .where(and(...whereConditions))
       .groupBy(sql`EXTRACT(HOUR FROM ${sales.createdAt})`);
 
       for (let i = 0; i < 24; i++) {
@@ -212,11 +214,7 @@ export class DatabaseStorage implements IStorage {
         total: sql<number>`sum(${sales.amount})`
       })
       .from(sales)
-      .where(and(
-        eq(sales.status, 'paid'),
-        gte(sales.createdAt, startDate),
-        lt(sales.createdAt, new Date(endDate.getTime() + 1))
-      ))
+      .where(and(...whereConditions))
       .groupBy(sql`TO_CHAR(${sales.createdAt}, 'DD/MM')`);
 
       const days = period === "7" ? 7 : (period === "90" ? 90 : 30);
