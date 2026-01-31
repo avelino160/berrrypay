@@ -169,15 +169,15 @@ export default function PublicCheckout() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <div 
-        className="py-2 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-4"
+        className="py-3 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-6"
         style={{ backgroundColor: config.primaryColor }}
         data-testid="timer-bar"
       >
-        <span className="font-mono text-xl lg:text-2xl font-bold tracking-wider tabular-nums" data-testid="timer-countdown">
+        <span className="font-mono text-3xl lg:text-4xl font-extrabold tracking-widest tabular-nums leading-none" data-testid="timer-countdown">
           {formatTime(timerSeconds)}
         </span>
-        <Timer className="w-5 h-5 animate-pulse" />
-        <span className="text-sm lg:text-base font-medium" data-testid="timer-text">{config.timerText}</span>
+        <Timer className="w-8 h-8 animate-pulse" />
+        <span className="text-base lg:text-xl font-bold uppercase tracking-tight" data-testid="timer-text">{config.timerText}</span>
       </div>
 
       {config.heroImageUrl && (

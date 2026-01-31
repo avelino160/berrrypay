@@ -433,14 +433,14 @@ export default function CheckoutEditor() {
         <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
           <div className={`bg-gray-50 h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}>
             <div 
-              className="py-1.5 px-4 text-center text-white flex items-center justify-center gap-3"
+              className="py-2.5 px-4 text-center text-white flex items-center justify-center gap-4"
               style={{ backgroundColor: config.primaryColor }}
             >
-              <span className="font-mono text-base font-bold tracking-wider tabular-nums">
+              <span className="font-mono text-2xl font-extrabold tracking-widest tabular-nums leading-none">
                 {formatTime(timerSeconds)}
               </span>
-              <Timer className="w-4 h-4 animate-pulse" />
-              <span className="text-xs font-medium">{config.timerText}</span>
+              <Timer className="w-6 h-6 animate-pulse" />
+              <span className="text-sm font-bold uppercase tracking-tight">{config.timerText}</span>
             </div>
 
             {config.heroImageUrl && (
