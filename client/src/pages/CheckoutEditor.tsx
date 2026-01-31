@@ -300,6 +300,10 @@ export default function CheckoutEditor() {
                 onChange={async (e) => {
                   const file = e.target.files?.[0];
                   if (file) {
+                    // Pre-visualização instantânea local
+                    const localUrl = URL.createObjectURL(file);
+                    setConfig({...config, heroImageUrl: localUrl});
+
                     const formData = new FormData();
                     formData.append("file", file);
                     try {
@@ -309,12 +313,10 @@ export default function CheckoutEditor() {
                       });
                       if (!res.ok) throw new Error("Falha no upload");
                       const data = await res.json();
-                      const img = new Image();
-                      img.src = data.url;
-                      img.onload = () => {
-                        setConfig({...config, heroImageUrl: data.url});
-                        toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
-                      };
+                      
+                      // Atualiza com a URL real do servidor, mas o preview já mudou antes
+                      setConfig({...config, heroImageUrl: data.url});
+                      toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
                     } catch (err) {
                       toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
                     }
