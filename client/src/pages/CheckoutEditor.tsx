@@ -322,46 +322,6 @@ export default function CheckoutEditor() {
                 data-testid="input-hero-image"
               />
             </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto de Privacidade</Label>
-              <Input 
-                value={config.privacyText}
-                onChange={(e) => setConfig({...config, privacyText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-privacy-text"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto de Compra Segura</Label>
-              <Input 
-                value={config.safeText}
-                onChange={(e) => setConfig({...config, safeText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-safe-text"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto de Entrega</Label>
-              <Input 
-                value={config.deliveryText}
-                onChange={(e) => setConfig({...config, deliveryText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-delivery-text"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto de Conteúdo Aprovado</Label>
-              <Input 
-                value={config.approvedText}
-                onChange={(e) => setConfig({...config, approvedText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-approved-text"
-              />
-            </div>
           </TabsContent>
 
           <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-4">

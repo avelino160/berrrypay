@@ -416,37 +416,6 @@ export default function PublicCheckout() {
 
           <div className="lg:col-span-1">
             <div className="sticky top-20 space-y-4">
-              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <Lock className="w-4 h-4 text-green-600" />
-                  <span className="font-medium">Privacy</span>
-                </div>
-                <p className="text-xs text-gray-500">{config.privacyText}</p>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-green-600" />
-                  <span className="font-medium">Safe purchase</span>
-                </div>
-                <p className="text-xs text-gray-500">{config.safeText}</p>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <Mail className="w-4 h-4 text-green-600" />
-                  <span className="font-medium">Delivery via E-mail</span>
-                </div>
-                <p className="text-xs text-gray-500">{config.deliveryText}</p>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-green-600" />
-                  <span className="font-medium">Approved content</span>
-                </div>
-                <p className="text-xs text-gray-500">{config.approvedText}</p>
-              </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="font-medium text-gray-900 mb-4">Order details</h3>
