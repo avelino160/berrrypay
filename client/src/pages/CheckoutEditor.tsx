@@ -31,6 +31,7 @@ const defaultConfig: CheckoutConfig = {
   approvedText: "Approved content",
   testimonials: [],
   upsellProducts: [],
+  orderBumpProduct: null,
   payButtonText: "Buy now",
   footerText: "BerryPay © 2026. All rights reserved.",
   primaryColor: "#22a559",
@@ -128,6 +129,7 @@ export default function CheckoutEditor() {
 
   const selectedProduct = products?.find(p => p.id.toString() === productId);
   const upsellProducts = products?.filter(p => config.upsellProducts.includes(p.id)) || [];
+  const orderBumpProductData = products?.find(p => p.id === config.orderBumpProduct);
 
   const toggleUpsell = (id: number) => {
     const current = config.upsellProducts || [];
@@ -304,6 +306,24 @@ export default function CheckoutEditor() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Order Bump (Você também pode gostar):</Label>
+              <Select 
+                value={config.orderBumpProduct?.toString() || "none"} 
+                onValueChange={(val) => setConfig({...config, orderBumpProduct: val === "none" ? null : parseInt(val)})}
+              >
+                <SelectTrigger className="bg-zinc-900/50 border-zinc-800 h-9 text-sm" data-testid="select-order-bump">
+                  <SelectValue placeholder="Nenhum produto selecionado" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-900 border-zinc-800">
+                  <SelectItem value="none">Nenhum</SelectItem>
+                  {products?.filter(p => p.id.toString() !== productId).map((p) => (
+                    <SelectItem key={p.id} value={p.id.toString()}>{p.name} - {(p.price / 100).toFixed(2).replace('.', ',')} US$</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -761,6 +781,37 @@ export default function CheckoutEditor() {
                       </div>
                     </div>
                   </div>
+
+                  {orderBumpProductData && (
+                    <div className="p-4">
+                      <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                          <span className="font-bold text-gray-900 text-sm">Você também pode gostar de:</span>
+                        </div>
+                        <div className="flex items-start gap-3 bg-white rounded-lg p-3 border border-gray-100">
+                          {orderBumpProductData.imageUrl ? (
+                            <img src={orderBumpProductData.imageUrl} alt="" className="w-14 h-14 object-cover rounded bg-gray-900" />
+                          ) : (
+                            <div className="w-14 h-14 bg-gray-900 rounded flex items-center justify-center text-white font-bold text-sm">
+                              {orderBumpProductData.name.charAt(0)}
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <h4 className="font-bold text-gray-900 text-sm">{orderBumpProductData.name}</h4>
+                            <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{orderBumpProductData.description || 'Produto adicional'}</p>
+                            <div className="mt-1 font-bold text-sm" style={{ color: config.primaryColor }}>
+                              + R$ {(orderBumpProductData.price / 100).toFixed(2).replace('.', ',')}
+                            </div>
+                          </div>
+                        </div>
+                        <label className="flex items-center gap-2 mt-3 cursor-pointer">
+                          <Checkbox checked={false} className="border-gray-300" data-testid="checkbox-order-bump-preview" />
+                          <span className="text-sm text-gray-700">Quero comprar também!</span>
+                        </label>
+                      </div>
+                    </div>
+                  )}
 
                   {upsellProducts.length > 0 && (
                     <div className="p-4">

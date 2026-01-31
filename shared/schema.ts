@@ -55,6 +55,7 @@ export const checkouts = pgTable("checkouts", {
       }
     ],
     upsellProducts: [] as number[],
+    orderBumpProduct: null,
     payButtonText: "Buy now",
     footerText: "BerryPay © 2026. All rights reserved.",
     primaryColor: "#22a559",
@@ -85,6 +86,7 @@ export type CheckoutConfig = {
     text: string;
   }[];
   upsellProducts: number[];
+  orderBumpProduct: number | null;
   payButtonText: string;
   footerText: string;
   primaryColor: string;
