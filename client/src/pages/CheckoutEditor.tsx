@@ -635,7 +635,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Phone number</label>
+                      <label className="block text-[11px] uppercase tracking-tight font-medium text-[#374151]">Phone number</label>
                       <div className="flex gap-2">
                         <Select defaultValue="BR">
                           <SelectTrigger className="w-[100px] h-11 bg-gray-50 border-gray-200 text-xs font-medium text-gray-600 focus:ring-1 focus:ring-primary/20 focus:border-primary">
