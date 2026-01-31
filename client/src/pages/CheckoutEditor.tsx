@@ -735,7 +735,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>confirme seu e-mail</label>
+                      <label className="block text-[11px] tracking-tight font-normal" style={{ color: config.textColor }}>Confirme seu email</label>
                       <input 
                         type="email"
                         placeholder="Digite seu e-mail novamente"
