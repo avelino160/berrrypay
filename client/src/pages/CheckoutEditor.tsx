@@ -695,9 +695,9 @@ export default function CheckoutEditor() {
             )}
 
             {config.heroImageUrl && (
-              <div className="py-4 px-4" style={{ backgroundColor: config.highlightColor }}>
+              <div className="py-2 px-4" style={{ backgroundColor: config.backgroundColor }}>
                 <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
-                  <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain transition-opacity duration-300" />
+                  <img src={config.heroImageUrl} alt="" className="w-full max-w-2xl h-auto object-contain transition-opacity duration-300" />
                 </div>
               </div>
             )}
