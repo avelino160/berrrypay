@@ -608,7 +608,7 @@ export default function CheckoutEditor() {
 
                   <div className="p-4 space-y-4">
                     <div className="space-y-1">
-                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Your email address</label>
+                      <label className="block text-[11px] text-gray-700 uppercase tracking-tight font-medium">Your email address</label>
                       <input 
                         type="email"
                         placeholder="Enter the email to receive your purchase"
