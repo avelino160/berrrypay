@@ -774,38 +774,38 @@ export default function CheckoutEditor() {
                         <Star className="w-4 h-4" style={{ fill: config.primaryColor, color: config.primaryColor }} />
                         <span className="font-bold text-sm" style={{ color: config.textColor }}>Você também pode gostar de:</span>
                       </div>
-                      <div className="rounded-lg overflow-hidden border-2" style={{ borderColor: config.primaryColor, backgroundColor: config.highlightColor }}>
+                      <div className="rounded-lg overflow-hidden border-2" style={{ borderColor: config.primaryColor, backgroundColor: config.primaryColor }}>
                         <div className="flex items-start gap-3 p-3">
                           {orderBumpProductData.imageUrl ? (
-                            <img src={orderBumpProductData.imageUrl} alt="" className="w-14 h-14 object-cover rounded bg-gray-900" />
+                            <img src={orderBumpProductData.imageUrl} alt="" className="w-14 h-14 object-cover rounded bg-white" />
                           ) : (
-                            <div className="w-14 h-14 bg-gray-900 rounded flex items-center justify-center text-white font-bold text-sm">
+                            <div className="w-14 h-14 bg-white rounded flex items-center justify-center text-zinc-900 font-bold text-sm">
                               {orderBumpProductData.name.charAt(0)}
                             </div>
                           )}
                           <div className="flex-1">
-                            <h4 className="font-bold text-sm" style={{ color: config.textColor }}>{orderBumpProductData.name}</h4>
-                            <p className="text-xs mt-0.5 line-clamp-1" style={{ color: `${config.textColor}99` }}>{orderBumpProductData.description || 'Produto adicional'}</p>
-                            <div className="mt-1 font-bold text-sm" style={{ color: config.primaryColor }}>
+                            <h4 className="font-bold text-sm" style={{ color: "#ffffff" }}>{orderBumpProductData.name}</h4>
+                            <p className="text-xs mt-0.5 line-clamp-1" style={{ color: "rgba(255,255,255,0.8)" }}>{orderBumpProductData.description || 'Produto adicional'}</p>
+                            <div className="mt-1 font-bold text-sm" style={{ color: "#ffffff" }}>
                               + R$ {(orderBumpProductData.price / 100).toFixed(2).replace('.', ',')}
                             </div>
                           </div>
                         </div>
                         <label 
                           className="flex items-center gap-2 p-3 cursor-pointer" 
-                          style={{ backgroundColor: `${config.primaryColor}15`, borderTop: `1px solid ${config.primaryColor}30` }}
+                          style={{ backgroundColor: `rgba(0,0,0,0.1)`, borderTop: `1px solid rgba(255,255,255,0.2)` }}
                         >
                             <Checkbox 
                               checked={orderBumpSelected} 
                               onCheckedChange={(checked) => setOrderBumpSelected(!!checked)}
-                              className="border-gray-400 data-[state=checked]:bg-[var(--primary-color)] data-[state=checked]:border-[var(--primary-color)]"
+                              className="border-white data-[state=checked]:bg-white data-[state=checked]:text-zinc-900"
                               style={{ 
-                                borderColor: config.primaryColor,
-                                "--primary-color": config.primaryColor 
+                                borderColor: "#ffffff",
+                                "--primary-color": "#ffffff" 
                               } as React.CSSProperties}
                               data-testid="checkbox-order-bump-preview" 
                             />
-                            <span className="text-sm font-medium" style={{ color: config.primaryColor }}>Quero comprar também!</span>
+                            <span className="text-sm font-medium" style={{ color: "#ffffff" }}>Quero comprar também!</span>
                           </label>
                       </div>
                     </div>
