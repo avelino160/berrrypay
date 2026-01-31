@@ -52,7 +52,7 @@ export default function CheckoutEditor() {
   
   const isNew = !checkoutId;
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'transfer' | 'paypal'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'transfer' | 'paypal'>('paypal');
   
   const [name, setName] = useState("");
   const [productId, setProductId] = useState("");
@@ -727,37 +727,12 @@ export default function CheckoutEditor() {
 
                   <div className="overflow-hidden">
                     <div className="flex border-b border-gray-200">
-                      <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'card' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'card' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('card')}>
-                        <CreditCard className="w-3 h-3" /> Credit Card
-                      </button>
-                      <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'transfer' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'transfer' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('transfer')}>
-                        <Building2 className="w-3 h-3" /> Transfer
-                      </button>
                       <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'paypal' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'paypal' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('paypal')}>
                         <SiPaypal className="w-3 h-3 text-blue-600" /> PayPal
                       </button>
                     </div>
                     <div className="p-4 space-y-3">
-                      <div>
-                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Card number</label>
-                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">0000 0000 0000 0000</div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-[10px] font-medium text-gray-700 mb-1">Expiration date</label>
-                          <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">MM/YY</div>
-                        </div>
-                        <div>
-                          <label className="block text-[10px] font-medium text-gray-700 mb-1">Security code</label>
-                          <div className="h-10 px-3 rounded-md border border-gray-200 bg-zinc-50 flex items-center text-gray-400 text-xs">CVV</div>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Account holder name</label>
-                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">Enter name printed on card</div>
-                      </div>
-
-                      <div className="pt-4 border-t border-gray-100">
+                      <div className="pt-4">
                         <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
                         <div className="flex justify-between items-center text-xs mb-2">
                           <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
