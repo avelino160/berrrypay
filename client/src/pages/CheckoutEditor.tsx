@@ -440,7 +440,7 @@ export default function CheckoutEditor() {
               <span className="font-mono text-4xl font-extrabold tabular-nums leading-none">
                 {formatTime(timerSeconds)}
               </span>
-              <img src={timerIcon} className="w-8 h-8" alt="Timer" />
+              <Timer className="w-8 h-8 animate-pulse" />
               <span className="text-lg font-bold uppercase tracking-tight">{config.timerText}</span>
             </div>
 
