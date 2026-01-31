@@ -303,24 +303,44 @@ export default function CheckoutEditor() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto do Badge</Label>
+              <Label className="text-xs text-zinc-400">Upload de Banner (Hero)</Label>
               <Input 
-                value={config.heroBadgeText}
-                onChange={(e) => setConfig({...config, heroBadgeText: e.target.value})}
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    try {
+                      const res = await fetch("/api/upload", {
+                        method: "POST",
+                        body: formData,
+                      });
+                      const data = await res.json();
+                      setConfig({...config, heroImageUrl: data.url});
+                      toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
+                    } catch (err) {
+                      toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
+                    }
+                  }
+                }}
                 className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-hero-badge"
+                data-testid="input-hero-image-upload"
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">URL da Imagem do Hero</Label>
-              <Input 
-                value={config.heroImageUrl}
-                onChange={(e) => setConfig({...config, heroImageUrl: e.target.value})}
-                placeholder="https://..."
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-hero-image"
-              />
+              {config.heroImageUrl && (
+                <div className="mt-2 relative group">
+                  <img src={config.heroImageUrl} alt="Banner Preview" className="w-full h-20 object-cover rounded-md border border-zinc-800" />
+                  <Button 
+                    size="icon" 
+                    variant="destructive" 
+                    className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => setConfig({...config, heroImageUrl: ""})}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              )}
             </div>
           </TabsContent>
 
