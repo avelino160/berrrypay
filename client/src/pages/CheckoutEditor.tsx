@@ -29,15 +29,7 @@ const defaultConfig: CheckoutConfig = {
   safeText: "Safe purchase",
   deliveryText: "Delivery via E-mail",
   approvedText: "Approved content",
-  testimonials: [
-    {
-      id: "1",
-      name: "Marisa Correia",
-      imageUrl: "",
-      rating: 5,
-      text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
-    }
-  ],
+  testimonials: [],
   upsellProducts: [],
   payButtonText: "Buy now",
   footerText: "BerryPay © 2026. All rights reserved.",
