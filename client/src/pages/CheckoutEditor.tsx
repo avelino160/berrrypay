@@ -577,8 +577,8 @@ export default function CheckoutEditor() {
               </div>
             )}
 
-            <div className={`max-w-5xl mx-auto px-4 py-6 ${device === 'mobile' ? 'space-y-4' : 'grid grid-cols-3 gap-6'}`}>
-              <div className={device === 'mobile' ? 'space-y-4' : 'col-span-2 space-y-4'}>
+            <div className={`max-w-5xl mx-auto px-4 py-6 ${device === 'mobile' ? 'space-y-4' : (config.testimonials && config.testimonials.length > 0 ? 'grid grid-cols-3 gap-6' : 'flex justify-center')}`}>
+              <div className={device === 'mobile' ? 'space-y-4' : (config.testimonials && config.testimonials.length > 0 ? 'col-span-2 space-y-4' : 'max-w-2xl w-full space-y-4')}>
                 <div className="bg-white rounded-lg border border-gray-200 overflow-hidden divide-y divide-gray-100">
                   <div className="p-4">
                     <div className="flex items-center gap-4">
