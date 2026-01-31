@@ -109,7 +109,7 @@ export default function Settings() {
               <img src={paypalLogo} alt="PayPal" className="w-full h-full object-contain" />
             </div>
             <div>
-              <CardTitle className="text-lg text-white">PayPal Gateway</CardTitle>
+              <CardTitle className="text-lg text-white">PayPal </CardTitle>
               <CardDescription className="text-zinc-500">
                 Configure suas credenciais de API do PayPal para processar pagamentos.
               </CardDescription>
