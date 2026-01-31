@@ -3,7 +3,7 @@ import { useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Clock, Shield, Zap, Mail, Lock, CheckCircle2, Star, CreditCard, Building2 } from "lucide-react";
+import { Loader2, Clock, Shield, Zap, Mail, Lock, CheckCircle2, Star, CreditCard, Building2, Timer } from "lucide-react";
 import { Product, Checkout, CheckoutConfig } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
 import { SiPaypal } from "react-icons/si";
@@ -169,15 +169,15 @@ export default function PublicCheckout() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <div 
-        className="py-4 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-4"
+        className="py-2 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-4"
         style={{ backgroundColor: config.primaryColor }}
         data-testid="timer-bar"
       >
-        <span className="font-mono text-2xl lg:text-3xl font-bold tracking-wider tabular-nums" data-testid="timer-countdown">
+        <span className="font-mono text-xl lg:text-2xl font-bold tracking-wider tabular-nums" data-testid="timer-countdown">
           {formatTime(timerSeconds)}
         </span>
-        <Clock className="w-6 h-6" />
-        <span className="text-base lg:text-lg font-medium" data-testid="timer-text">{config.timerText}</span>
+        <Timer className="w-5 h-5 animate-pulse" />
+        <span className="text-sm lg:text-base font-medium" data-testid="timer-text">{config.timerText}</span>
       </div>
 
       <div className="bg-white py-4 px-4">

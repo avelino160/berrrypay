@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useProducts } from "@/hooks/use-products";
 import { useCheckout, useCreateCheckout, useUpdateCheckout } from "@/hooks/use-checkouts";
-import { ArrowLeft, Save, Monitor, Smartphone, Clock, Shield, Zap, Mail, Lock, CheckCircle2, Star, CreditCard, Building2, Copy, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Monitor, Smartphone, Clock, Shield, Zap, Mail, Lock, CheckCircle2, Star, CreditCard, Building2, Copy, Plus, Trash2, Timer } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -433,14 +433,14 @@ export default function CheckoutEditor() {
         <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
           <div className={`bg-gray-50 h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}>
             <div 
-              className="py-2 px-4 text-center text-white flex items-center justify-center gap-3"
+              className="py-1.5 px-4 text-center text-white flex items-center justify-center gap-3"
               style={{ backgroundColor: config.primaryColor }}
             >
-              <span className="font-mono text-lg font-bold tracking-wider tabular-nums">
+              <span className="font-mono text-base font-bold tracking-wider tabular-nums">
                 {formatTime(timerSeconds)}
               </span>
-              <Clock className="w-4 h-4" />
-              <span className="text-sm font-medium">{config.timerText}</span>
+              <Timer className="w-4 h-4 animate-pulse" />
+              <span className="text-xs font-medium">{config.timerText}</span>
             </div>
 
             <div className="bg-white py-4 px-4">
