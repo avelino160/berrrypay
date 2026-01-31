@@ -641,6 +641,7 @@ export default function CheckoutEditor() {
                       </div>
 
                       <div className="pt-4 border-t border-gray-100">
+                        <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
                         <div className="flex justify-between items-center text-xs mb-2">
                           <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
                           <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
