@@ -800,12 +800,14 @@ export default function CheckoutEditor() {
                       </div>
                     ))}
 
-                    <div className="text-center">
-                      <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
-                        <Lock className="w-2 h-2" />
-                        Secured by <span className="font-bold">BerryPay</span>
+                    {config.testimonials && config.testimonials.length > 0 && (
+                      <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
+                          <Lock className="w-2 h-2" />
+                          Secured by <span className="font-bold">BerryPay</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
             </div>
 
