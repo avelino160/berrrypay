@@ -626,7 +626,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Your full name</label>
+                      <label className="block text-[11px] text-gray-700 uppercase tracking-tight font-medium">Your full name</label>
                       <input 
                         type="text"
                         placeholder="Enter your full name"
