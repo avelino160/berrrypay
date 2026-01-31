@@ -42,6 +42,8 @@ const defaultConfig: CheckoutConfig = {
   showChangeCountry: true,
 };
 
+import { timerIcon } from "@/lib/assets";
+
 export default function CheckoutEditor() {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/checkouts/edit/:id");
@@ -87,7 +89,7 @@ export default function CheckoutEditor() {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${hrs.toString().padStart(2, '0')} : ${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`;
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handleSave = async () => {
@@ -435,10 +437,10 @@ export default function CheckoutEditor() {
               className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[33px] pb-[33px]"
               style={{ backgroundColor: config.primaryColor }}
             >
-              <span className="font-mono text-4xl font-extrabold tracking-widest tabular-nums leading-none">
+              <span className="font-mono text-4xl font-extrabold tabular-nums leading-none">
                 {formatTime(timerSeconds)}
               </span>
-              <Timer className="w-8 h-8 animate-pulse" />
+              <img src={timerIcon} className="w-8 h-8" alt="Timer" />
               <span className="text-lg font-bold uppercase tracking-tight">{config.timerText}</span>
             </div>
 
