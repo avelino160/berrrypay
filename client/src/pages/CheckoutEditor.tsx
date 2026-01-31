@@ -524,26 +524,46 @@ export default function CheckoutEditor() {
                     </div>
                   </div>
 
-                  <div className="p-4 space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Your email address</label>
-                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter the email to receive your purchase</div>
+                  <div className="p-4 space-y-4">
+                    <div className="space-y-1">
+                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Your email address</label>
+                      <input 
+                        type="email"
+                        placeholder="Enter the email to receive your purchase"
+                        className="w-full h-11 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                        data-testid="input-email"
+                      />
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Confirm your email</label>
-                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your email again</div>
+                    <div className="space-y-1">
+                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Confirm your email</label>
+                      <input 
+                        type="email"
+                        placeholder="Enter your email again"
+                        className="w-full h-11 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                        data-testid="input-confirm-email"
+                      />
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Your full name</label>
-                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your full name</div>
+                    <div className="space-y-1">
+                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Your full name</label>
+                      <input 
+                        type="text"
+                        placeholder="Enter your full name"
+                        className="w-full h-11 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                        data-testid="input-fullname"
+                      />
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
+                    <div className="space-y-1">
+                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Phone number</label>
                       <div className="flex gap-2">
-                        <div className="flex items-center gap-1 border border-gray-200 rounded-md px-2 h-10 bg-gray-50 text-xs">
+                        <div className="flex items-center gap-1.5 border border-gray-200 rounded-md px-3 h-11 bg-gray-50 text-xs font-medium text-gray-600">
                           <span>🇧🇷</span> +55
                         </div>
-                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex-1"></div>
+                        <input 
+                          type="tel"
+                          placeholder="(00) 00000-0000"
+                          className="flex-1 h-11 px-3 rounded-md border border-gray-200 bg-gray-50 text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                          data-testid="input-phone"
+                        />
                       </div>
                     </div>
                   </div>
