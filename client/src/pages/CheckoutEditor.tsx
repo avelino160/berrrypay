@@ -521,7 +521,6 @@ export default function CheckoutEditor() {
                       </div>
                     </div>
                   </div>
-                  <div className="text-[10px] text-gray-500">Secure checkout • 1 Pagamento Único</div>
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">

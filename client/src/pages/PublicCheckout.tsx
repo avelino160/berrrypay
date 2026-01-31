@@ -214,9 +214,6 @@ export default function PublicCheckout() {
                   </button>
                 )}
               </div>
-              <div className="text-xs text-gray-500">
-                Secure checkout • 1 Pagamento Único
-              </div>
             </div>
 
             <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-4">
