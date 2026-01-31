@@ -40,7 +40,7 @@ const defaultConfig: CheckoutConfig = {
   footerText: "BerryPay © 2026. All rights reserved.",
   primaryColor: "#22a559",
   showChangeCountry: true,
-  showTimer: true,
+  showTimer: false,
 };
 
 import { timerIcon } from "@/lib/assets";
