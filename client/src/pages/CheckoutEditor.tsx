@@ -603,9 +603,9 @@ export default function CheckoutEditor() {
                   </div>
 
                   {config.testimonial && (
-                    <div className="p-4">
+                    <div className="p-4 bg-gray-50/50">
                       <div className="flex items-start gap-3">
-                        <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+                        <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
                           {config.testimonial.imageUrl ? (
                             <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
                           ) : (
@@ -621,11 +621,12 @@ export default function CheckoutEditor() {
                               <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                             ))}
                           </div>
-                          <p className="text-[11px] text-gray-600 italic">{config.testimonial.text}</p>
+                          <p className="text-[11px] text-gray-600 italic leading-relaxed">{config.testimonial.text}</p>
                         </div>
                       </div>
                     </div>
                   )}
+
 
                   {upsellProducts.length > 0 && (
                     <div className="p-4">
@@ -658,7 +659,7 @@ export default function CheckoutEditor() {
 
               <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
                 <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
+                  <h3 className="font-medium text-gray-900 text-sm mb-3 uppercase tracking-tight font-bold">Resumo do Pedido</h3>
                   <div className="flex justify-between items-center text-xs mb-2">
                     <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
                     <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
@@ -674,16 +675,16 @@ export default function CheckoutEditor() {
                 </div>
 
                 <Button 
-                  className="w-full h-12 text-base font-bold"
+                  className="w-full h-12 text-base font-bold shadow-lg hover:brightness-110 transition-all active:scale-[0.98]"
                   style={{ backgroundColor: config.primaryColor }}
                 >
                   {config.payButtonText}
                 </Button>
 
                 <div className="text-center">
-                  <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
-                    <Lock className="w-2 h-2" />
-                    Secured by <span className="font-bold">Berry Pay</span>
+                  <div className="flex items-center justify-center gap-1.5 text-[10px] text-gray-400">
+                    <Lock className="w-2.5 h-2.5" />
+                    Compra Segura processada por <span className="font-bold text-gray-500">Berry Pay</span>
                   </div>
                 </div>
               </div>
