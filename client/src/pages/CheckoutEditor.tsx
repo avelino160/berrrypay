@@ -293,16 +293,6 @@ export default function CheckoutEditor() {
 
           <TabsContent value="hero" className="flex-1 overflow-y-auto p-4 space-y-4">
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Título do Hero</Label>
-              <Input 
-                value={config.heroTitle}
-                onChange={(e) => setConfig({...config, heroTitle: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-hero-title"
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Upload de Banner (Hero)</Label>
               <Input 
                 type="file"
@@ -317,6 +307,7 @@ export default function CheckoutEditor() {
                         method: "POST",
                         body: formData,
                       });
+                      if (!res.ok) throw new Error("Falha no upload");
                       const data = await res.json();
                       setConfig({...config, heroImageUrl: data.url});
                       toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
@@ -446,26 +437,15 @@ export default function CheckoutEditor() {
               <span className="text-sm font-medium">{config.timerText}</span>
             </div>
 
-            <div className="bg-[#1a3a2a] py-8 px-4">
-              <div className={`max-w-5xl mx-auto flex ${device === 'mobile' ? 'flex-col' : 'flex-row'} items-center justify-between gap-6`}>
-                <div className="text-white">
-                  <h1 className={`${device === 'mobile' ? 'text-2xl' : 'text-3xl'} font-bold italic leading-tight`}>
-                    {config.heroTitle}
-                  </h1>
-                </div>
-                <div className="flex items-center gap-4">
-                  {config.heroImageUrl ? (
-                    <img src={config.heroImageUrl} alt="" className="w-16 h-16 object-contain" />
-                  ) : (
-                    <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
-                      <span className="text-white/50 text-[10px]">Imagem</span>
-                    </div>
-                  )}
-                  <div className="bg-[#0d5c3d] rounded-lg px-3 py-2 text-center">
-                    <span className="text-3xl font-bold text-white">{config.heroBadgeText.split(' ')[0]}</span>
-                    <div className="text-white text-xs font-medium">{config.heroBadgeText.split(' ').slice(1).join(' ')}</div>
+            <div className="bg-white py-8 px-4">
+              <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
+                {config.heroImageUrl ? (
+                  <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain" />
+                ) : (
+                  <div className="w-full max-w-4xl h-32 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
+                    <span className="text-gray-400 text-sm">Banner Principal</span>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 

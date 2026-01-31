@@ -180,26 +180,15 @@ export default function PublicCheckout() {
         <span className="text-base lg:text-lg font-medium" data-testid="timer-text">{config.timerText}</span>
       </div>
 
-      <div className="bg-[#1a3a2a] py-8 px-4">
-        <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="text-white">
-            <h1 className="text-3xl lg:text-4xl font-bold italic leading-tight" data-testid="hero-title">
-              {config.heroTitle}
-            </h1>
-          </div>
-          <div className="flex items-center gap-6">
-            {config.heroImageUrl ? (
-              <img src={config.heroImageUrl} alt="" className="w-24 h-24 object-contain" />
-            ) : (
-              <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center">
-                <span className="text-white/50 text-xs">Imagem</span>
-              </div>
-            )}
-            <div className="bg-[#0d5c3d] rounded-lg px-4 py-3 text-center">
-              <span className="text-5xl font-bold text-white" data-testid="hero-badge">{config.heroBadgeText.split(' ')[0]}</span>
-              <div className="text-white text-sm font-medium">{config.heroBadgeText.split(' ').slice(1).join(' ')}</div>
+      <div className="bg-white py-8 px-4">
+        <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
+          {config.heroImageUrl ? (
+            <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain" />
+          ) : (
+            <div className="w-full max-w-4xl h-48 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
+              <span className="text-gray-400">Banner Principal</span>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
