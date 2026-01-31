@@ -130,17 +130,17 @@ export default function PublicCheckout() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: config.backgroundColor }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: config.primaryColor }} />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-900 p-4">
+      <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
         <h1 className="text-2xl font-bold mb-2">Link Inválido</h1>
-        <p className="text-gray-500">Este checkout não existe ou foi desativado.</p>
+        <p style={{ color: `${config.textColor}99` }}>Este checkout não existe ou foi desativado.</p>
       </div>
     );
   }
@@ -159,7 +159,7 @@ export default function PublicCheckout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen font-sans" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
       {config.showTimer && (
         <div 
           className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[20px] pb-[20px]"
@@ -175,7 +175,7 @@ export default function PublicCheckout() {
       )}
 
       {config.heroImageUrl && (
-        <div className="bg-white py-4 px-4">
+        <div className="py-4 px-4" style={{ backgroundColor: config.highlightColor }}>
           <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
             <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain transition-opacity duration-300" />
           </div>
@@ -184,18 +184,18 @@ export default function PublicCheckout() {
 
       <div className={`max-w-5xl mx-auto px-4 py-6 ${testimonials.length > 0 ? 'grid grid-cols-1 lg:grid-cols-3 gap-6' : 'flex justify-center'}`}>
         <div className={testimonials.length > 0 ? 'lg:col-span-2 space-y-4' : 'max-w-2xl w-full space-y-4'}>
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden divide-y divide-gray-100">
+          <div className="rounded-lg border border-gray-200 overflow-hidden divide-y divide-gray-100" style={{ backgroundColor: config.highlightColor }}>
             <div className="p-4">
               <div className="flex items-center gap-4">
                 {product.imageUrl ? (
                   <img src={product.imageUrl} alt={product.name} className="w-20 h-20 object-contain rounded-md shadow-sm" />
                 ) : (
-                  <div className="w-20 h-20 bg-gray-100 rounded-md flex items-center justify-center text-gray-400 font-bold">
+                  <div className="w-20 h-20 rounded-md flex items-center justify-center font-bold" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
                     {product.name.charAt(0)}
                   </div>
                 )}
                 <div className="flex-1 space-y-1">
-                  <h2 className="font-bold text-gray-900 text-[17px]" data-testid="product-name">{product.name}</h2>
+                  <h2 className="font-bold text-[17px]" style={{ color: config.textColor }} data-testid="product-name">{product.name}</h2>
                   <div className="text-lg font-bold" style={{ color: config.primaryColor }} data-testid="product-price">
                     {(product.price / 100).toFixed(2).replace('.', ',')} US$
                   </div>
@@ -205,40 +205,43 @@ export default function PublicCheckout() {
 
             <div className="p-4 space-y-4">
               <div className="space-y-1">
-                <label className="block text-[11px] text-gray-700 uppercase tracking-tight font-medium">Your email address</label>
+                <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Your email address</label>
                 <input 
                   type="email"
                   placeholder="Enter the email to receive your purchase"
-                  className="w-full h-11 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                  className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                  style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                   data-testid="input-email"
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-[11px] text-gray-700 uppercase tracking-tight font-medium">Confirm your email</label>
+                <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Confirm your email</label>
                 <input 
                   type="email"
                   placeholder="Enter your email again"
-                  className="w-full h-11 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                  className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                  style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                   data-testid="input-confirm-email"
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-[11px] text-gray-700 uppercase tracking-tight font-medium">Your full name</label>
+                <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Your full name</label>
                 <input 
                   type="text"
                   placeholder="Enter your full name"
-                  className="w-full h-11 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                  className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                  style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                   data-testid="input-name"
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-[11px] uppercase tracking-tight font-medium text-[#374151]">Phone number</label>
+                <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Phone number</label>
                 <div className="flex gap-2">
                   <Select defaultValue="BR">
-                    <SelectTrigger className="w-[100px] h-11 bg-gray-50 border-gray-200 text-xs font-medium text-gray-600 focus:ring-1 focus:ring-primary/20 focus:border-primary">
+                    <SelectTrigger className="w-[100px] h-11 border-gray-200 text-xs font-medium focus:ring-1 focus:ring-primary/20 focus:border-primary" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-gray-200">
+                    <SelectContent style={{ backgroundColor: config.highlightColor }}>
                       <SelectItem value="BR">
                         <div className="flex items-center gap-2">
                           <span>+55</span>
@@ -274,7 +277,8 @@ export default function PublicCheckout() {
                   <input 
                     type="tel"
                     placeholder="(00) 00000-0000"
-                    className="flex-1 h-11 px-3 rounded-md border border-gray-200 bg-gray-50 text-gray-900 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                    className="flex-1 h-11 px-3 rounded-md border border-gray-200 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                    style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                     data-testid="input-phone"
                   />
                 </div>
@@ -285,9 +289,9 @@ export default function PublicCheckout() {
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Star className="w-4 h-4" style={{ fill: config.primaryColor, color: config.primaryColor }} />
-                  <span className="font-bold text-gray-900 text-sm">Você também pode gostar de:</span>
+                  <span className="font-bold text-sm" style={{ color: config.textColor }}>Você também pode gostar de:</span>
                 </div>
-                <div className="bg-white rounded-lg overflow-hidden border-2" style={{ borderColor: config.primaryColor }}>
+                <div className="rounded-lg overflow-hidden border-2" style={{ borderColor: config.primaryColor, backgroundColor: config.highlightColor }}>
                   <div className="flex items-start gap-3 p-3">
                     {orderBumpProductData.imageUrl ? (
                       <img src={orderBumpProductData.imageUrl} alt="" className="w-14 h-14 object-cover rounded bg-gray-900" />
@@ -297,8 +301,8 @@ export default function PublicCheckout() {
                       </div>
                     )}
                     <div className="flex-1">
-                      <h4 className="font-bold text-gray-900 text-sm">{orderBumpProductData.name}</h4>
-                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{orderBumpProductData.description || 'Produto adicional'}</p>
+                      <h4 className="font-bold text-sm" style={{ color: config.textColor }}>{orderBumpProductData.name}</h4>
+                      <p className="text-xs mt-0.5 line-clamp-1" style={{ color: `${config.textColor}99` }}>{orderBumpProductData.description || 'Produto adicional'}</p>
                       <div className="mt-1 font-bold text-sm" style={{ color: config.primaryColor }}>
                         + R$ {(orderBumpProductData.price / 100).toFixed(2).replace('.', ',')}
                       </div>
@@ -315,7 +319,7 @@ export default function PublicCheckout() {
                       style={{ borderColor: config.primaryColor }}
                       data-testid="checkbox-order-bump" 
                     />
-                    <span className="text-sm text-gray-700 font-medium">Quero comprar também!</span>
+                    <span className="text-sm font-medium" style={{ color: config.textColor }}>Quero comprar também!</span>
                   </label>
                 </div>
               </div>
@@ -323,21 +327,21 @@ export default function PublicCheckout() {
 
             {upsellProducts.length > 0 && (
               <div className="p-4">
-                <h3 className="font-bold text-gray-900 text-sm mb-3">Buy together</h3>
+                <h3 className="font-bold text-sm mb-3" style={{ color: config.textColor }}>Buy together</h3>
                 <div className="space-y-3">
                   {upsellProducts.map((p) => (
-                    <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
+                    <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg" style={{ backgroundColor: config.backgroundColor }}>
                       <Checkbox checked disabled className="mt-1" />
                       {p.imageUrl ? (
                         <img src={p.imageUrl} alt="" className="w-14 h-14 object-cover rounded" />
                       ) : (
-                        <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-sm">
+                        <div className="w-14 h-14 rounded flex items-center justify-center font-bold text-sm" style={{ backgroundColor: config.highlightColor, color: config.textColor }}>
                           {p.name.charAt(0)}
                         </div>
                       )}
                       <div className="flex-1">
-                        <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
-                        <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
+                        <h4 className="font-bold text-xs" style={{ color: config.textColor }}>{p.name}</h4>
+                        <p className="text-[10px] mt-1 line-clamp-2" style={{ color: `${config.textColor}99` }}>{p.description}</p>
                         <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
                           {(p.price / 100).toFixed(2).replace('.', ',')} US$
                         </div>
@@ -350,7 +354,7 @@ export default function PublicCheckout() {
 
             <div className="overflow-hidden">
               <div className="flex border-b border-gray-200">
-                <button className="flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium bg-gray-50 border-b-2 text-gray-900" style={{ borderColor: config.primaryColor }}>
+                <button className="flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium border-b-2" style={{ backgroundColor: config.backgroundColor, borderColor: config.primaryColor, color: config.textColor }}>
                   <SiPaypal className="w-3 h-3 text-blue-600" /> PayPal
                 </button>
               </div>
@@ -363,19 +367,19 @@ export default function PublicCheckout() {
                   )}
                 </div>
                 <div className="pt-4">
-                  <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
+                  <h3 className="font-medium text-sm mb-3" style={{ color: config.textColor }}>Order details</h3>
                   <div className="flex justify-between items-center text-xs mb-2">
-                    <span className="text-gray-600">{product.name}</span>
-                    <span className="font-medium">{(product.price / 100).toFixed(2).replace('.', ',')} US$</span>
+                    <span style={{ color: `${config.textColor}99` }}>{product.name}</span>
+                    <span className="font-medium" style={{ color: config.textColor }}>{(product.price / 100).toFixed(2).replace('.', ',')} US$</span>
                   </div>
                   {orderBumpSelected && orderBumpProductData && (
                     <div className="flex justify-between items-center text-xs mb-2">
-                      <span className="text-gray-600">{orderBumpProductData.name}</span>
-                      <span className="font-medium">{(orderBumpProductData.price / 100).toFixed(2).replace('.', ',')} US$</span>
+                      <span style={{ color: `${config.textColor}99` }}>{orderBumpProductData.name}</span>
+                      <span className="font-medium" style={{ color: config.textColor }}>{(orderBumpProductData.price / 100).toFixed(2).replace('.', ',')} US$</span>
                     </div>
                   )}
                   <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-                    <span className="font-bold text-gray-900 text-xs">Total</span>
+                    <span className="font-bold text-xs" style={{ color: config.textColor }}>Total</span>
                     <span className="font-bold text-lg" style={{ color: config.primaryColor }} data-testid="total-price">
                       {(calculateTotal() / 100).toFixed(2).replace('.', ',')} US$
                     </span>
@@ -396,24 +400,24 @@ export default function PublicCheckout() {
         {testimonials.length > 0 && (
           <div className="space-y-3">
             {testimonials.map((t) => (
-              <div key={t.id} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+              <div key={t.id} className="rounded-xl border border-gray-200 p-6 shadow-sm" style={{ backgroundColor: config.highlightColor }}>
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden mb-4 border-2 border-white shadow-md">
+                  <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white shadow-md" style={{ backgroundColor: config.backgroundColor }}>
                     {t.imageUrl ? (
                       <img src={t.imageUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">
+                      <div className="w-full h-full flex items-center justify-center font-bold text-xl" style={{ color: `${config.textColor}66` }}>
                         {t.name.charAt(0)}
                       </div>
                     )}
                   </div>
-                  <h4 className="font-bold text-gray-900 text-lg mb-1" data-testid={`testimonial-name-${t.id}`}>{t.name}</h4>
+                  <h4 className="font-bold text-lg mb-1" style={{ color: config.textColor }} data-testid={`testimonial-name-${t.id}`}>{t.name}</h4>
                   <div className="flex gap-1 mb-4">
                     {[...Array(t.rating)].map((_, i) => (
                       <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-700 font-medium leading-relaxed italic" data-testid={`testimonial-text-${t.id}`}>
+                  <p className="text-sm font-medium leading-relaxed italic" style={{ color: `${config.textColor}cc` }} data-testid={`testimonial-text-${t.id}`}>
                     "{t.text.replace(/^["']|["']$/g, '')}"
                   </p>
                 </div>
@@ -424,7 +428,7 @@ export default function PublicCheckout() {
       </div>
 
       <footer className="py-4 border-t border-gray-200 text-center">
-        <p className="text-[10px] text-gray-400" data-testid="footer-text">{config.footerText}</p>
+        <p className="text-[10px]" style={{ color: `${config.textColor}66` }} data-testid="footer-text">{config.footerText}</p>
       </footer>
     </div>
   );
