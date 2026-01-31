@@ -35,7 +35,7 @@ const defaultConfig: CheckoutConfig = {
   upsellProducts: [],
   orderBumpProduct: null,
   payButtonText: "Buy now",
-  footerText: "BerryPay © 2026. All rights reserved.",
+  footerText: "BerryPay © 2026. Todos os direitos reservados.",
   primaryColor: "#22a559",
   backgroundColor: "#f9fafb",
   highlightColor: "#f3f4f6",
@@ -43,6 +43,7 @@ const defaultConfig: CheckoutConfig = {
   showChangeCountry: true,
   showTimer: false,
   showPhone: false,
+  showCpf: false,
 };
 
 import { timerIcon } from "@/lib/assets";
@@ -98,6 +99,10 @@ export default function CheckoutEditor() {
   };
 
   const handleSave = async () => {
+    if (!name) {
+      toast({ title: "Erro", description: "O nome do checkout é obrigatório", variant: "destructive" });
+      return;
+    }
     if (!productId) {
       toast({ title: "Erro", description: "Selecione um produto principal", variant: "destructive" });
       return;
@@ -140,6 +145,10 @@ export default function CheckoutEditor() {
     if (current.includes(id)) {
       setConfig({ ...config, upsellProducts: current.filter(x => x !== id) });
     } else {
+      if (current.length >= 10) {
+        toast({ title: "Limite atingido", description: "Você pode selecionar no máximo 10 produtos de upsell", variant: "destructive" });
+        return;
+      }
       setConfig({ ...config, upsellProducts: [...current, id] });
     }
   };
@@ -205,6 +214,15 @@ export default function CheckoutEditor() {
                   />
                   <Label htmlFor="showPhone" className="text-sm text-white cursor-pointer">Mostrar Campo de Celular</Label>
                 </div>
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                  <Checkbox 
+                    id="showCpf"
+                    checked={config.showCpf}
+                    onCheckedChange={(checked) => setConfig({...config, showCpf: !!checked})}
+                    data-testid="checkbox-show-cpf"
+                  />
+                  <Label htmlFor="showCpf" className="text-sm text-white cursor-pointer">Mostrar Campo de CPF</Label>
+                </div>
               </div>
             </div>
 
@@ -223,58 +241,60 @@ export default function CheckoutEditor() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Upload de Banner (Hero)</Label>
-              <Input 
-                type="file"
-                accept="image/*"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const localUrl = URL.createObjectURL(file);
-                    setConfig({...config, heroImageUrl: localUrl});
+              <Label className="text-xs text-zinc-400 font-bold uppercase">Upload de Banner (Hero)</Label>
+              <div className="p-4 border-2 border-dashed border-zinc-700 rounded-xl bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors">
+                <Input 
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const localUrl = URL.createObjectURL(file);
+                      setConfig({...config, heroImageUrl: localUrl});
 
-                    const xhr = new XMLHttpRequest();
-                    const formData = new FormData();
-                    formData.append("file", file);
+                      const xhr = new XMLHttpRequest();
+                      const formData = new FormData();
+                      formData.append("file", file);
 
-                    xhr.upload.addEventListener("progress", (event) => {
-                      if (event.lengthComputable) {
-                        const percent = Math.round((event.loaded / event.total) * 95);
-                        setUploadProgress(percent);
-                      }
-                    });
+                      xhr.upload.addEventListener("progress", (event) => {
+                        if (event.lengthComputable) {
+                          const percent = Math.round((event.loaded / event.total) * 95);
+                          setUploadProgress(percent);
+                        }
+                      });
 
-                    xhr.addEventListener("load", () => {
-                      if (xhr.status >= 200 && xhr.status < 300) {
-                        setUploadProgress(100);
-                        setTimeout(() => {
-                          try {
-                            const data = JSON.parse(xhr.responseText);
-                            setConfig({...config, heroImageUrl: data.url});
-                            toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
-                          } catch (err) {
-                            toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
-                          }
+                      xhr.addEventListener("load", () => {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                          setUploadProgress(100);
+                          setTimeout(() => {
+                            try {
+                              const data = JSON.parse(xhr.responseText);
+                              setConfig({...config, heroImageUrl: data.url});
+                              toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
+                            } catch (err) {
+                              toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
+                            }
+                            setUploadProgress(null);
+                          }, 200);
+                        } else {
+                          toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
                           setUploadProgress(null);
-                        }, 200);
-                      } else {
-                        toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+                        }
+                      });
+
+                      xhr.addEventListener("error", () => {
+                        toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
                         setUploadProgress(null);
-                      }
-                    });
+                      });
 
-                    xhr.addEventListener("error", () => {
-                      toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
-                      setUploadProgress(null);
-                    });
-
-                    xhr.open("POST", "/api/upload");
-                    xhr.send(formData);
-                  }
-                }}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-hero-image-upload"
-              />
+                      xhr.open("POST", "/api/upload");
+                      xhr.send(formData);
+                    }
+                  }}
+                  className="bg-transparent border-0 h-9 text-sm focus-visible:ring-0 p-0 file:bg-zinc-800 file:text-white file:border-0 file:rounded-md file:px-4 file:py-1 file:mr-4 file:hover:bg-zinc-700 cursor-pointer"
+                  data-testid="input-hero-image-upload"
+                />
+              </div>
               {uploadProgress !== null && (
                 <div className="mt-2 space-y-1">
                   <div className="flex justify-between text-[10px] text-zinc-500">
@@ -342,13 +362,10 @@ export default function CheckoutEditor() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto do Rodapé</Label>
-              <Input 
-                value={config.footerText}
-                onChange={(e) => setConfig({...config, footerText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-footer-text"
-              />
+              <Label className="text-xs text-zinc-400">Direitos Autorais do Rodapé</Label>
+              <div className="p-3 bg-zinc-900/30 border border-zinc-800 rounded-lg text-zinc-500 text-xs italic">
+                BerryPay © 2026. Todos os direitos reservados.
+              </div>
             </div>
 
             {checkout?.publicUrl && (

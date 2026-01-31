@@ -41,6 +41,7 @@ const defaultConfig: CheckoutConfig = {
   showChangeCountry: true,
   showTimer: false,
   showPhone: false,
+  showCpf: false,
 };
 
 export default function PublicCheckout() {
@@ -236,6 +237,18 @@ export default function PublicCheckout() {
                   data-testid="input-name"
                 />
               </div>
+              {config.showCpf && (
+                <div className="space-y-1">
+                  <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>CPF</label>
+                  <input 
+                    type="text"
+                    placeholder="000.000.000-00"
+                    className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                    style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+                    data-testid="input-cpf"
+                  />
+                </div>
+              )}
               {config.showPhone && (
                 <div className="space-y-1">
                   <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Número de Telefone</label>

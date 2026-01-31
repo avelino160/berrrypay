@@ -58,7 +58,7 @@ export const checkouts = pgTable("checkouts", {
     upsellProducts: [] as number[],
     orderBumpProduct: null,
     payButtonText: "Buy now",
-    footerText: "BerryPay © 2026. All rights reserved.",
+    footerText: "BerryPay © 2026. Todos os direitos reservados.",
     primaryColor: "#22a559",
     backgroundColor: "#f9fafb",
     highlightColor: "#f3f4f6",
@@ -66,6 +66,7 @@ export const checkouts = pgTable("checkouts", {
     showChangeCountry: true,
     showTimer: false,
     showPhone: false,
+    showCpf: false,
   }),
 });
 
@@ -99,6 +100,7 @@ export type CheckoutConfig = {
   showChangeCountry: boolean;
   showTimer: boolean;
   showPhone: boolean;
+  showCpf: boolean;
 };
 
 export const settings = pgTable("settings", {
