@@ -37,7 +37,7 @@ const defaultConfig: CheckoutConfig = {
   },
   upsellProducts: [],
   payButtonText: "Buy now",
-  footerText: "Hotmart © 2026. All rights reserved.",
+  footerText: "Berry Pay © 2026. All rights reserved.",
   primaryColor: "#22a559",
   showChangeCountry: true,
 };
@@ -623,7 +623,7 @@ export default function CheckoutEditor() {
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
                     <Lock className="w-2 h-2" />
-                    Secured by <span className="font-bold">Hotmart</span>
+                    Secured by <span className="font-bold">Berry Pay</span>
                   </div>
                 </div>
               </div>
