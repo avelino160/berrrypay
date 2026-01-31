@@ -505,133 +505,135 @@ export default function CheckoutEditor() {
 
             <div className={`max-w-5xl mx-auto px-4 py-6 ${device === 'mobile' ? 'space-y-4' : 'grid grid-cols-3 gap-6'}`}>
               <div className={device === 'mobile' ? 'space-y-4' : 'col-span-2 space-y-4'}>
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <div className="flex items-center gap-4">
-                    {selectedProduct?.imageUrl ? (
-                      <img src={selectedProduct.imageUrl} alt="" className="w-20 h-20 object-contain rounded-md shadow-sm" />
-                    ) : (
-                      <div className="w-20 h-20 bg-gray-100 rounded-md flex items-center justify-center text-gray-400 font-bold">
-                        {selectedProduct?.name?.charAt(0) || '?'}
-                      </div>
-                    )}
-                    <div className="flex-1 space-y-1">
-                      <h2 className="font-bold text-gray-900 text-[17px]">{selectedProduct?.name || 'Selecione um produto'}</h2>
-                      <div className="text-lg font-bold" style={{ color: config.primaryColor }}>
-                        {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden divide-y divide-gray-100">
+                  <div className="p-4">
+                    <div className="flex items-center gap-4">
+                      {selectedProduct?.imageUrl ? (
+                        <img src={selectedProduct.imageUrl} alt="" className="w-20 h-20 object-contain rounded-md shadow-sm" />
+                      ) : (
+                        <div className="w-20 h-20 bg-gray-100 rounded-md flex items-center justify-center text-gray-400 font-bold">
+                          {selectedProduct?.name?.charAt(0) || '?'}
+                        </div>
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <h2 className="font-bold text-gray-900 text-[17px]">{selectedProduct?.name || 'Selecione um produto'}</h2>
+                        <div className="text-lg font-bold" style={{ color: config.primaryColor }}>
+                          {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Your email address</label>
-                    <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter the email to receive your purchase</div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Confirm your email</label>
-                    <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your email again</div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Your full name</label>
-                    <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your full name</div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
-                    <div className="flex gap-2">
-                      <div className="flex items-center gap-1 border border-gray-200 rounded-md px-2 h-10 bg-gray-50 text-xs">
-                        <span>🇧🇷</span> +55
-                      </div>
-                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex-1"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                  <div className="flex border-b border-gray-200">
-                    <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'card' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'card' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('card')}>
-                      <CreditCard className="w-3 h-3" /> Credit Card
-                    </button>
-                    <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'transfer' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'transfer' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('transfer')}>
-                      <Building2 className="w-3 h-3" /> Transfer
-                    </button>
-                    <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'paypal' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'paypal' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('paypal')}>
-                      <SiPaypal className="w-3 h-3 text-blue-600" /> PayPal
-                    </button>
-                  </div>
                   <div className="p-4 space-y-3">
                     <div>
-                      <label className="block text-[10px] font-medium text-gray-700 mb-1">Card number</label>
-                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">0000 0000 0000 0000</div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Expiration date</label>
-                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">MM/YY</div>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Security code</label>
-                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">CVV</div>
-                      </div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Your email address</label>
+                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter the email to receive your purchase</div>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-medium text-gray-700 mb-1">Account holder name</label>
-                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">Enter name printed on card</div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Confirm your email</label>
+                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your email again</div>
                     </div>
-                  </div>
-                </div>
-
-                {config.testimonial && (
-                  <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
-                        {config.testimonial.imageUrl ? (
-                          <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold">
-                            {config.testimonial.name.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-bold text-gray-900 text-sm">{config.testimonial.name}</h4>
-                        <div className="flex gap-0.5 my-1">
-                          {[...Array(config.testimonial.rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                          ))}
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Your full name</label>
+                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your full name</div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
+                      <div className="flex gap-2">
+                        <div className="flex items-center gap-1 border border-gray-200 rounded-md px-2 h-10 bg-gray-50 text-xs">
+                          <span>🇧🇷</span> +55
                         </div>
-                        <p className="text-[11px] text-gray-600 italic">{config.testimonial.text}</p>
+                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex-1"></div>
                       </div>
                     </div>
                   </div>
-                )}
 
-                {upsellProducts.length > 0 && (
-                  <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <h3 className="font-bold text-gray-900 text-sm mb-3">Buy together</h3>
-                    <div className="space-y-3">
-                      {upsellProducts.map((p) => (
-                        <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
-                          <Checkbox checked disabled className="mt-1" />
-                          {p.imageUrl ? (
-                            <img src={p.imageUrl} alt="" className="w-14 h-14 object-cover rounded" />
+                  <div className="overflow-hidden">
+                    <div className="flex border-b border-gray-200">
+                      <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'card' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'card' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('card')}>
+                        <CreditCard className="w-3 h-3" /> Credit Card
+                      </button>
+                      <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'transfer' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'transfer' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('transfer')}>
+                        <Building2 className="w-3 h-3" /> Transfer
+                      </button>
+                      <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'paypal' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'paypal' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('paypal')}>
+                        <SiPaypal className="w-3 h-3 text-blue-600" /> PayPal
+                      </button>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <div>
+                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Card number</label>
+                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">0000 0000 0000 0000</div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[10px] font-medium text-gray-700 mb-1">Expiration date</label>
+                          <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">MM/YY</div>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-medium text-gray-700 mb-1">Security code</label>
+                          <div className="h-10 px-3 rounded-md border border-gray-200 bg-zinc-50 flex items-center text-gray-400 text-xs">CVV</div>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Account holder name</label>
+                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">Enter name printed on card</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {config.testimonial && (
+                    <div className="p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+                          {config.testimonial.imageUrl ? (
+                            <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-sm">
-                              {p.name.charAt(0)}
+                            <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold">
+                              {config.testimonial.name.charAt(0)}
                             </div>
                           )}
-                          <div className="flex-1">
-                            <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
-                            <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
-                            <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
-                              {(p.price / 100).toFixed(2)} US$
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-gray-900 text-sm">{config.testimonial.name}</h4>
+                          <div className="flex gap-0.5 my-1">
+                            {[...Array(config.testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                          <p className="text-[11px] text-gray-600 italic">{config.testimonial.text}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {upsellProducts.length > 0 && (
+                    <div className="p-4">
+                      <h3 className="font-bold text-gray-900 text-sm mb-3">Buy together</h3>
+                      <div className="space-y-3">
+                        {upsellProducts.map((p) => (
+                          <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
+                            <Checkbox checked disabled className="mt-1" />
+                            {p.imageUrl ? (
+                              <img src={p.imageUrl} alt="" className="w-14 h-14 object-cover rounded" />
+                            ) : (
+                              <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-sm">
+                                {p.name.charAt(0)}
+                              </div>
+                            )}
+                            <div className="flex-1">
+                              <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
+                              <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
+                              <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
+                                {(p.price / 100).toFixed(2)} US$
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
               <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
