@@ -1,17 +1,46 @@
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useProducts } from "@/hooks/use-products";
 import { useCheckout, useCreateCheckout, useUpdateCheckout } from "@/hooks/use-checkouts";
-import { ArrowLeft, Save, Layout as LayoutIcon, Palette, Settings, Eye, Monitor, Smartphone, Plus, Trash2, Clock, Bell, User, Star, Copy, CreditCard, Shield, Lock, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Save, Monitor, Smartphone, Clock, Shield, Zap, Mail, Lock, CheckCircle2, Star, CreditCard, Building2, Copy, Plus, Trash2 } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { CheckoutConfig } from "@shared/schema";
+import { SiPaypal } from "react-icons/si";
+
+const defaultConfig: CheckoutConfig = {
+  timerMinutes: 10,
+  timerText: "Oferta Especial por Tempo Limitado!",
+  heroTitle: "Promoção por tempo limitado",
+  heroBadgeText: "7 DIAS",
+  heroImageUrl: "",
+  benefitsList: [
+    { icon: "zap", title: "ACESSO IMEDIATO", subtitle: "Seu produto disponível em instantes" },
+    { icon: "shield", title: "PAGAMENTO SEGURO", subtitle: "Dados protegidos e criptografados" }
+  ],
+  privacyText: "Your information is 100% secure",
+  safeText: "Safe purchase",
+  deliveryText: "Delivery via E-mail",
+  approvedText: "Approved content",
+  testimonial: {
+    name: "Marisa Correia",
+    imageUrl: "",
+    rating: 5,
+    text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
+  },
+  upsellProducts: [],
+  payButtonText: "Buy now",
+  footerText: "Hotmart © 2026. All rights reserved.",
+  primaryColor: "#22a559",
+  showChangeCountry: true,
+};
 
 export default function CheckoutEditor() {
   const [, setLocation] = useLocation();
@@ -25,28 +54,11 @@ export default function CheckoutEditor() {
   
   const isNew = !checkoutId;
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'transfer' | 'paypal'>('card');
   
-  // State for editor fields
-  const [config, setConfig] = useState({
-    name: "",
-    product: "",
-    orderBump: "",
-    bannerUrl: "",
-    timerText: "Oferta Especial por Tempo Limitado!",
-    paymentButtonText: "PAGAR AGORA",
-    requirePhone: false,
-    requireCpf: false,
-    primaryColor: "#9333ea",
-    backgroundColor: "#ffffff",
-    timerColor: "#f59e0b",
-    showTitle: true,
-    title: "Finalize sua Compra",
-    subtitle: "Ambiente 100% seguro",
-    timerMinutes: 0,
-    showTimer: true,
-    socialProofs: [] as { id: string; name: string; text: string; stars: number }[],
-  });
-
+  const [name, setName] = useState("");
+  const [productId, setProductId] = useState("");
+  const [config, setConfig] = useState<CheckoutConfig>(defaultConfig);
   const [timerSeconds, setTimerSeconds] = useState(config.timerMinutes * 60);
 
   useEffect(() => {
@@ -61,65 +73,47 @@ export default function CheckoutEditor() {
     return () => clearInterval(interval);
   }, [timerSeconds]);
 
-  const formatTimeParts = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return {
-      hours: hours.toString().padStart(2, '0'),
-      mins: mins.toString().padStart(2, '0'),
-      secs: secs.toString().padStart(2, '0')
-    };
-  };
-
-  const addSocialProof = () => {
-    const newProof = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: "Novo Cliente",
-      text: "Excelente produto!",
-      stars: 5
-    };
-    setConfig({ ...config, socialProofs: [...config.socialProofs, newProof] });
-  };
-
-  const removeSocialProof = (id: string) => {
-    setConfig({ ...config, socialProofs: config.socialProofs.filter(p => p.id !== id) });
-  };
-
   useEffect(() => {
     if (checkout) {
-      setConfig({
-        ...config,
-        name: checkout.name,
-        product: checkout.productId.toString(),
-        // Since we don't have all these fields in the schema yet, we'll use defaults or mock them
-        // In a real app, you'd extend the schema to support these visual configs
-      });
+      setName(checkout.name);
+      setProductId(checkout.productId.toString());
+      if (checkout.config) {
+        setConfig({ ...defaultConfig, ...checkout.config });
+      }
     }
   }, [checkout]);
 
+  const formatTime = (seconds: number) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hrs.toString().padStart(2, '0')} : ${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`;
+  };
+
   const handleSave = async () => {
-    if (!config.product) {
+    if (!productId) {
       toast({ title: "Erro", description: "Selecione um produto principal", variant: "destructive" });
       return;
     }
 
     try {
       if (isNew) {
-        const slug = config.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        const slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         await createMutation.mutateAsync({
-          name: config.name,
-          productId: parseInt(config.product),
+          name,
+          productId: parseInt(productId),
           slug: slug + '-' + Math.random().toString(36).substring(2, 7),
           active: true,
+          config,
         });
         toast({ title: "Sucesso", description: "Checkout criado com sucesso!" });
       } else {
         await updateMutation.mutateAsync({
           id: checkoutId!,
           data: {
-            name: config.name,
-            productId: parseInt(config.product),
+            name,
+            productId: parseInt(productId),
+            config,
           }
         });
         toast({ title: "Sucesso", description: "Checkout atualizado com sucesso!" });
@@ -130,13 +124,17 @@ export default function CheckoutEditor() {
     }
   };
 
-  const selectedProduct = useMemo(() => 
-    products?.find(p => p.id.toString() === config.product),
-  [products, config.product]);
+  const selectedProduct = products?.find(p => p.id.toString() === productId);
+  const upsellProducts = products?.filter(p => config.upsellProducts.includes(p.id)) || [];
 
-  const orderBumpProduct = useMemo(() => 
-    products?.find(p => p.id.toString() === config.orderBump),
-  [products, config.orderBump]);
+  const toggleUpsell = (id: number) => {
+    const current = config.upsellProducts || [];
+    if (current.includes(id)) {
+      setConfig({ ...config, upsellProducts: current.filter(x => x !== id) });
+    } else {
+      setConfig({ ...config, upsellProducts: [...current, id] });
+    }
+  };
 
   if (checkoutId && loadingCheckout) {
     return (
@@ -148,16 +146,13 @@ export default function CheckoutEditor() {
 
   return (
     <div className="flex h-screen bg-[#09090b] overflow-hidden">
-      {/* Sidebar Editor */}
-      <div className="w-[400px] flex flex-col border-r border-zinc-800 bg-[#0c0c0e]">
+      <div className="w-[420px] flex flex-col border-r border-zinc-800 bg-[#0c0c0e]">
         <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setLocation("/checkouts")} className="h-8 w-8">
+            <Button variant="ghost" size="icon" onClick={() => setLocation("/checkouts")} className="h-8 w-8" data-testid="button-back">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <div>
-              <h1 className="text-xl font-bold text-white leading-tight uppercase tracking-tight">Editor de Checkout</h1>
-            </div>
+            <h1 className="text-lg font-bold text-white uppercase tracking-tight">Editor de Checkout</h1>
           </div>
         </div>
 
@@ -165,369 +160,475 @@ export default function CheckoutEditor() {
           <div className="px-4 pt-4">
             <TabsList className="w-full bg-zinc-900/50 border border-zinc-800 p-1">
               <TabsTrigger value="geral" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Geral</TabsTrigger>
-              <TabsTrigger value="provas" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Provas Sociais</TabsTrigger>
-              <TabsTrigger value="visual" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Visual</TabsTrigger>
+              <TabsTrigger value="hero" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Hero</TabsTrigger>
+              <TabsTrigger value="testimonial" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Depoimento</TabsTrigger>
+              <TabsTrigger value="upsells" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Upsells</TabsTrigger>
             </TabsList>
           </div>
 
-          <TabsContent value="geral" className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar">
-            <section className="space-y-4">
-              <div className="flex items-center gap-2 text-zinc-400">
-                <Settings className="w-4 h-4" />
-                <h2 className="text-sm font-bold">Configurações Gerais</h2>
-              </div>
-              
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Nome do Checkout *</Label>
+          <TabsContent value="geral" className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Nome do Checkout *</Label>
+              <Input 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-checkout-name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Produto Principal *</Label>
+              <Select value={productId} onValueChange={setProductId}>
+                <SelectTrigger className="bg-zinc-900/50 border-zinc-800 h-9 text-sm" data-testid="select-product">
+                  <SelectValue placeholder="Selecione um produto" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-900 border-zinc-800">
+                  {products?.map((p) => (
+                    <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor Principal</Label>
+              <div className="flex gap-2">
+                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.primaryColor }} />
                 <Input 
-                  value={config.name}
-                  onChange={(e) => setConfig({...config, name: e.target.value})}
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm focus:ring-1 focus:ring-purple-500"
+                  value={config.primaryColor} 
+                  onChange={(e) => setConfig({...config, primaryColor: e.target.value})} 
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  data-testid="input-primary-color"
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Produto Principal</Label>
-                <Select 
-                  value={config.product} 
-                  onValueChange={(v) => setConfig({...config, product: v})}
-                >
-                  <SelectTrigger className="bg-zinc-900/50 border-zinc-800 h-9 text-sm">
-                    <SelectValue placeholder="Selecione um produto" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-800">
-                    {products?.map((p) => (
-                      <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="flex gap-1 mt-2">
+                {['#22a559', '#2563eb', '#9333ea', '#dc2626', '#d97706', '#000000'].map(color => (
+                  <button 
+                    key={color} 
+                    className="w-6 h-6 rounded-full border border-white/20" 
+                    style={{ backgroundColor: color }}
+                    onClick={() => setConfig({...config, primaryColor: color})}
+                  />
+                ))}
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Produtos de Order Bump (Opcional)</Label>
-                <Select 
-                  value={config.orderBump} 
-                  onValueChange={(v) => setConfig({...config, orderBump: v})}
-                >
-                  <SelectTrigger className="bg-zinc-900/50 border-zinc-800 h-9 text-sm">
-                    <SelectValue placeholder="Nenhum order bump selecionado" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-800">
-                    {products?.map((p) => (
-                      <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </section>
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Timer (minutos)</Label>
+              <Input 
+                type="number"
+                value={config.timerMinutes}
+                onChange={(e) => setConfig({...config, timerMinutes: parseInt(e.target.value) || 0})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-timer-minutes"
+              />
+            </div>
 
-            <section className="space-y-4 pt-4 border-t border-zinc-800/50">
-              <div className="flex items-center gap-2 text-zinc-400">
-                <LayoutIcon className="w-4 h-4" />
-                <h2 className="text-sm font-bold">Conteúdo e Dados Adicionais</h2>
-              </div>
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto do Timer</Label>
+              <Input 
+                value={config.timerText}
+                onChange={(e) => setConfig({...config, timerText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-timer-text"
+              />
+            </div>
 
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">URL do Banner (Opcional)</Label>
-                <Input 
-                  placeholder="https://exemplo.com/banner.jpg"
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto do Botão</Label>
+              <Input 
+                value={config.payButtonText}
+                onChange={(e) => setConfig({...config, payButtonText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-button-text"
+              />
+            </div>
 
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Texto do Timer *</Label>
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto do Rodapé</Label>
+              <Input 
+                value={config.footerText}
+                onChange={(e) => setConfig({...config, footerText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-footer-text"
+              />
+            </div>
+
+            {checkout?.publicUrl && (
+              <div className="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-2 mt-4">
+                <Label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Link Público</Label>
                 <div className="flex gap-2">
                   <Input 
-                    value={config.timerText}
-                    onChange={(e) => setConfig({...config, timerText: e.target.value})}
-                    className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                    readOnly 
+                    value={checkout.publicUrl} 
+                    className="bg-zinc-950 border-zinc-800 h-8 text-[10px]" 
                   />
-                  <Input 
-                    type="number"
-                    value={config.timerMinutes}
-                    onChange={(e) => setConfig({...config, timerMinutes: parseInt(e.target.value) || 0})}
-                    className="bg-zinc-900/50 border-zinc-800 h-9 text-sm w-20"
-                    placeholder="Min"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Texto do Botão de Pagamento *</Label>
-                <Input 
-                  value={config.paymentButtonText}
-                  onChange={(e) => setConfig({...config, paymentButtonText: e.target.value})}
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                />
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-xs font-medium">Exigir Telefone</Label>
-                    <p className="text-[10px] text-zinc-500">Se marcado, o cliente precisará fornecer um número de telefone válido.</p>
-                  </div>
-                  <Switch checked={config.requirePhone} onCheckedChange={(v) => setConfig({...config, requirePhone: v})} />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-xs font-medium">Exigir CPF</Label>
-                    <p className="text-[10px] text-zinc-500">Se marcado, o cliente precisará fornecer um CPF válido.</p>
-                  </div>
-                  <Switch checked={config.requireCpf} onCheckedChange={(v) => setConfig({...config, requireCpf: v})} />
-                </div>
-              </div>
-
-            <div className="pt-4 space-y-4">
-              {checkout?.publicUrl && (
-                <div className="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-2">
-                  <Label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Link Público</Label>
-                  <div className="flex gap-2">
-                    <Input 
-                      readOnly 
-                      value={checkout.publicUrl} 
-                      className="bg-zinc-950 border-zinc-800 h-8 text-[10px] focus:ring-0" 
-                    />
-                    <Button 
-                      size="icon" 
-                      variant="outline" 
-                      className="h-8 w-8 border-zinc-800 bg-zinc-900 hover:bg-zinc-800"
-                      onClick={() => {
-                        navigator.clipboard.writeText(checkout.publicUrl!);
-                        toast({ title: "Copiado!" });
-                      }}
-                    >
-                      <Copy className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-              <Button 
-                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold h-10 border-0 ring-0 focus-visible:ring-0"
-                onClick={handleSave}
-                disabled={createMutation.isPending || updateMutation.isPending}
-              >
-                <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
-              </Button>
-            </div>
-            </section>
-          </TabsContent>
-
-          <TabsContent value="provas" className="flex-1 overflow-y-auto p-4 space-y-4">
-            <div className="flex items-center gap-2 text-zinc-400 mb-4">
-              <User className="w-4 h-4" />
-              <h2 className="text-sm font-bold">Provas Sociais</h2>
-            </div>
-            
-            <div className="space-y-3">
-              {config.socialProofs.map((proof) => (
-                <div key={proof.id} className="bg-zinc-900/50 border border-zinc-800 p-3 rounded-lg space-y-2 relative group">
                   <Button 
-                    variant="ghost" 
                     size="icon" 
-                    className="absolute top-2 right-2 h-6 w-6 text-zinc-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeSocialProof(proof.id)}
+                    variant="outline" 
+                    className="h-8 w-8 border-zinc-800"
+                    onClick={() => {
+                      navigator.clipboard.writeText(checkout.publicUrl!);
+                      toast({ title: "Copiado!" });
+                    }}
+                    data-testid="button-copy-url"
                   >
-                    <Trash2 className="h-3 w-3" />
+                    <Copy className="h-3 w-3" />
                   </Button>
-                  <Input 
-                    value={proof.name} 
-                    onChange={(e) => {
-                      const newProofs = config.socialProofs.map(p => p.id === proof.id ? { ...p, name: e.target.value } : p);
-                      setConfig({ ...config, socialProofs: newProofs });
-                    }}
-                    className="bg-transparent border-none p-0 h-auto text-xs font-bold focus-visible:ring-0" 
-                  />
-                  <textarea 
-                    value={proof.text} 
-                    onChange={(e) => {
-                      const newProofs = config.socialProofs.map(p => p.id === proof.id ? { ...p, text: e.target.value } : p);
-                      setConfig({ ...config, socialProofs: newProofs });
-                    }}
-                    className="bg-transparent border-none p-0 w-full resize-none text-[10px] text-zinc-400 focus:outline-none" 
-                  />
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
 
             <Button 
-              variant="outline" 
-              className="w-full border-zinc-800 bg-zinc-900/50 text-xs border-dashed hover:bg-zinc-800 h-10"
-              onClick={addSocialProof}
+              className="w-full h-10 font-bold mt-4"
+              style={{ backgroundColor: config.primaryColor }}
+              onClick={handleSave}
+              disabled={createMutation.isPending || updateMutation.isPending}
+              data-testid="button-save"
             >
-              <Plus className="w-3 h-3 mr-2" /> Adicionar Avaliação
+              <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
             </Button>
           </TabsContent>
 
-          <TabsContent value="visual" className="flex-1 overflow-y-auto p-4 space-y-6">
-            <div className="flex items-center gap-2 text-zinc-400 mb-4">
-              <Palette className="w-4 h-4" />
-              <h2 className="text-sm font-bold">Aparência Visual</h2>
+          <TabsContent value="hero" className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Título do Hero</Label>
+              <Input 
+                value={config.heroTitle}
+                onChange={(e) => setConfig({...config, heroTitle: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-hero-title"
+              />
             </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Cor de Destaque</Label>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <div className="w-9 h-9 rounded-md border border-zinc-800 shrink-0" style={{ backgroundColor: config.primaryColor }} />
-                    <Input value={config.primaryColor} onChange={(e) => setConfig({...config, primaryColor: e.target.value})} className="flex-1 bg-zinc-900 border-zinc-800 h-9 text-xs" />
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['#9333ea', '#2563eb', '#16a34a', '#dc2626', '#d97706', '#000000'].map(color => (
-                      <button 
-                        key={color} 
-                        className="w-5 h-5 rounded-full border border-white/10" 
-                        style={{ backgroundColor: color }}
-                        onClick={() => setConfig({...config, primaryColor: color})}
-                      />
-                    ))}
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto do Badge</Label>
+              <Input 
+                value={config.heroBadgeText}
+                onChange={(e) => setConfig({...config, heroBadgeText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-hero-badge"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">URL da Imagem do Hero</Label>
+              <Input 
+                value={config.heroImageUrl}
+                onChange={(e) => setConfig({...config, heroImageUrl: e.target.value})}
+                placeholder="https://..."
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-hero-image"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto de Privacidade</Label>
+              <Input 
+                value={config.privacyText}
+                onChange={(e) => setConfig({...config, privacyText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-privacy-text"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto de Compra Segura</Label>
+              <Input 
+                value={config.safeText}
+                onChange={(e) => setConfig({...config, safeText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-safe-text"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto de Entrega</Label>
+              <Input 
+                value={config.deliveryText}
+                onChange={(e) => setConfig({...config, deliveryText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-delivery-text"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto de Conteúdo Aprovado</Label>
+              <Input 
+                value={config.approvedText}
+                onChange={(e) => setConfig({...config, approvedText: e.target.value})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-approved-text"
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Nome do Cliente</Label>
+              <Input 
+                value={config.testimonial.name}
+                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, name: e.target.value}})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-testimonial-name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">URL da Foto</Label>
+              <Input 
+                value={config.testimonial.imageUrl}
+                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, imageUrl: e.target.value}})}
+                placeholder="https://..."
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-testimonial-image"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Avaliação (1-5 estrelas)</Label>
+              <Input 
+                type="number"
+                min={1}
+                max={5}
+                value={config.testimonial.rating}
+                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, rating: parseInt(e.target.value) || 5}})}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-testimonial-rating"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Texto do Depoimento</Label>
+              <Textarea 
+                value={config.testimonial.text}
+                onChange={(e) => setConfig({...config, testimonial: {...config.testimonial, text: e.target.value}})}
+                className="bg-zinc-900/50 border-zinc-800 text-sm min-h-[100px]"
+                data-testid="input-testimonial-text"
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="upsells" className="flex-1 overflow-y-auto p-4 space-y-4">
+            <Label className="text-xs text-zinc-400">Selecione produtos para upsell:</Label>
+            <div className="space-y-2">
+              {products?.filter(p => p.id.toString() !== productId).map(p => (
+                <div key={p.id} className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                  <Checkbox 
+                    checked={config.upsellProducts.includes(p.id)}
+                    onCheckedChange={() => toggleUpsell(p.id)}
+                    data-testid={`checkbox-upsell-${p.id}`}
+                  />
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-white">{p.name}</div>
+                    <div className="text-xs text-zinc-500">{(p.price / 100).toFixed(2)} US$</div>
                   </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-xs text-zinc-400">Cor do Timer</Label>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <div className="w-9 h-9 rounded-md border border-zinc-800 shrink-0" style={{ backgroundColor: config.timerColor }} />
-                    <Input value={config.timerColor} onChange={(e) => setConfig({...config, timerColor: e.target.value})} className="flex-1 bg-zinc-900 border-zinc-800 h-9 text-xs" />
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['#f59e0b', '#ef4444', '#000000', '#9333ea', '#ffffff'].map(color => (
-                      <button 
-                        key={color} 
-                        className="w-5 h-5 rounded-full border border-white/10" 
-                        style={{ backgroundColor: color }}
-                        onClick={() => setConfig({...config, timerColor: color})}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </TabsContent>
         </Tabs>
       </div>
 
-      {/* Preview Area */}
       <div className="flex-1 flex flex-col bg-zinc-900/20 relative">
         <div className="h-14 border-b border-zinc-800/50 flex items-center justify-center gap-2">
           <Button 
             variant="ghost" 
             size="icon" 
-            className={`h-8 w-8 ${device === 'desktop' ? 'bg-zinc-800 text-purple-500' : 'text-zinc-500'}`}
+            className={`h-8 w-8 ${device === 'desktop' ? 'bg-zinc-800 text-green-500' : 'text-zinc-500'}`}
             onClick={() => setDevice('desktop')}
+            data-testid="button-desktop"
           >
             <Monitor className="h-4 w-4" />
           </Button>
           <Button 
             variant="ghost" 
             size="icon" 
-            className={`h-8 w-8 ${device === 'mobile' ? 'bg-zinc-800 text-purple-500' : 'text-zinc-500'}`}
+            className={`h-8 w-8 ${device === 'mobile' ? 'bg-zinc-800 text-green-500' : 'text-zinc-500'}`}
             onClick={() => setDevice('mobile')}
+            data-testid="button-mobile"
           >
             <Smartphone className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className={`flex-1 overflow-y-auto custom-scrollbar flex ${device === 'mobile' ? 'justify-center p-8 bg-zinc-100' : ''}`}>
-          <div 
-            className={`transition-all duration-300 h-fit bg-white ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}
-          >
-            {/* Header / Timer */}
+        <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
+          <div className={`bg-gray-50 h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}>
             <div 
-              className="py-2.5 px-4 text-center text-white flex items-center justify-center gap-4 text-sm font-bold"
-              style={{ backgroundColor: "#22a559" }}
+              className="py-2 px-4 text-center text-white flex items-center justify-center gap-3"
+              style={{ backgroundColor: config.primaryColor }}
             >
-              {(() => {
-                const { hours, mins, secs } = formatTimeParts(timerSeconds);
-                return (
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-xl font-bold tracking-wider text-white tabular-nums">
-                      {hours} : {mins} : {secs}
-                    </span>
-                    <Clock className="w-5 h-5 text-white" />
-                    <span className="text-sm font-medium text-white">{config.timerText}</span>
-                  </div>
-                );
-              })()}
+              <span className="font-mono text-lg font-bold tracking-wider tabular-nums">
+                {formatTime(timerSeconds)}
+              </span>
+              <Clock className="w-4 h-4" />
+              <span className="text-sm font-medium">{config.timerText}</span>
             </div>
 
-            <div className={`p-4 md:p-8 grid grid-cols-1 ${device === 'desktop' ? 'lg:grid-cols-12' : ''} gap-8 text-zinc-900`}>
-              {/* Coluna da Esquerda - Dados e Pagamento */}
-              <div className={device === 'desktop' ? 'lg:col-span-7 space-y-6' : 'space-y-6'}>
-                <div className="bg-zinc-50 border border-zinc-100 p-6 rounded-2xl shadow-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-purple-600" />
+            <div className="bg-[#1a3a2a] py-8 px-4">
+              <div className={`max-w-5xl mx-auto flex ${device === 'mobile' ? 'flex-col' : 'flex-row'} items-center justify-between gap-6`}>
+                <div className="text-white">
+                  <h1 className={`${device === 'mobile' ? 'text-2xl' : 'text-3xl'} font-bold italic leading-tight`}>
+                    {config.heroTitle}
+                  </h1>
+                </div>
+                <div className="flex items-center gap-4">
+                  {config.heroImageUrl ? (
+                    <img src={config.heroImageUrl} alt="" className="w-16 h-16 object-contain" />
+                  ) : (
+                    <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
+                      <span className="text-white/50 text-[10px]">Imagem</span>
                     </div>
-                    <h2 className="text-lg font-black text-zinc-900 uppercase tracking-tight">Dados de Acesso</h2>
+                  )}
+                  <div className="bg-[#0d5c3d] rounded-lg px-3 py-2 text-center">
+                    <span className="text-3xl font-bold text-white">{config.heroBadgeText.split(' ')[0]}</span>
+                    <div className="text-white text-xs font-medium">{config.heroBadgeText.split(' ').slice(1).join(' ')}</div>
                   </div>
-                  
-                  <div className="space-y-4">
-                    <div className={`grid grid-cols-1 ${device === 'desktop' ? 'md:grid-cols-2' : ''} gap-4`}>
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Nome Completo</label>
-                        <div className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white flex items-center text-zinc-400 text-sm italic">Seu nome completo</div>
+                </div>
+                <div className={`flex ${device === 'mobile' ? 'flex-row' : 'flex-col'} gap-2`}>
+                  <div className="bg-white/10 rounded-lg px-3 py-2 flex items-center gap-2">
+                    <Zap className="w-3 h-3 text-yellow-400" />
+                    <div>
+                      <div className="text-white text-[10px] font-bold">ACESSO IMEDIATO</div>
+                    </div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg px-3 py-2 flex items-center gap-2">
+                    <Shield className="w-3 h-3 text-green-400" />
+                    <div>
+                      <div className="text-white text-[10px] font-bold">PAGAMENTO SEGURO</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={`max-w-5xl mx-auto px-4 py-6 ${device === 'mobile' ? 'space-y-4' : 'grid grid-cols-3 gap-6'}`}>
+              <div className={device === 'mobile' ? 'space-y-4' : 'col-span-2 space-y-4'}>
+                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
+                    {selectedProduct?.imageUrl ? (
+                      <img src={selectedProduct.imageUrl} alt="" className="w-12 h-12 object-cover rounded" />
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold">
+                        {selectedProduct?.name?.charAt(0) || '?'}
                       </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">E-mail para Acesso</label>
-                        <div className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white flex items-center text-zinc-400 text-sm italic">exemplo@email.com</div>
+                    )}
+                    <div className="flex-1">
+                      <div className="text-gray-400 text-[10px] uppercase">BY MOVE DIGITAL MARKETING</div>
+                      <h2 className="font-bold text-gray-900 text-sm">{selectedProduct?.name || 'Selecione um produto'}</h2>
+                      <div className="text-lg font-bold" style={{ color: config.primaryColor }}>
+                        {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
                       </div>
+                    </div>
+                  </div>
+                  <div className="text-[10px] text-gray-500">Secure checkout • 1 Pagamento Único</div>
+                </div>
+
+                <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Your email address</label>
+                    <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter the email to receive your purchase</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Confirm your email</label>
+                    <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your email again</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Your full name</label>
+                    <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-sm">Enter your full name</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Phone number</label>
+                    <div className="flex gap-2">
+                      <div className="flex items-center gap-1 border border-gray-200 rounded-md px-2 h-10 bg-gray-50 text-xs">
+                        <span>🇧🇷</span> +55
+                      </div>
+                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex-1"></div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-zinc-50 border border-zinc-100 p-6 rounded-2xl shadow-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <CreditCard className="w-4 h-4 text-purple-600" />
-                    </div>
-                    <h2 className="text-lg font-black text-zinc-900 uppercase tracking-tight">Pagamento Seguro</h2>
+                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                  <div className="flex border-b border-gray-200">
+                    <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'card' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'card' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('card')}>
+                      <CreditCard className="w-3 h-3" /> Credit Card
+                    </button>
+                    <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'transfer' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'transfer' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('transfer')}>
+                      <Building2 className="w-3 h-3" /> Transfer
+                    </button>
+                    <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'paypal' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'paypal' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('paypal')}>
+                      <SiPaypal className="w-3 h-3 text-blue-600" /> PayPal
+                    </button>
                   </div>
-                  
-                  <div className="space-y-6">
-                    <div className="p-4 rounded-xl border-2 border-purple-500 bg-purple-50 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full border-4 border-purple-500 bg-white" />
-                        <span className="font-bold text-zinc-900">PayPal</span>
-                      </div>
-                      <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" className="h-6 opacity-80" alt="PayPal" />
+                  <div className="p-4 space-y-3">
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-700 mb-1">Card number</label>
+                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">0000 0000 0000 0000</div>
                     </div>
-
-                    <Button 
-                      className="w-full h-16 text-xl font-black rounded-2xl shadow-xl border-0"
-                      style={{ backgroundColor: config.primaryColor }}
-                    >
-                      {config.paymentButtonText}
-                    </Button>
-
-                    <div className="flex items-center justify-center gap-6 py-4 border-t border-zinc-200/50">
-                      <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
-                        <Shield className="w-3 h-3 text-green-500" />
-                        <span>Criptografia SSL</span>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Expiration date</label>
+                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">MM/YY</div>
                       </div>
-                      <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
-                        <Lock className="w-3 h-3 text-green-500" />
-                        <span>Compra Segura</span>
+                      <div>
+                        <label className="block text-[10px] font-medium text-gray-700 mb-1">Security code</label>
+                        <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">CVV</div>
                       </div>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-medium text-gray-700 mb-1">Account holder name</label>
+                      <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">Enter name printed on card</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Provas Sociais */}
-                {config.socialProofs.length > 0 && (
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest px-2">O que dizem nossos clientes</h3>
-                    <div className={`grid grid-cols-1 ${device === 'desktop' ? 'md:grid-cols-2' : ''} gap-4`}>
-                      {config.socialProofs.map((proof) => (
-                        <div key={proof.id} className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl shadow-sm">
-                          <div className="flex gap-0.5 mb-2">
-                            {[...Array(proof.stars)].map((_, s) => <Star key={s} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
+                {config.testimonial && (
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+                        {config.testimonial.imageUrl ? (
+                          <img src={config.testimonial.imageUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold">
+                            {config.testimonial.name.charAt(0)}
                           </div>
-                          <p className="text-xs font-bold text-zinc-900 mb-1">{proof.name}</p>
-                          <p className="text-[11px] text-zinc-500 leading-relaxed italic">"{proof.text}"</p>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-gray-900 text-sm">{config.testimonial.name}</h4>
+                        <div className="flex gap-0.5 my-1">
+                          {[...Array(config.testimonial.rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
+                        <p className="text-[11px] text-gray-600 italic">{config.testimonial.text}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {upsellProducts.length > 0 && (
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <h3 className="font-bold text-gray-900 text-sm mb-3">Buy together</h3>
+                    <div className="space-y-3">
+                      {upsellProducts.map((p) => (
+                        <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
+                          <Checkbox checked disabled className="mt-1" />
+                          {p.imageUrl ? (
+                            <img src={p.imageUrl} alt="" className="w-14 h-14 object-cover rounded" />
+                          ) : (
+                            <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-sm">
+                              {p.name.charAt(0)}
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
+                            <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
+                            <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
+                              {(p.price / 100).toFixed(2)} US$
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -535,73 +636,74 @@ export default function CheckoutEditor() {
                 )}
               </div>
 
-              {/* Coluna da Direita - Resumo */}
-              <div className={device === 'desktop' ? 'lg:col-span-5' : ''}>
-                <div className="space-y-6">
-                  <div className="bg-zinc-50 border border-zinc-100 p-8 rounded-3xl shadow-sm space-y-8">
-                    <div className="flex items-center gap-4">
-                      {selectedProduct?.imageUrl ? (
-                        <img src={selectedProduct.imageUrl} className="w-20 h-20 rounded-2xl object-cover shadow-md border border-zinc-100" alt="" />
-                      ) : (
-                        <div className="w-20 h-20 bg-zinc-900 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-lg border border-zinc-100">
-                          {selectedProduct?.name?.charAt(0) || 'P'}
-                        </div>
-                      )}
-                      <div>
-                        <h2 className="text-xl font-black text-zinc-900 tracking-tight leading-tight">{selectedProduct?.name || "Produto Principal"}</h2>
-                        <p className="text-lg font-black mt-1" style={{ color: config.primaryColor }}>
-                          {selectedProduct ? `R$ ${(selectedProduct.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : "R$ 0,00"}
-                        </p>
-                      </div>
-                    </div>
+              <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
+                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <Lock className="w-3 h-3 text-green-600" />
+                    <span className="font-medium">Privacy</span>
+                  </div>
+                  <p className="text-[10px] text-gray-500">{config.privacyText}</p>
+                </div>
 
-                    <div className="space-y-4 pt-6 border-t border-zinc-200/50">
-                      <div className="flex items-center gap-2 text-zinc-900 font-black uppercase text-[10px] tracking-widest opacity-40">
-                        <Settings className="w-3 h-3" />
-                        <span>Resumo do Pedido</span>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex justify-between text-sm font-bold text-zinc-600">
-                          <span>{selectedProduct?.name || "Produto Principal"}</span>
-                          <span>{selectedProduct ? `R$ ${(selectedProduct.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : "R$ 0,00"}</span>
-                        </div>
-                        {orderBumpProduct && (
-                          <div className="flex justify-between text-sm font-bold text-zinc-600">
-                            <span>{orderBumpProduct.name} (Order Bump)</span>
-                            <span>R$ {(orderBumpProduct.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                          </div>
-                        )}
-                        <div className="pt-4 border-t border-zinc-200/50 flex justify-between items-center">
-                          <span className="text-zinc-900 font-black uppercase text-xs tracking-widest">Total</span>
-                          <span className="text-3xl font-black" style={{ color: config.primaryColor }}>
-                            {`R$ ${(((selectedProduct?.price || 0) + (orderBumpProduct?.price || 0)) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <CheckCircle2 className="w-3 h-3 text-green-600" />
+                    <span className="font-medium">Safe purchase</span>
+                  </div>
+                  <p className="text-[10px] text-gray-500">{config.safeText}</p>
+                </div>
 
-                    <div className="pt-2">
-                      <div className="p-4 bg-green-50 border border-green-100 rounded-2xl space-y-2">
-                        <div className="flex items-center gap-2 text-green-700">
-                          <CheckCircle2 className="w-4 h-4" />
-                          <span className="text-xs font-bold uppercase tracking-wider">Acesso Imediato</span>
-                        </div>
-                        <p className="text-[11px] text-green-600/80 leading-relaxed">
-                          Seu acesso será enviado para o e-mail informado assim que o pagamento for aprovado.
-                        </p>
-                      </div>
+                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <Mail className="w-3 h-3 text-green-600" />
+                    <span className="font-medium">Delivery via E-mail</span>
+                  </div>
+                  <p className="text-[10px] text-gray-500">{config.deliveryText}</p>
+                </div>
+
+                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <CheckCircle2 className="w-3 h-3 text-green-600" />
+                    <span className="font-medium">Approved content</span>
+                  </div>
+                  <p className="text-[10px] text-gray-500">{config.approvedText}</p>
+                </div>
+
+                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
+                  <div className="flex justify-between items-center text-xs mb-2">
+                    <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
+                    <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
+                  </div>
+                  <div className="border-t border-gray-100 pt-2 mt-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-gray-900 text-xs">Total</span>
+                      <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
+                        {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                      </span>
                     </div>
                   </div>
+                </div>
 
-                  <footer className="text-center px-4">
-                    <p className="text-[10px] text-zinc-400 font-medium leading-relaxed">
-                      BerryPay - Tecnologia de Pagamentos Seguros<br />
-                      Todos os direitos reservados &copy; {new Date().getFullYear()}
-                    </p>
-                  </footer>
+                <Button 
+                  className="w-full h-12 text-base font-bold"
+                  style={{ backgroundColor: config.primaryColor }}
+                >
+                  {config.payButtonText}
+                </Button>
+
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
+                    <Lock className="w-2 h-2" />
+                    Secured by <span className="font-bold">Hotmart</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <footer className="py-4 border-t border-gray-200 text-center">
+              <p className="text-[10px] text-gray-400">{config.footerText}</p>
+            </footer>
           </div>
         </div>
       </div>

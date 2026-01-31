@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "wouter";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, ShoppingCart, ShieldCheck, CheckCircle2, Clock, Settings, Plus, Star, User, Shield, Lock, CreditCard } from "lucide-react";
-import { Product, Checkout } from "@shared/schema";
-import { useState, useEffect, useMemo, useRef } from "react";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2, Clock, Shield, Zap, Mail, Lock, CheckCircle2, Star, CreditCard, Building2 } from "lucide-react";
+import { Product, Checkout, CheckoutConfig } from "@shared/schema";
+import { useState, useEffect, useRef } from "react";
+import { SiPaypal } from "react-icons/si";
 
 declare global {
   interface Window {
@@ -12,24 +14,72 @@ declare global {
   }
 }
 
+const defaultConfig: CheckoutConfig = {
+  timerMinutes: 10,
+  timerText: "Oferta Especial por Tempo Limitado!",
+  heroTitle: "Promoção por tempo limitado",
+  heroBadgeText: "7 DIAS",
+  heroImageUrl: "",
+  benefitsList: [
+    { icon: "zap", title: "ACESSO IMEDIATO", subtitle: "Seu produto disponível em instantes" },
+    { icon: "shield", title: "PAGAMENTO SEGURO", subtitle: "Dados protegidos e criptografados" }
+  ],
+  privacyText: "Your information is 100% secure",
+  safeText: "Safe purchase",
+  deliveryText: "Delivery via E-mail",
+  approvedText: "Approved content",
+  testimonial: {
+    name: "Marisa Correia",
+    imageUrl: "",
+    rating: 5,
+    text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
+  },
+  upsellProducts: [],
+  payButtonText: "Buy now",
+  footerText: "Hotmart © 2026. All rights reserved.",
+  primaryColor: "#22a559",
+  showChangeCountry: true,
+};
+
 export default function PublicCheckout() {
   const { slug } = useParams();
   const [sdkLoaded, setSdkLoaded] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
-  const [paymentStep, setPaymentStep] = useState<'info' | 'payment'>('info');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'transfer' | 'paypal'>('card');
+  const [selectedUpsells, setSelectedUpsells] = useState<number[]>([]);
 
   const { data, isLoading, error } = useQuery<{ checkout: Checkout, product: Product }>({
     queryKey: [`/api/checkouts/public/${slug}`],
+  });
+
+  const { data: allProducts } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
   });
 
   const { data: settings } = useQuery<any>({
     queryKey: ["/api/settings"],
   });
 
+  const config: CheckoutConfig = data?.checkout?.config || defaultConfig;
+
+  const [timerSeconds, setTimerSeconds] = useState(config.timerMinutes * 60);
+
+  useEffect(() => {
+    setTimerSeconds(config.timerMinutes * 60);
+  }, [config.timerMinutes]);
+
+  useEffect(() => {
+    if (timerSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setTimerSeconds(s => s - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timerSeconds]);
+
   useEffect(() => {
     if (settings?.paypalClientId && !sdkLoaded) {
       const script = document.createElement("script");
-      script.src = `https://www.paypal.com/sdk/js?client-id=${settings.paypalClientId}&components=buttons,card-fields&currency=BRL`;
+      script.src = `https://www.paypal.com/sdk/js?client-id=${settings.paypalClientId}&components=buttons&currency=USD`;
       script.async = true;
       script.onload = () => setSdkLoaded(true);
       document.body.appendChild(script);
@@ -41,8 +91,10 @@ export default function PublicCheckout() {
   }, [settings, sdkLoaded]);
 
   useEffect(() => {
-    if (sdkLoaded && data && paymentStep === 'payment' && window.paypal) {
-      // Buttons
+    if (sdkLoaded && data && paymentMethod === 'paypal' && window.paypal) {
+      const container = document.getElementById("paypal-button-container");
+      if (container) container.innerHTML = '';
+      
       window.paypal.Buttons({
         createOrder: () => {
           return fetch("/api/paypal/create-order", {
@@ -67,282 +119,398 @@ export default function PublicCheckout() {
             });
         }
       }).render("#paypal-button-container");
-
-      // Card Fields
-      const cardField = window.paypal.CardFields({
-        createOrder: () => {
-          return fetch("/api/paypal/create-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              checkoutId: data.checkout.id,
-              productId: data.product.id,
-            }),
-          })
-            .then((res) => res.json())
-            .then((order) => order.id);
-        },
-        onApprove: (approveData: any) => {
-          return fetch(`/api/paypal/capture-order/${approveData.orderID}`, {
-            method: "POST",
-          })
-            .then((res) => res.json())
-            .then(() => {
-              alert("Pagamento aprovado com sucesso!");
-              window.location.reload();
-            });
-        }
-      });
-
-      if (cardField.isEligible()) {
-        cardField.NameField().render("#card-name-field-container");
-        cardField.NumberField().render("#card-number-field-container");
-        cardField.ExpiryField().render("#card-expiry-field-container");
-        cardField.CVVField().render("#card-cvv-field-container");
-
-        document.getElementById("card-field-submit-button")?.addEventListener("click", () => {
-          cardField.submit().then(() => {
-            console.log("Card submit initiated");
-          });
-        });
-      }
     }
-  }, [sdkLoaded, data, paymentStep]);
+  }, [sdkLoaded, data, paymentMethod]);
 
-  const [timerSeconds, setTimerSeconds] = useState(15 * 60); // 15 minutos padrão
-  const primaryColor = "#9333ea";
-  const timerColor = "#f59e0b";
-
-  useEffect(() => {
-    if (timerSeconds <= 0) return;
-    const interval = setInterval(() => {
-      setTimerSeconds(s => s - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [timerSeconds]);
-
-  const formatTimeParts = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
+  const formatTime = (seconds: number) => {
+    const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return {
-      hours: hours.toString().padStart(2, '0'),
-      mins: mins.toString().padStart(2, '0'),
-      secs: secs.toString().padStart(2, '0')
-    };
+    return `${hrs.toString().padStart(2, '0')} : ${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`;
+  };
+
+  const toggleUpsell = (productId: number) => {
+    setSelectedUpsells(prev => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId) 
+        : [...prev, productId]
+    );
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#09090b]">
-        <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#09090b] text-white p-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-900 p-4">
         <h1 className="text-2xl font-bold mb-2">Link Inválido</h1>
-        <p className="text-zinc-400">Este checkout não existe ou foi desativado.</p>
+        <p className="text-gray-500">Este checkout não existe ou foi desativado.</p>
       </div>
     );
   }
 
   const { product, checkout } = data;
+  const upsellProducts = allProducts?.filter(p => config.upsellProducts.includes(p.id)) || [];
 
-  const { hours, mins, secs } = formatTimeParts(timerSeconds);
+  const calculateTotal = () => {
+    let total = product.price;
+    selectedUpsells.forEach(id => {
+      const upsell = allProducts?.find(p => p.id === id);
+      if (upsell) total += upsell.price;
+    });
+    return total;
+  };
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 font-sans">
-      {/* Header / Timer */}
+    <div className="min-h-screen bg-gray-50 font-sans">
       <div 
-        className="py-2.5 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-4"
-        style={{ backgroundColor: "#22a559" }}
+        className="py-2 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-3"
+        style={{ backgroundColor: config.primaryColor }}
+        data-testid="timer-bar"
       >
-        <span className="font-mono text-xl font-bold tracking-wider text-white tabular-nums">
-          {hours} : {mins} : {secs}
+        <span className="font-mono text-lg font-bold tracking-wider tabular-nums" data-testid="timer-countdown">
+          {formatTime(timerSeconds)}
         </span>
-        <Clock className="w-5 h-5 text-white" />
-        <span className="text-sm font-medium text-white">Oferta Especial por Tempo Limitado!</span>
+        <Clock className="w-4 h-4" />
+        <span className="text-sm font-medium" data-testid="timer-text">{config.timerText}</span>
       </div>
 
-      <div className="max-w-[1000px] mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Coluna da Esquerda - Dados e Pagamento */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="bg-zinc-50 border border-zinc-100 p-6 rounded-2xl shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-purple-600" />
+      <div className="bg-[#1a3a2a] py-8 px-4">
+        <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="text-white">
+            <h1 className="text-3xl lg:text-4xl font-bold italic leading-tight" data-testid="hero-title">
+              {config.heroTitle}
+            </h1>
+          </div>
+          <div className="flex items-center gap-6">
+            {config.heroImageUrl ? (
+              <img src={config.heroImageUrl} alt="" className="w-24 h-24 object-contain" />
+            ) : (
+              <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center">
+                <span className="text-white/50 text-xs">Imagem</span>
               </div>
-              <h2 className="text-lg font-black text-zinc-900 uppercase tracking-tight">Dados de Acesso</h2>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Nome Completo</label>
-                  <input className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all" placeholder="Seu nome completo" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">E-mail para Acesso</label>
-                  <input className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all" placeholder="exemplo@email.com" />
-                </div>
-              </div>
+            )}
+            <div className="bg-[#0d5c3d] rounded-lg px-4 py-3 text-center">
+              <span className="text-5xl font-bold text-white" data-testid="hero-badge">{config.heroBadgeText.split(' ')[0]}</span>
+              <div className="text-white text-sm font-medium">{config.heroBadgeText.split(' ').slice(1).join(' ')}</div>
             </div>
           </div>
-
-          <div className="bg-zinc-50 border border-zinc-100 p-6 rounded-2xl shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <CreditCard className="w-4 h-4 text-purple-600" />
-              </div>
-              <h2 className="text-lg font-black text-zinc-900 uppercase tracking-tight">Pagamento Seguro</h2>
-            </div>
-            
-            <div className="space-y-6">
-              {paymentStep === 'info' ? (
-                <div className="space-y-4">
-                  <Button 
-                    className="w-full h-16 text-xl font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] border-0"
-                    style={{ backgroundColor: primaryColor }}
-                    onClick={() => setPaymentStep('payment')}
-                  >
-                    CONTINUAR PARA PAGAMENTO
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <div id="paypal-button-container" className="mb-6"></div>
-                  
-                  <div className="relative py-4">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-zinc-200"></span>
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-zinc-50 px-2 text-zinc-400 font-bold">Ou pague com cartão</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 bg-white p-4 rounded-xl border border-zinc-200 shadow-inner">
-                    <div id="card-name-field-container" className="h-12"></div>
-                    <div id="card-number-field-container" className="h-12"></div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div id="card-expiry-field-container" className="h-12"></div>
-                      <div id="card-cvv-field-container" className="h-12"></div>
-                    </div>
-                    <Button 
-                      id="card-field-submit-button"
-                      className="w-full h-14 text-lg font-black rounded-xl shadow-lg border-0 mt-4"
-                      style={{ backgroundColor: primaryColor }}
-                    >
-                      PAGAR COM CARTÃO
-                    </Button>
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    className="w-full text-zinc-400 font-bold text-xs"
-                    onClick={() => setPaymentStep('info')}
-                  >
-                    ← VOLTAR
-                  </Button>
-                </div>
-              )}
-
-              <div className="flex items-center justify-center gap-6 py-4 border-t border-zinc-200/50">
-                <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
-                  <Shield className="w-3 h-3 text-green-500" />
-                  <span>Criptografia SSL</span>
-                </div>
-                <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
-                  <Lock className="w-3 h-3 text-green-500" />
-                  <span>Compra Segura</span>
-                </div>
+          <div className="flex flex-col gap-3">
+            <div className="bg-white/10 rounded-lg px-4 py-2 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <div>
+                <div className="text-white text-xs font-bold">ACESSO IMEDIATO</div>
+                <div className="text-white/60 text-[10px]">Seu produto disponível em instantes</div>
               </div>
             </div>
-          </div>
-
-          {/* Provas Sociais */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest px-2">O que dizem nossos clientes</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { name: "Mariana Silva", text: "Excelente conteúdo, recebi o acesso na hora!", stars: 5 },
-                { name: "João Pedro", text: "Valeu cada centavo, suporte muito atencioso.", stars: 5 }
-              ].map((proof, i) => (
-                <div key={i} className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl shadow-sm">
-                  <div className="flex gap-0.5 mb-2">
-                    {[...Array(proof.stars)].map((_, s) => <Star key={s} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
-                  </div>
-                  <p className="text-xs font-bold text-zinc-900 mb-1">{proof.name}</p>
-                  <p className="text-[11px] text-zinc-500 leading-relaxed italic">"{proof.text}"</p>
-                </div>
-              ))}
+            <div className="bg-white/10 rounded-lg px-4 py-2 flex items-center gap-2">
+              <Shield className="w-4 h-4 text-green-400" />
+              <div>
+                <div className="text-white text-xs font-bold">PAGAMENTO SEGURO</div>
+                <div className="text-white/60 text-[10px]">Dados protegidos e criptografados</div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Coluna da Direita - Resumo */}
-        <div className="lg:col-span-5">
-          <div className="sticky top-24 space-y-6">
-            <div className="bg-zinc-50 border border-zinc-100 p-8 rounded-3xl shadow-sm space-y-8">
-              <div className="flex items-center gap-4">
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-100">
                 {product.imageUrl ? (
-                  <img src={product.imageUrl} className="w-20 h-20 rounded-2xl object-cover shadow-md border border-zinc-100" alt="" />
+                  <img src={product.imageUrl} alt={product.name} className="w-16 h-16 object-cover rounded" />
                 ) : (
-                  <div className="w-20 h-20 bg-zinc-900 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-lg border border-zinc-100">
+                  <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-xl">
                     {product.name.charAt(0)}
                   </div>
                 )}
-                <div>
-                  <h2 className="text-xl font-black text-zinc-900 tracking-tight leading-tight">{product.name}</h2>
-                  <p className="text-lg font-black mt-1" style={{ color: primaryColor }}>
-                    R$ {(product.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                  </p>
+                <div className="flex-1">
+                  <div className="text-gray-400 text-xs uppercase tracking-wider">BY MOVE DIGITAL MARKETING</div>
+                  <h2 className="font-bold text-gray-900" data-testid="product-name">{product.name}</h2>
+                  <div className="text-xl font-bold" style={{ color: config.primaryColor }} data-testid="product-price">
+                    {(product.price / 100).toFixed(2)} US$
+                  </div>
+                </div>
+                {config.showChangeCountry && (
+                  <button className="text-xs text-gray-500 underline" data-testid="change-country">
+                    Change country
+                  </button>
+                )}
+              </div>
+              <div className="text-xs text-gray-500">
+                Secure checkout • 1 Pagamento Único
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your email address</label>
+                <Input placeholder="Enter the email to receive your purchase" className="h-11" data-testid="input-email" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm your email</label>
+                <Input placeholder="Enter your email again" className="h-11" data-testid="input-confirm-email" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your full name</label>
+                <Input placeholder="Enter your full name" className="h-11" data-testid="input-name" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
+                <div className="flex gap-2">
+                  <div className="flex items-center gap-1 border border-gray-200 rounded-md px-3 h-11 bg-gray-50 min-w-[80px]">
+                    <span className="text-sm">🇧🇷</span>
+                    <span className="text-sm text-gray-600">+55</span>
+                  </div>
+                  <Input placeholder="" className="h-11 flex-1" data-testid="input-phone" />
                 </div>
               </div>
+            </div>
 
-              <div className="space-y-4 pt-6 border-t border-zinc-200/50">
-                <div className="flex items-center gap-2 text-zinc-900 font-black uppercase text-[10px] tracking-widest opacity-40">
-                  <Settings className="w-3 h-3" />
-                  <span>Resumo do Pedido</span>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm font-bold text-zinc-600">
-                    <span>{product.name}</span>
-                    <span>R$ {(product.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="flex border-b border-gray-200">
+                <button 
+                  onClick={() => setPaymentMethod('card')}
+                  className={`flex-1 py-3 px-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                    paymentMethod === 'card' 
+                      ? 'bg-gray-50 border-b-2 border-green-600 text-gray-900' 
+                      : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                  data-testid="tab-credit-card"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  Credit Card
+                </button>
+                <button 
+                  onClick={() => setPaymentMethod('transfer')}
+                  className={`flex-1 py-3 px-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                    paymentMethod === 'transfer' 
+                      ? 'bg-gray-50 border-b-2 border-green-600 text-gray-900' 
+                      : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                  data-testid="tab-transfer"
+                >
+                  <Building2 className="w-4 h-4" />
+                  Instant Transfer
+                </button>
+                <button 
+                  onClick={() => setPaymentMethod('paypal')}
+                  className={`flex-1 py-3 px-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                    paymentMethod === 'paypal' 
+                      ? 'bg-gray-50 border-b-2 border-green-600 text-gray-900' 
+                      : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                  data-testid="tab-paypal"
+                >
+                  <SiPaypal className="w-4 h-4 text-blue-600" />
+                  PayPal
+                </button>
+              </div>
+
+              <div className="p-6">
+                {paymentMethod === 'card' && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Card number</label>
+                      <Input placeholder="0000 0000 0000 0000" className="h-11" data-testid="input-card-number" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Expiration date</label>
+                        <Input placeholder="MM/YY" className="h-11" data-testid="input-card-expiry" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Security code</label>
+                        <Input placeholder="3 or 4 digits code" className="h-11" data-testid="input-card-cvv" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Account holder name</label>
+                      <Input placeholder="Enter name printed on card" className="h-11" data-testid="input-card-holder" />
+                    </div>
                   </div>
-                  <div className="pt-4 border-t border-zinc-200/50 flex justify-between items-center">
-                    <span className="text-zinc-900 font-black uppercase text-xs tracking-widest">Total</span>
-                    <span className="text-3xl font-black" style={{ color: primaryColor }}>
-                      R$ {(product.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                )}
+                {paymentMethod === 'transfer' && (
+                  <div className="text-center py-8 text-gray-500">
+                    <Building2 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                    <p className="text-sm">Instant bank transfer will be available after checkout confirmation.</p>
+                  </div>
+                )}
+                {paymentMethod === 'paypal' && (
+                  <div id="paypal-button-container" className="min-h-[50px]">
+                    {!sdkLoaded && (
+                      <div className="flex items-center justify-center py-4">
+                        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {config.testimonial && (
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-20 h-20 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+                    {config.testimonial.imageUrl ? (
+                      <img src={config.testimonial.imageUrl} alt={config.testimonial.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">
+                        {config.testimonial.name.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-gray-900" data-testid="testimonial-name">{config.testimonial.name}</h4>
+                    <div className="flex gap-0.5 my-1">
+                      {[...Array(config.testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-600 italic" data-testid="testimonial-text">{config.testimonial.text}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {upsellProducts.length > 0 && (
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="font-bold text-gray-900 mb-4">Buy together</h3>
+                <div className="space-y-4">
+                  {upsellProducts.map((upsell) => (
+                    <div key={upsell.id} className="flex items-start gap-4 p-4 border border-gray-100 rounded-lg hover:border-green-300 transition-colors">
+                      <Checkbox 
+                        checked={selectedUpsells.includes(upsell.id)}
+                        onCheckedChange={() => toggleUpsell(upsell.id)}
+                        className="mt-1"
+                        data-testid={`checkbox-upsell-${upsell.id}`}
+                      />
+                      {upsell.imageUrl ? (
+                        <img src={upsell.imageUrl} alt={upsell.name} className="w-20 h-20 object-cover rounded" />
+                      ) : (
+                        <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold">
+                          {upsell.name.charAt(0)}
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <h4 className="font-bold text-gray-900 text-sm">{upsell.name}</h4>
+                        <p className="text-xs text-gray-500 mt-1 line-clamp-2">{upsell.description}</p>
+                        <div className="mt-2 font-bold text-green-600">
+                          {(upsell.price / 100).toFixed(2)} US$
+                        </div>
+                      </div>
+                      <button className="text-xs text-gray-400 hover:text-gray-600">+ Add to purchase</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="lg:col-span-1">
+            <div className="sticky top-20 space-y-4">
+              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <Lock className="w-4 h-4 text-green-600" />
+                  <span className="font-medium">Privacy</span>
+                </div>
+                <p className="text-xs text-gray-500">{config.privacyText}</p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  <span className="font-medium">Safe purchase</span>
+                </div>
+                <p className="text-xs text-gray-500">{config.safeText}</p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <Mail className="w-4 h-4 text-green-600" />
+                  <span className="font-medium">Delivery via E-mail</span>
+                </div>
+                <p className="text-xs text-gray-500">{config.deliveryText}</p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  <span className="font-medium">Approved content</span>
+                </div>
+                <p className="text-xs text-gray-500">{config.approvedText}</p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="font-medium text-gray-900 mb-4">Order details</h3>
+                <div className="flex justify-between items-center text-sm mb-2">
+                  <span className="text-gray-600">{product.name}</span>
+                  <span className="font-medium">{(product.price / 100).toFixed(2)} US$</span>
+                </div>
+                {selectedUpsells.map(id => {
+                  const upsell = allProducts?.find(p => p.id === id);
+                  if (!upsell) return null;
+                  return (
+                    <div key={id} className="flex justify-between items-center text-sm mb-2">
+                      <span className="text-gray-600">{upsell.name}</span>
+                      <span className="font-medium">{(upsell.price / 100).toFixed(2)} US$</span>
+                    </div>
+                  );
+                })}
+                <div className="border-t border-gray-100 pt-3 mt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-gray-900">Total</span>
+                    <span className="font-bold text-xl" style={{ color: config.primaryColor }}>
+                      {(calculateTotal() / 100).toFixed(2)} US$
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-2">
-                <div className="p-4 bg-green-50 border border-green-100 rounded-2xl space-y-2">
-                  <div className="flex items-center gap-2 text-green-700">
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Acesso Imediato</span>
-                  </div>
-                  <p className="text-[11px] text-green-600/80 leading-relaxed">
-                    Seu acesso será enviado para o e-mail informado assim que o pagamento for aprovado.
-                  </p>
+              <Button 
+                className="w-full h-14 text-lg font-bold"
+                style={{ backgroundColor: config.primaryColor }}
+                data-testid="button-buy-now"
+              >
+                {config.payButtonText}
+              </Button>
+
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
+                  <Lock className="w-3 h-3" />
+                  Secured by <span className="font-bold">Hotmart</span>
                 </div>
               </div>
             </div>
-
-            <footer className="text-center px-4">
-              <p className="text-[10px] text-zinc-400 font-medium leading-relaxed">
-                BerryPay - Tecnologia de Pagamentos Seguros<br />
-                Todos os direitos reservados &copy; {new Date().getFullYear()}
-              </p>
-            </footer>
           </div>
         </div>
+
+        <div className="mt-12 text-center space-y-4 text-xs text-gray-400">
+          <p>
+            Have questions about this product? <a href="#" className="text-green-600 underline">Please contact</a>
+          </p>
+          <p>
+            Can't complete a purchase? <a href="#" className="text-green-600 underline">Read our Help Center</a>
+          </p>
+          <p className="max-w-2xl mx-auto leading-relaxed">
+            By clicking "Buy Now", I declare that: (i) I understand that Hotmart is processing this order on behalf of MOVE DIGITAL MARKETING and has no responsibility for the content and/or service delivered in this sale; (ii) I agree to Hotmart's Terms of Use and that I confirm consent to sales after verification of my legal age and authorization.
+          </p>
+          <p>
+            Learn more about your purchase <a href="#" className="text-green-600 underline">here</a>.
+          </p>
+        </div>
+
+        <footer className="mt-8 pt-8 border-t border-gray-200 text-center">
+          <p className="text-xs text-gray-400" data-testid="footer-text">{config.footerText}</p>
+          <p className="text-[10px] text-gray-300 mt-1">2026-01-31 21:09:19 13.54Z #E2</p>
+        </footer>
       </div>
     </div>
   );
