@@ -56,6 +56,7 @@ export const checkouts = pgTable("checkouts", {
     footerText: "BerryPay © 2026. All rights reserved.",
     primaryColor: "#22a559",
     showChangeCountry: true,
+    showTimer: true,
   }),
 });
 
@@ -81,6 +82,7 @@ export type CheckoutConfig = {
   footerText: string;
   primaryColor: string;
   showChangeCountry: boolean;
+  showTimer: boolean;
 };
 
 export const settings = pgTable("settings", {

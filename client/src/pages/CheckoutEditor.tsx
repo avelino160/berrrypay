@@ -40,6 +40,7 @@ const defaultConfig: CheckoutConfig = {
   footerText: "BerryPay © 2026. All rights reserved.",
   primaryColor: "#22a559",
   showChangeCountry: true,
+  showTimer: true,
 };
 
 import { timerIcon } from "@/lib/assets";
@@ -178,6 +179,19 @@ export default function CheckoutEditor() {
                 className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
                 data-testid="input-checkout-name"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400 font-bold uppercase">Opções de Exibição</Label>
+              <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                <Checkbox 
+                  id="showTimer"
+                  checked={config.showTimer}
+                  onCheckedChange={(checked) => setConfig({...config, showTimer: !!checked})}
+                  data-testid="checkbox-show-timer"
+                />
+                <Label htmlFor="showTimer" className="text-sm text-white cursor-pointer">Mostrar Timer de Oferta</Label>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -468,16 +482,18 @@ export default function CheckoutEditor() {
 
         <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
           <div className={`bg-gray-50 h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}>
-            <div 
-              className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[20px] pb-[20px]"
-              style={{ backgroundColor: config.primaryColor }}
-            >
-              <span className="font-mono tabular-nums text-[31px] font-extrabold bg-[transparent] text-justify">
-                {formatTime(timerSeconds)}
-              </span>
-              <Timer className="w-8 h-8 animate-pulse" />
-              <span className="uppercase tracking-tight font-normal text-[16px]">{config.timerText}</span>
-            </div>
+            {config.showTimer && (
+              <div 
+                className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[20px] pb-[20px]"
+                style={{ backgroundColor: config.primaryColor }}
+              >
+                <span className="font-mono tabular-nums text-[31px] font-extrabold bg-[transparent] text-justify">
+                  {formatTime(timerSeconds)}
+                </span>
+                <Timer className="w-8 h-8 animate-pulse" />
+                <span className="uppercase tracking-tight font-normal text-[16px]">{config.timerText}</span>
+              </div>
+            )}
 
             {config.heroImageUrl && (
               <div className="bg-white py-4 px-4">
