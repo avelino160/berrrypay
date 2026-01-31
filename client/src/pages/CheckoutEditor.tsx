@@ -617,7 +617,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-tight">Confirm your email</label>
+                      <label className="block text-[11px] text-gray-700 uppercase tracking-tight font-medium">Confirm your email</label>
                       <input 
                         type="email"
                         placeholder="Enter your email again"
