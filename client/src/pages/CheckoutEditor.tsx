@@ -756,7 +756,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>telefone</label>
+                      <label className="block text-[11px] tracking-tight font-normal" style={{ color: config.textColor }}>Celular</label>
                       <input 
                         type="tel"
                         placeholder="(00) 00000-0000"
