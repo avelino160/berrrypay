@@ -441,7 +441,7 @@ export default function CheckoutEditor() {
                 {formatTime(timerSeconds)}
               </span>
               <Timer className="w-8 h-8 animate-pulse" />
-              <span className="text-lg font-bold uppercase tracking-tight">{config.timerText}</span>
+              <span className="uppercase tracking-tight font-normal text-[16px]">{config.timerText}</span>
             </div>
 
             {config.heroImageUrl && (
