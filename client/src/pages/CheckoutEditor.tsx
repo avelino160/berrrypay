@@ -798,10 +798,10 @@ export default function CheckoutEditor() {
                             <Checkbox 
                               checked={orderBumpSelected} 
                               onCheckedChange={(checked) => setOrderBumpSelected(!!checked)}
-                              className="border-gray-400 data-[state=checked]:bg-[var(--primary-color)] data-[state=checked]:border-[var(--primary-color)]"
+                              className="border-gray-400 data-[state=checked]:bg-[var(--checkbox-color)] data-[state=checked]:border-[var(--checkbox-color)]"
                               style={{ 
                                 borderColor: config.primaryColor,
-                                "--primary-color": config.primaryColor 
+                                "--checkbox-color": config.primaryColor 
                               } as React.CSSProperties}
                               data-testid="checkbox-order-bump-preview" 
                             />
