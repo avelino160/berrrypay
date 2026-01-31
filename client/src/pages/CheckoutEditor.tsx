@@ -725,37 +725,37 @@ export default function CheckoutEditor() {
 
                   <div className="p-4 space-y-4">
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Your email address</label>
+                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Seu endereço de e-mail</label>
                       <input 
                         type="email"
-                        placeholder="Enter the email to receive your purchase"
+                        placeholder="Digite o e-mail para receber sua compra"
                         className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
                         style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                         data-testid="input-email"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Confirm your email</label>
+                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Confirme seu e-mail</label>
                       <input 
                         type="email"
-                        placeholder="Enter your email again"
+                        placeholder="Digite seu e-mail novamente"
                         className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
                         style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                         data-testid="input-confirm-email"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Your full name</label>
+                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Seu nome completo</label>
                       <input 
                         type="text"
-                        placeholder="Enter your full name"
+                        placeholder="Digite seu nome completo"
                         className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
                         style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                         data-testid="input-fullname"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Phone number</label>
+                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Número de telefone</label>
                       <div className="flex gap-2">
                         <Select defaultValue="BR">
                           <SelectTrigger className="w-[100px] h-11 border-gray-200 text-xs font-medium focus:ring-1 focus:ring-primary/20 focus:border-primary" style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
@@ -853,7 +853,7 @@ export default function CheckoutEditor() {
 
                   {upsellProducts.length > 0 && (
                     <div className="p-4">
-                      <h3 className="font-bold text-sm mb-3" style={{ color: config.textColor }}>Buy together</h3>
+                      <h3 className="font-bold text-sm mb-3" style={{ color: config.textColor }}>Compre junto</h3>
                       <div className="space-y-3">
                         {upsellProducts.map((p) => (
                           <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg" style={{ backgroundColor: config.backgroundColor }}>
@@ -886,7 +886,7 @@ export default function CheckoutEditor() {
                     </div>
                     <div className="p-4 space-y-3">
                       <div className="pt-4">
-                        <h3 className="font-medium text-sm mb-3" style={{ color: config.textColor }}>Order details</h3>
+                        <h3 className="font-medium text-sm mb-3" style={{ color: config.textColor }}>Detalhes do pedido</h3>
                         <div className="flex justify-between items-center text-xs mb-2">
                           <span style={{ color: `${config.textColor}99` }}>{selectedProduct?.name || 'Produto Principal'}</span>
                           <span className="font-medium" style={{ color: config.textColor }}>{selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$</span>
