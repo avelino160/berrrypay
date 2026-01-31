@@ -67,7 +67,6 @@ export default function CheckoutEditor() {
   const [config, setConfig] = useState<CheckoutConfig>(defaultConfig);
   const [timerSeconds, setTimerSeconds] = useState(547); // 9 minutes and 7 seconds
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [openPicker, setOpenPicker] = useState<string | null>(null);
 
   useEffect(() => {
     setTimerSeconds(config.timerMinutes * 60);
@@ -388,150 +387,87 @@ export default function CheckoutEditor() {
             </Button>
           </TabsContent>
 
-            <div className="space-y-4">
-              <Label className="text-xs text-zinc-400">Personalização de Cores</Label>
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs text-zinc-400">Cor do Timer</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
-                      onClick={() => setOpenPicker(openPicker === 'timer' ? null : 'timer')}
-                    >
-                      {openPicker === 'timer' ? 'Fechar' : 'Abrir Seletor'}
-                    </Button>
-                  </div>
-                  {openPicker === 'timer' && (
-                    <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
-                      <ColorPicker 
-                        value={config.timerColor} 
-                        onChange={(color) => setConfig({...config, timerColor: color})} 
-                        hidePresets
-                        hideOpacity
-                        hideAdvancedSliders
-                        hideColorTypeBtns
-                        width={340}
-                        height={150}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs text-zinc-400">Cor Principal (Botões)</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
-                      onClick={() => setOpenPicker(openPicker === 'primary' ? null : 'primary')}
-                    >
-                      {openPicker === 'primary' ? 'Fechar' : 'Abrir Seletor'}
-                    </Button>
-                  </div>
-                  {openPicker === 'primary' && (
-                    <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
-                      <ColorPicker 
-                        value={config.primaryColor} 
-                        onChange={(color) => setConfig({...config, primaryColor: color})} 
-                        hidePresets
-                        hideOpacity
-                        hideAdvancedSliders
-                        hideColorTypeBtns
-                        width={340}
-                        height={150}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs text-zinc-400">Cor de Fundo</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
-                      onClick={() => setOpenPicker(openPicker === 'background' ? null : 'background')}
-                    >
-                      {openPicker === 'background' ? 'Fechar' : 'Abrir Seletor'}
-                    </Button>
-                  </div>
-                  {openPicker === 'background' && (
-                    <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
-                      <ColorPicker 
-                        value={config.backgroundColor} 
-                        onChange={(color) => setConfig({...config, backgroundColor: color})} 
-                        hidePresets
-                        hideOpacity
-                        hideAdvancedSliders
-                        hideColorTypeBtns
-                        width={340}
-                        height={150}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs text-zinc-400">Cor de Destaque</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
-                      onClick={() => setOpenPicker(openPicker === 'highlight' ? null : 'highlight')}
-                    >
-                      {openPicker === 'highlight' ? 'Fechar' : 'Abrir Seletor'}
-                    </Button>
-                  </div>
-                  {openPicker === 'highlight' && (
-                    <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
-                      <ColorPicker 
-                        value={config.highlightColor} 
-                        onChange={(color) => setConfig({...config, highlightColor: color})} 
-                        hidePresets
-                        hideOpacity
-                        hideAdvancedSliders
-                        hideColorTypeBtns
-                        width={340}
-                        height={150}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-xs text-zinc-400">Cor do Texto</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
-                      onClick={() => setOpenPicker(openPicker === 'text' ? null : 'text')}
-                    >
-                      {openPicker === 'text' ? 'Fechar' : 'Abrir Seletor'}
-                    </Button>
-                  </div>
-                  {openPicker === 'text' && (
-                    <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
-                      <ColorPicker 
-                        value={config.textColor} 
-                        onChange={(color) => setConfig({...config, textColor: color})} 
-                        hidePresets
-                        hideOpacity
-                        hideAdvancedSliders
-                        hideColorTypeBtns
-                        width={340}
-                        height={150}
-                      />
-                    </div>
-                  )}
-                </div>
+          <TabsContent value="visual" className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor do Timer</Label>
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
+                  value={config.timerColor} 
+                  onChange={(color) => setConfig({...config, timerColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
+                />
               </div>
             </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor Principal (Botões e Destaques)</Label>
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
+                  value={config.primaryColor} 
+                  onChange={(color) => setConfig({...config, primaryColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor de Fundo</Label>
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
+                  value={config.backgroundColor} 
+                  onChange={(color) => setConfig({...config, backgroundColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor de Destaque (Inputs/Cards)</Label>
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
+                  value={config.highlightColor} 
+                  onChange={(color) => setConfig({...config, highlightColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor do Texto</Label>
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
+                  value={config.textColor} 
+                  onChange={(color) => setConfig({...config, textColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
+                />
+              </div>
+            </div>
+          </TabsContent>
 
           <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-6">
             <div className="flex items-center justify-between">
