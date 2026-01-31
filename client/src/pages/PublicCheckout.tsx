@@ -34,7 +34,8 @@ export default function PublicCheckout() {
       script.onload = () => setSdkLoaded(true);
       document.body.appendChild(script);
       return () => {
-        document.body.removeChild(script);
+        const existingScript = document.querySelector(`script[src*="paypal.com/sdk/js"]`);
+        if (existingScript) document.body.removeChild(existingScript);
       };
     }
   }, [settings, sdkLoaded]);
@@ -55,8 +56,8 @@ export default function PublicCheckout() {
             .then((res) => res.json())
             .then((order) => order.id);
         },
-        onApprove: (data: any) => {
-          return fetch(`/api/paypal/capture-order/${data.orderID}`, {
+        onApprove: (approveData: any) => {
+          return fetch(`/api/paypal/capture-order/${approveData.orderID}`, {
             method: "POST",
           })
             .then((res) => res.json())
@@ -81,8 +82,8 @@ export default function PublicCheckout() {
             .then((res) => res.json())
             .then((order) => order.id);
         },
-        onApprove: (data: any) => {
-          return fetch(`/api/paypal/capture-order/${data.orderID}`, {
+        onApprove: (approveData: any) => {
+          return fetch(`/api/paypal/capture-order/${approveData.orderID}`, {
             method: "POST",
           })
             .then((res) => res.json())
@@ -101,7 +102,7 @@ export default function PublicCheckout() {
 
         document.getElementById("card-field-submit-button")?.addEventListener("click", () => {
           cardField.submit().then(() => {
-            console.log("Card submit successful");
+            console.log("Card submit initiated");
           });
         });
       }
