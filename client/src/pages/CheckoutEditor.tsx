@@ -312,24 +312,28 @@ export default function CheckoutEditor() {
 
                     xhr.upload.addEventListener("progress", (event) => {
                       if (event.lengthComputable) {
-                        const percent = Math.round((event.loaded / event.total) * 100);
+                        const percent = Math.round((event.loaded / event.total) * 95); // Reach 95% during upload
                         setUploadProgress(percent);
                       }
                     });
 
                     xhr.addEventListener("load", () => {
                       if (xhr.status >= 200 && xhr.status < 300) {
-                        try {
-                          const data = JSON.parse(xhr.responseText);
-                          setConfig({...config, heroImageUrl: data.url});
-                          toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
-                        } catch (err) {
-                          toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
-                        }
+                        setUploadProgress(100); // Complete to 100%
+                        setTimeout(() => {
+                          try {
+                            const data = JSON.parse(xhr.responseText);
+                            setConfig({...config, heroImageUrl: data.url});
+                            toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
+                          } catch (err) {
+                            toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
+                          }
+                          setUploadProgress(null);
+                        }, 200);
                       } else {
                         toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+                        setUploadProgress(null);
                       }
-                      setUploadProgress(null);
                     });
 
                     xhr.addEventListener("error", () => {

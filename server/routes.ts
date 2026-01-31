@@ -26,7 +26,10 @@ export async function registerRoutes(
     },
   });
 
-  const upload = multer({ storage: storage_multer });
+  const upload = multer({ 
+    storage: storage_multer,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  });
 
   app.post("/api/upload", upload.single("file"), (req, res) => {
     try {
