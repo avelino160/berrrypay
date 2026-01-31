@@ -157,40 +157,14 @@ export default function PublicCheckout() {
     <div className="min-h-screen bg-white text-zinc-900 font-sans">
       {/* Header / Timer */}
       <div 
-        className="p-4 text-center text-white sticky top-0 z-50 shadow-md flex items-center justify-center"
-        style={{ backgroundColor: "#b4833e" }}
+        className="py-2.5 px-4 text-center text-white sticky top-0 z-50 flex items-center justify-center gap-4"
+        style={{ backgroundColor: "#22a559" }}
       >
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full border-2 border-white/40 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-white/90">Oferta por Tempo Limitado:</span>
-          </div>
-
-          <div className="flex gap-2">
-            <div className="flex flex-col items-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 min-w-[50px]">
-                <span className="text-2xl font-black text-white tabular-nums">{hours}</span>
-              </div>
-              <span className="text-[10px] font-bold uppercase mt-1 text-white/70">Horas</span>
-            </div>
-            
-            <div className="flex flex-col items-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 min-w-[50px]">
-                <span className="text-2xl font-black text-white tabular-nums">{mins}</span>
-              </div>
-              <span className="text-[10px] font-bold uppercase mt-1 text-white/70">Min</span>
-            </div>
-
-            <div className="flex flex-col items-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 min-w-[50px]">
-                <span className="text-2xl font-black text-white tabular-nums">{secs}</span>
-              </div>
-              <span className="text-[10px] font-bold uppercase mt-1 text-white/70">Seg</span>
-            </div>
-          </div>
-        </div>
+        <span className="font-mono text-xl font-bold tracking-wider text-white tabular-nums">
+          {hours} : {mins} : {secs}
+        </span>
+        <Clock className="w-5 h-5 text-white" />
+        <span className="text-sm font-medium text-white">Oferta Especial por Tempo Limitado!</span>
       </div>
 
       <div className="max-w-[1000px] mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">

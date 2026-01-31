@@ -32,7 +32,7 @@ export default function CheckoutEditor() {
     product: "",
     orderBump: "",
     bannerUrl: "",
-    timerText: "Oferta por Tempo Limitado:",
+    timerText: "Oferta Especial por Tempo Limitado!",
     paymentButtonText: "PAGAR AGORA",
     requirePhone: false,
     requireCpf: false,
@@ -61,10 +61,15 @@ export default function CheckoutEditor() {
     return () => clearInterval(interval);
   }, [timerSeconds]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
+  const formatTimeParts = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return {
+      hours: hours.toString().padStart(2, '0'),
+      mins: mins.toString().padStart(2, '0'),
+      secs: secs.toString().padStart(2, '0')
+    };
   };
 
   const addSocialProof = () => {
@@ -432,18 +437,21 @@ export default function CheckoutEditor() {
           >
             {/* Header / Timer */}
             <div 
-              className="p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold shadow-md"
-              style={{ backgroundColor: config.timerColor }}
+              className="py-2.5 px-4 text-center text-white flex items-center justify-center gap-4 text-sm font-bold"
+              style={{ backgroundColor: "#22a559" }}
             >
-              <div className="flex items-center gap-4 bg-black/20 px-6 py-2 rounded-2xl shadow-inner border border-white/10">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 animate-pulse" />
-                  <span className="uppercase tracking-widest text-[10px] opacity-80">{config.timerText}</span>
-                </div>
-                <div className="font-mono text-2xl font-black tracking-[0.2em] text-white tabular-nums">
-                  {formatTime(timerSeconds)}
-                </div>
-              </div>
+              {(() => {
+                const { hours, mins, secs } = formatTimeParts(timerSeconds);
+                return (
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-xl font-bold tracking-wider text-white tabular-nums">
+                      {hours} : {mins} : {secs}
+                    </span>
+                    <Clock className="w-5 h-5 text-white" />
+                    <span className="text-sm font-medium text-white">{config.timerText}</span>
+                  </div>
+                );
+              })()}
             </div>
 
             <div className={`p-4 md:p-8 grid grid-cols-1 ${device === 'desktop' ? 'lg:grid-cols-12' : ''} gap-8 text-zinc-900`}>
