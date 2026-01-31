@@ -4,7 +4,7 @@ import {
   type User, type InsertUser,
   type Product, type InsertProduct, type UpdateProductRequest,
   type Checkout, type InsertCheckout, type UpdateCheckoutRequest,
-  type Settings, type InsertSettings, type UpdateSettingsRequest,
+  type Sale, type InsertSale, type UpdateSettingsRequest,
   type DashboardStats
 } from "@shared/schema";
 import { eq, sql, and, gte, lt } from "drizzle-orm";
@@ -129,6 +129,9 @@ export class DatabaseStorage implements IStorage {
   async updateSaleStatus(id: number, status: string): Promise<void> {
     await db.update(sales).set({ status }).where(eq(sales.id, id));
   }
+
+  // Stats
+  async getDashboardStats(period?: string, productId?: string): Promise<DashboardStats> {
 
   // Settings
   async getSettings(): Promise<Settings | undefined> {
