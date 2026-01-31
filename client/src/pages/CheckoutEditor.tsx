@@ -427,41 +427,79 @@ export default function CheckoutEditor() {
 
                   <div className="space-y-2">
                     <Label className="text-[10px] text-zinc-500 uppercase font-bold">Foto do Cliente</Label>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-12 h-12 rounded-full bg-zinc-800 border border-zinc-700 overflow-hidden flex-shrink-0">
-                        {t.imageUrl ? (
-                          <img src={t.imageUrl} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-zinc-600 font-bold text-lg">
-                            {t.name.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                      <Input 
-                        type="file"
-                        accept="image/*"
-                        className="bg-zinc-950 border-zinc-800 h-8 text-[10px] flex-1"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            const formData = new FormData();
-                            formData.append("file", file);
-                            try {
-                              const res = await fetch("/api/upload", {
-                                method: "POST",
-                                body: formData
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-3 items-center">
+                        <div className="w-12 h-12 rounded-full bg-zinc-800 border border-zinc-700 overflow-hidden flex-shrink-0">
+                          {t.imageUrl ? (
+                            <img src={t.imageUrl} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-zinc-600 font-bold text-lg">
+                              {t.name.charAt(0)}
+                            </div>
+                          )}
+                        </div>
+                        <Input 
+                          type="file"
+                          accept="image/*"
+                          className="bg-zinc-950 border-zinc-800 h-8 text-[10px] flex-1"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const xhr = new XMLHttpRequest();
+                              const formData = new FormData();
+                              formData.append("file", file);
+
+                              xhr.upload.addEventListener("progress", (event) => {
+                                if (event.lengthComputable) {
+                                  const percent = Math.round((event.loaded / event.total) * 100);
+                                  const newList = [...config.testimonials];
+                                  // @ts-ignore - added progress to type locally
+                                  newList[index].uploadProgress = percent;
+                                  setConfig({...config, testimonials: newList});
+                                }
                               });
-                              const data = await res.json();
-                              const newList = [...config.testimonials];
-                              newList[index].imageUrl = data.url;
-                              setConfig({...config, testimonials: newList});
-                              toast({ title: "Sucesso", description: "Imagem enviada!" });
-                            } catch (err) {
-                              toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+
+                              xhr.addEventListener("load", () => {
+                                if (xhr.status >= 200 && xhr.status < 300) {
+                                  try {
+                                    const data = JSON.parse(xhr.responseText);
+                                    const newList = [...config.testimonials];
+                                    newList[index].imageUrl = data.url;
+                                    // @ts-ignore
+                                    newList[index].uploadProgress = null;
+                                    setConfig({...config, testimonials: newList});
+                                    toast({ title: "Sucesso", description: "Imagem enviada!" });
+                                  } catch (err) {
+                                    toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
+                                  }
+                                } else {
+                                  toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+                                }
+                              });
+
+                              xhr.open("POST", "/api/upload");
+                              xhr.send(formData);
                             }
-                          }
-                        }}
-                      />
+                          }}
+                        />
+                      </div>
+                      {/* @ts-ignore */}
+                      {t.uploadProgress !== undefined && t.uploadProgress !== null && (
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-[8px] text-zinc-500 uppercase font-bold">
+                            <span>Enviando foto...</span>
+                            {/* @ts-ignore */}
+                            <span>{t.uploadProgress}%</span>
+                          </div>
+                          <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-green-500 transition-all duration-300" 
+                              /* @ts-ignore */
+                              style={{ width: `${t.uploadProgress}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
