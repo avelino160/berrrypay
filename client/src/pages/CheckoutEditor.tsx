@@ -431,9 +431,9 @@ export default function CheckoutEditor() {
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-8 flex justify-center custom-scrollbar bg-zinc-100">
+        <div className={`flex-1 overflow-y-auto custom-scrollbar flex ${device === 'mobile' ? 'justify-center p-8 bg-zinc-100' : ''}`}>
           <div 
-            className={`transition-all duration-300 shadow-2xl rounded-xl overflow-hidden h-fit bg-white ${device === 'desktop' ? 'w-full max-w-[1000px]' : 'w-[375px]'}`}
+            className={`transition-all duration-300 h-fit bg-white ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}
           >
             {/* Header / Timer */}
             <div 
