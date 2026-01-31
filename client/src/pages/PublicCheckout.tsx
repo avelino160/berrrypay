@@ -185,7 +185,7 @@ export default function PublicCheckout() {
 
       <div className={`max-w-5xl mx-auto px-4 py-6 ${testimonials.length > 0 ? 'grid grid-cols-1 lg:grid-cols-3 gap-6' : 'flex justify-center'}`}>
         <div className={testimonials.length > 0 ? 'lg:col-span-2 space-y-4' : 'max-w-2xl w-full space-y-4'}>
-          <div className="rounded-lg border border-gray-200 overflow-hidden divide-y divide-gray-100" style={{ backgroundColor: config.highlightColor }}>
+          <div className="rounded-lg border border-gray-200 overflow-hidden divide-y divide-gray-100" style={{ backgroundColor: '#ffffff' }}>
             <div className="p-4">
               <div className="flex items-center gap-4">
                 {product.imageUrl ? (
