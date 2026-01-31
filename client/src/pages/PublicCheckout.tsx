@@ -121,10 +121,15 @@ export default function PublicCheckout() {
     return () => clearInterval(interval);
   }, [timerSeconds]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
+  const formatTimeParts = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return {
+      hours: hours.toString().padStart(2, '0'),
+      mins: mins.toString().padStart(2, '0'),
+      secs: secs.toString().padStart(2, '0')
+    };
   };
 
   if (isLoading) {
@@ -146,20 +151,44 @@ export default function PublicCheckout() {
 
   const { product, checkout } = data;
 
+  const { hours, mins, secs } = formatTimeParts(timerSeconds);
+
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans">
       {/* Header / Timer */}
       <div 
-        className="p-3 text-center text-white flex items-center justify-center gap-4 text-sm font-bold sticky top-0 z-50 shadow-md"
-        style={{ backgroundColor: timerColor }}
+        className="p-4 text-center text-white sticky top-0 z-50 shadow-md flex items-center justify-center"
+        style={{ backgroundColor: "#b4833e" }}
       >
-        <div className="flex items-center gap-4 bg-black/20 px-6 py-2 rounded-2xl shadow-inner border border-white/10">
+        <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 animate-pulse" />
-            <span className="uppercase tracking-widest text-[10px] opacity-80">Oferta por Tempo Limitado:</span>
+            <div className="w-8 h-8 rounded-full border-2 border-white/40 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white/90">Oferta por Tempo Limitado:</span>
           </div>
-          <div className="font-mono text-2xl font-black tracking-[0.2em] text-white tabular-nums">
-            {formatTime(timerSeconds)}
+
+          <div className="flex gap-2">
+            <div className="flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 min-w-[50px]">
+                <span className="text-2xl font-black text-white tabular-nums">{hours}</span>
+              </div>
+              <span className="text-[10px] font-bold uppercase mt-1 text-white/70">Horas</span>
+            </div>
+            
+            <div className="flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 min-w-[50px]">
+                <span className="text-2xl font-black text-white tabular-nums">{mins}</span>
+              </div>
+              <span className="text-[10px] font-bold uppercase mt-1 text-white/70">Min</span>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 min-w-[50px]">
+                <span className="text-2xl font-black text-white tabular-nums">{secs}</span>
+              </div>
+              <span className="text-[10px] font-bold uppercase mt-1 text-white/70">Seg</span>
+            </div>
           </div>
         </div>
       </div>
