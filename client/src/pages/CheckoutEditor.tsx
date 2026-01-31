@@ -793,23 +793,18 @@ export default function CheckoutEditor() {
                         </div>
                         <label 
                           className="flex items-center gap-2 p-3 cursor-pointer" 
-                          style={{ 
-                            backgroundColor: `${config.primaryColor}20`, 
-                            borderTop: `1px solid ${config.primaryColor}30`,
-                            transition: 'background-color 0.2s ease'
-                          }}
+                          style={{ backgroundColor: config.primaryColor, borderTop: `1px solid ${config.primaryColor}30` }}
                         >
                             <Checkbox 
                               checked={orderBumpSelected} 
                               onCheckedChange={(checked) => setOrderBumpSelected(!!checked)}
-                              className="border-gray-400 data-[state=checked]:bg-[var(--checkbox-color)] data-[state=checked]:border-[var(--checkbox-color)]"
+                              className="border-white data-[state=checked]:bg-white data-[state=checked]:text-[var(--primary-color)]"
                               style={{ 
-                                borderColor: config.primaryColor,
-                                "--checkbox-color": config.primaryColor 
+                                "--primary-color": config.primaryColor 
                               } as React.CSSProperties}
                               data-testid="checkbox-order-bump-preview" 
                             />
-                            <span className="text-sm font-medium" style={{ color: config.textColor }}>Quero comprar também!</span>
+                            <span className="text-sm font-medium" style={{ color: "#ffffff" }}>Quero comprar também!</span>
                           </label>
                       </div>
                     </div>
