@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { CheckoutConfig } from "@shared/schema";
 import { SiPaypal } from "react-icons/si";
+import ColorPicker from 'react-best-gradient-color-picker';
 
 const defaultConfig: CheckoutConfig = {
   timerMinutes: 10,
@@ -389,113 +390,81 @@ export default function CheckoutEditor() {
           <TabsContent value="visual" className="flex-1 overflow-y-auto p-4 space-y-4">
             <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Cor do Timer</Label>
-              <div className="flex gap-2">
-                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.timerColor }} />
-                <Input 
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
                   value={config.timerColor} 
-                  onChange={(e) => setConfig({...config, timerColor: e.target.value})} 
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
-                  data-testid="input-timer-color"
+                  onChange={(color) => setConfig({...config, timerColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
                 />
-              </div>
-              <div className="flex gap-1 mt-2">
-                {['#dc2626', '#ef4444', '#f97316', '#22a559', '#2563eb', '#9333ea'].map(color => (
-                  <button 
-                    key={color} 
-                    className="w-6 h-6 rounded-full border border-white/20" 
-                    style={{ backgroundColor: color }}
-                    onClick={() => setConfig({...config, timerColor: color})}
-                  />
-                ))}
               </div>
             </div>
 
             <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Cor Principal (Botões e Destaques)</Label>
-              <div className="flex gap-2">
-                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.primaryColor }} />
-                <Input 
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
                   value={config.primaryColor} 
-                  onChange={(e) => setConfig({...config, primaryColor: e.target.value})} 
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
-                  data-testid="input-primary-color"
+                  onChange={(color) => setConfig({...config, primaryColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
                 />
-              </div>
-              <div className="flex gap-1 mt-2">
-                {['#22a559', '#2563eb', '#9333ea', '#dc2626', '#d97706', '#000000'].map(color => (
-                  <button 
-                    key={color} 
-                    className="w-6 h-6 rounded-full border border-white/20" 
-                    style={{ backgroundColor: color }}
-                    onClick={() => setConfig({...config, primaryColor: color})}
-                  />
-                ))}
               </div>
             </div>
 
             <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Cor de Fundo</Label>
-              <div className="flex gap-2">
-                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.backgroundColor }} />
-                <Input 
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
                   value={config.backgroundColor} 
-                  onChange={(e) => setConfig({...config, backgroundColor: e.target.value})} 
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  onChange={(color) => setConfig({...config, backgroundColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
                 />
-              </div>
-              <div className="flex gap-1 mt-2">
-                {['#f9fafb', '#ffffff', '#f3f4f6', '#e5e7eb', '#111827', '#000000'].map(color => (
-                  <button 
-                    key={color} 
-                    className="w-6 h-6 rounded-full border border-white/20" 
-                    style={{ backgroundColor: color }}
-                    onClick={() => setConfig({...config, backgroundColor: color})}
-                  />
-                ))}
               </div>
             </div>
 
             <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Cor de Destaque (Inputs/Cards)</Label>
-              <div className="flex gap-2">
-                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.highlightColor }} />
-                <Input 
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
                   value={config.highlightColor} 
-                  onChange={(e) => setConfig({...config, highlightColor: e.target.value})} 
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  onChange={(color) => setConfig({...config, highlightColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
                 />
-              </div>
-              <div className="flex gap-1 mt-2">
-                {['#f3f4f6', '#ffffff', '#f9fafb', '#f4f4f5', '#1f2937', '#27272a'].map(color => (
-                  <button 
-                    key={color} 
-                    className="w-6 h-6 rounded-full border border-white/20" 
-                    style={{ backgroundColor: color }}
-                    onClick={() => setConfig({...config, highlightColor: color})}
-                  />
-                ))}
               </div>
             </div>
 
             <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Cor do Texto</Label>
-              <div className="flex gap-2">
-                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.textColor }} />
-                <Input 
+              <div className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden flex justify-center">
+                <ColorPicker 
                   value={config.textColor} 
-                  onChange={(e) => setConfig({...config, textColor: e.target.value})} 
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  onChange={(color) => setConfig({...config, textColor: color})} 
+                  hidePresets
+                  hideOpacity
+                  hideAdvancedSliders
+                  hideColorTypeBtns
+                  width={340}
+                  height={150}
                 />
-              </div>
-              <div className="flex gap-1 mt-2">
-                {['#111827', '#000000', '#374151', '#4b5563', '#ffffff', '#f3f4f6'].map(color => (
-                  <button 
-                    key={color} 
-                    className="w-6 h-6 rounded-full border border-white/20" 
-                    style={{ backgroundColor: color }}
-                    onClick={() => setConfig({...config, textColor: color})}
-                  />
-                ))}
               </div>
             </div>
           </TabsContent>
