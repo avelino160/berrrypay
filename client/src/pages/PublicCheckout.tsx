@@ -194,25 +194,20 @@ export default function PublicCheckout() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-100">
+              <div className="flex flex-col gap-6 mb-6">
                 {product.imageUrl ? (
-                  <img src={product.imageUrl} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-auto object-contain rounded-lg shadow-sm" />
                 ) : (
-                  <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-xl">
+                  <div className="w-full aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 font-bold text-xl">
                     {product.name.charAt(0)}
                   </div>
                 )}
-                <div className="flex-1">
-                  <h2 className="font-bold text-gray-900" data-testid="product-name">{product.name}</h2>
-                  <div className="text-xl font-bold" style={{ color: config.primaryColor }} data-testid="product-price">
+                <div className="flex-1 space-y-2">
+                  <h2 className="font-bold text-gray-900 text-2xl" data-testid="product-name">{product.name}</h2>
+                  <div className="text-3xl font-bold" style={{ color: config.primaryColor }} data-testid="product-price">
                     {(product.price / 100).toFixed(2)} US$
                   </div>
                 </div>
-                {config.showChangeCountry && (
-                  <button className="text-xs text-gray-500 underline" data-testid="change-country">
-                    Change country
-                  </button>
-                )}
               </div>
             </div>
 

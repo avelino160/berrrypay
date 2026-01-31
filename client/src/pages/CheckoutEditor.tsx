@@ -506,15 +506,15 @@ export default function CheckoutEditor() {
             <div className={`max-w-5xl mx-auto px-4 py-6 ${device === 'mobile' ? 'space-y-4' : 'grid grid-cols-3 gap-6'}`}>
               <div className={device === 'mobile' ? 'space-y-4' : 'col-span-2 space-y-4'}>
                 <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
+                  <div className="flex flex-col gap-4 mb-4">
                     {selectedProduct?.imageUrl ? (
-                      <img src={selectedProduct.imageUrl} alt="" className="w-12 h-12 object-cover rounded" />
+                      <img src={selectedProduct.imageUrl} alt="" className="w-full h-auto object-contain rounded-md shadow-sm" />
                     ) : (
-                      <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold">
+                      <div className="w-full aspect-video bg-gray-100 rounded-md flex items-center justify-center text-gray-400 font-bold">
                         {selectedProduct?.name?.charAt(0) || '?'}
                       </div>
                     )}
-                    <div className="flex-1">
+                    <div className="flex-1 space-y-1">
                       <h2 className="font-bold text-gray-900 text-[17px]">{selectedProduct?.name || 'Selecione um produto'}</h2>
                       <div className="text-lg font-bold" style={{ color: config.primaryColor }}>
                         {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
