@@ -745,7 +745,7 @@ export default function CheckoutEditor() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Seu nome completo</label>
+                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>nome completo</label>
                       <input 
                         type="text"
                         placeholder="Digite seu nome completo"
