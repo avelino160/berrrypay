@@ -762,6 +762,33 @@ export default function CheckoutEditor() {
                     </div>
                   </div>
 
+                  {upsellProducts.length > 0 && (
+                    <div className="p-4">
+                      <h3 className="font-bold text-gray-900 text-sm mb-3">Buy together</h3>
+                      <div className="space-y-3">
+                        {upsellProducts.map((p) => (
+                          <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
+                            <Checkbox checked disabled className="mt-1" />
+                            {p.imageUrl ? (
+                              <img src={p.imageUrl} alt="" className="w-14 h-14 object-cover rounded" />
+                            ) : (
+                              <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-sm">
+                                {p.name.charAt(0)}
+                              </div>
+                            )}
+                            <div className="flex-1">
+                              <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
+                              <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
+                              <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
+                                {(p.price / 100).toFixed(2).replace('.', ',')} US$
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="overflow-hidden">
                     <div className="flex border-b border-gray-200">
                       <button className={`flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[10px] font-medium ${paymentMethod === 'paypal' ? 'bg-gray-50 border-b-2 text-gray-900' : 'text-gray-500'}`} style={{ borderColor: paymentMethod === 'paypal' ? config.primaryColor : 'transparent' }} onClick={() => setPaymentMethod('paypal')}>
@@ -790,34 +817,6 @@ export default function CheckoutEditor() {
                       </div>
                     </div>
                   </div>
-
-
-                  {upsellProducts.length > 0 && (
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 text-sm mb-3">Buy together</h3>
-                      <div className="space-y-3">
-                        {upsellProducts.map((p) => (
-                          <div key={p.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
-                            <Checkbox checked disabled className="mt-1" />
-                            {p.imageUrl ? (
-                              <img src={p.imageUrl} alt="" className="w-14 h-14 object-cover rounded" />
-                            ) : (
-                              <div className="w-14 h-14 bg-gray-100 rounded flex items-center justify-center text-gray-400 font-bold text-sm">
-                                {p.name.charAt(0)}
-                              </div>
-                            )}
-                            <div className="flex-1">
-                              <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
-                              <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
-                              <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
-                                {(p.price / 100).toFixed(2).replace('.', ',')} US$
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
 
