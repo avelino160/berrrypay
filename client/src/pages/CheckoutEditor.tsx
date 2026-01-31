@@ -660,7 +660,7 @@ export default function CheckoutEditor() {
           </Button>
         </div>
 
-        <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
+        <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`} style={device === 'desktop' ? { backgroundColor: config.backgroundColor } : {}}>
           <div className={`h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`} style={{ backgroundColor: config.backgroundColor, color: config.textColor }}>
             {config.showTimer && (
               <div 
