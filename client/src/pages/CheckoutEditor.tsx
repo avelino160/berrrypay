@@ -805,7 +805,7 @@ export default function CheckoutEditor() {
                               } as React.CSSProperties}
                               data-testid="checkbox-order-bump-preview" 
                             />
-                            <span className="text-sm font-medium" style={{ color: config.primaryColor }}>Quero comprar também!</span>
+                            <span className="text-sm font-medium" style={{ color: "#000000" }}>Quero comprar também!</span>
                           </label>
                       </div>
                     </div>
