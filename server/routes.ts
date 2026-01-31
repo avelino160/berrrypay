@@ -131,6 +131,35 @@ export async function registerRoutes(
     }
   });
 
+  app.get(api.checkouts.get.path, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id as string);
+      const checkout = await storage.getCheckout(id);
+      if (!checkout) return res.status(404).json({ message: "Checkout não encontrado" });
+      res.json(checkout);
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.patch(api.checkouts.update.path, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id as string);
+      const input = api.checkouts.update.input.parse(req.body);
+      const checkout = await storage.updateCheckout(id, input);
+      res.json(checkout);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  });
+
   // Settings
   app.get(api.settings.get.path, async (req, res) => {
     const settings = await storage.getSettings();

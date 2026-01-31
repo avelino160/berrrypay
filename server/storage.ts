@@ -27,6 +27,7 @@ export interface IStorage {
   getCheckouts(): Promise<Checkout[]>;
   getCheckout(id: number): Promise<Checkout | undefined>;
   createCheckout(checkout: InsertCheckout): Promise<Checkout>;
+  updateCheckout(id: number, updates: UpdateCheckoutRequest): Promise<Checkout>;
   
   // Settings
   getSettings(): Promise<Settings | undefined>;
@@ -113,6 +114,12 @@ export class DatabaseStorage implements IStorage {
   async createCheckout(checkout: InsertCheckout): Promise<Checkout> {
     const [newCheckout] = await db.insert(checkouts).values(checkout).returning();
     return newCheckout;
+  }
+
+  async updateCheckout(id: number, updates: UpdateCheckoutRequest): Promise<Checkout> {
+    const [updated] = await db.update(checkouts).set(updates as any).where(eq(checkouts.id, id)).returning();
+    if (!updated) throw new Error("Checkout não encontrado");
+    return updated;
   }
 
   // Sales

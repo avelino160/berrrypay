@@ -31,7 +31,57 @@ export const checkouts = pgTable("checkouts", {
   views: integer("views").default(0),
   active: boolean("active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
+  config: jsonb("config").$type<CheckoutConfig>().default({
+    timerMinutes: 10,
+    timerText: "Oferta Especial por Tempo Limitado!",
+    heroTitle: "Promoção por tempo limitado",
+    heroBadgeText: "7 DIAS",
+    heroImageUrl: "",
+    benefitsList: [
+      { icon: "zap", title: "ACESSO IMEDIATO", subtitle: "Seu produto disponível em instantes" },
+      { icon: "shield", title: "PAGAMENTO SEGURO", subtitle: "Dados protegidos e criptografados" }
+    ],
+    privacyText: "Your information is 100% secure",
+    safeText: "Safe purchase",
+    deliveryText: "Delivery via E-mail",
+    approvedText: "Approved content",
+    testimonial: {
+      name: "Marisa Correia",
+      imageUrl: "",
+      rating: 5,
+      text: "\"Acreditem em mim, essa é a melhor compra que vocês vão fazer esse ano. Não percam a chance!\""
+    },
+    upsellProducts: [] as number[],
+    payButtonText: "Buy now",
+    footerText: "Hotmart © 2026. All rights reserved.",
+    primaryColor: "#22a559",
+    showChangeCountry: true,
+  }),
 });
+
+export type CheckoutConfig = {
+  timerMinutes: number;
+  timerText: string;
+  heroTitle: string;
+  heroBadgeText: string;
+  heroImageUrl: string;
+  benefitsList: { icon: string; title: string; subtitle: string }[];
+  privacyText: string;
+  safeText: string;
+  deliveryText: string;
+  approvedText: string;
+  testimonial: {
+    name: string;
+    imageUrl: string;
+    rating: number;
+    text: string;
+  };
+  upsellProducts: number[];
+  payButtonText: string;
+  footerText: string;
+  primaryColor: string;
+  showChangeCountry: boolean;
+};
 
 export const settings = pgTable("settings", {
   id: serial("id").primaryKey(),

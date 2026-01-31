@@ -83,6 +83,15 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    update: {
+      method: 'PATCH' as const,
+      path: '/api/checkouts/:id',
+      input: insertCheckoutSchema.partial(),
+      responses: {
+        200: z.custom<typeof checkouts.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
   },
   settings: {
     get: {
@@ -122,6 +131,9 @@ export const api = {
     },
   },
 };
+
+export type CreateCheckoutRequest = z.infer<typeof insertCheckoutSchema>;
+export type UpdateCheckoutRequest = z.infer<typeof insertCheckoutSchema.partial>;
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
   let url = path;
