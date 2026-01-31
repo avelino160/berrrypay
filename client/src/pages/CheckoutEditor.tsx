@@ -439,13 +439,13 @@ export default function CheckoutEditor() {
 
             <div className="bg-white py-8 px-4">
               <div className="max-w-5xl mx-auto flex flex-col items-center justify-center">
-                {config.heroImageUrl ? (
-                  <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain" />
-                ) : (
-                  <div className="w-full max-w-4xl h-32 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
-                    <span className="text-gray-400 text-sm">Banner Principal</span>
-                  </div>
-                )}
+                  {config.heroImageUrl ? (
+                    <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain" />
+                  ) : (
+                    <div className="w-full max-w-4xl h-32 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
+                      <span className="text-gray-400 text-sm font-sans">Banner Principal</span>
+                    </div>
+                  )}
               </div>
             </div>
 

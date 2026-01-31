@@ -29,9 +29,14 @@ export async function registerRoutes(
   const upload = multer({ storage: storage_multer });
 
   app.post("/api/upload", upload.single("file"), (req, res) => {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-    const url = `/uploads/${req.file.filename}`;
-    res.json({ url });
+    try {
+      if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+      const url = `/uploads/${req.file.filename}`;
+      res.json({ url });
+    } catch (err) {
+      console.error("Upload error:", err);
+      res.status(500).json({ message: "Internal server error during upload" });
+    }
   });
   // Auth routes already registered via setupAuth(app)
   

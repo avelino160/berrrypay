@@ -186,7 +186,7 @@ export default function PublicCheckout() {
             <img src={config.heroImageUrl} alt="" className="w-full max-w-4xl h-auto object-contain" />
           ) : (
             <div className="w-full max-w-4xl h-48 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-200">
-              <span className="text-gray-400">Banner Principal</span>
+              <span className="text-gray-400 font-sans">Banner Principal</span>
             </div>
           )}
         </div>
