@@ -407,7 +407,6 @@ export default function CheckoutEditor() {
           </TabsContent>
         </Tabs>
       </div>
-
       <div className="flex-1 flex flex-col bg-zinc-900/20 relative">
         <div className="h-14 border-b border-zinc-800/50 flex items-center justify-center gap-2">
           <Button 
@@ -433,7 +432,7 @@ export default function CheckoutEditor() {
         <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
           <div className={`bg-gray-50 h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}>
             <div 
-              className="py-4 px-6 text-center text-white flex items-center justify-center gap-6"
+              className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[33px] pb-[33px]"
               style={{ backgroundColor: config.primaryColor }}
             >
               <span className="font-mono text-4xl font-extrabold tracking-widest tabular-nums leading-none">
