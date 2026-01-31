@@ -37,7 +37,7 @@ const defaultConfig: CheckoutConfig = {
   },
   upsellProducts: [],
   payButtonText: "Buy now",
-  footerText: "Berry Pay © 2026. All rights reserved.",
+  footerText: "BerryPay © 2026. All rights reserved.",
   primaryColor: "#22a559",
   showChangeCountry: true,
 };

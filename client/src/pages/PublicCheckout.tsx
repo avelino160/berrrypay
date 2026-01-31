@@ -36,7 +36,7 @@ const defaultConfig: CheckoutConfig = {
   },
   upsellProducts: [],
   payButtonText: "Buy now",
-  footerText: "Berry Pay © 2026. All rights reserved.",
+  footerText: "BerryPay © 2026. All rights reserved.",
   primaryColor: "#22a559",
   showChangeCountry: true,
 };
@@ -454,7 +454,7 @@ export default function PublicCheckout() {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
                   <Lock className="w-3 h-3" />
-                  Secured by <span className="font-bold">Berry Pay</span>
+                  Secured by <span className="font-bold">BerryPay</span>
                 </div>
               </div>
             </div>
@@ -469,7 +469,7 @@ export default function PublicCheckout() {
             Can't complete a purchase? <a href="#" className="text-green-600 underline">Read our Help Center</a>
           </p>
           <p className="max-w-2xl mx-auto leading-relaxed">
-            By clicking "Buy Now", I declare that: (i) I understand that Berry Pay is processing this order on behalf of MOVE DIGITAL MARKETING and has no responsibility for the content and/or service delivered in this sale; (ii) I agree to Berry Pay's Terms of Use and that I confirm consent to sales after verification of my legal age and authorization.
+            By clicking "Buy Now", I declare that: (i) I understand that BerryPay is processing this order on behalf of MOVE DIGITAL MARKETING and has no responsibility for the content and/or service delivered in this sale; (ii) I agree to BerryPay's Terms of Use and that I confirm consent to sales after verification of my legal age and authorization.
           </p>
           <p>
             Learn more about your purchase <a href="#" className="text-green-600 underline">here</a>.
