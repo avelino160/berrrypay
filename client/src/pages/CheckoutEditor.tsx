@@ -160,6 +160,7 @@ export default function CheckoutEditor() {
             <TabsList className="w-full bg-zinc-900/50 border border-zinc-800 p-1">
               <TabsTrigger value="geral" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Geral</TabsTrigger>
               <TabsTrigger value="testimonial" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Depoimento</TabsTrigger>
+              <TabsTrigger value="visual" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Visual</TabsTrigger>
             </TabsList>
           </div>
 
@@ -303,60 +304,6 @@ export default function CheckoutEditor() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Cor Principal</Label>
-              <div className="flex gap-2">
-                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.primaryColor }} />
-                <Input 
-                  value={config.primaryColor} 
-                  onChange={(e) => setConfig({...config, primaryColor: e.target.value})} 
-                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
-                  data-testid="input-primary-color"
-                />
-              </div>
-              <div className="flex gap-1 mt-2">
-                {['#22a559', '#2563eb', '#9333ea', '#dc2626', '#d97706', '#000000'].map(color => (
-                  <button 
-                    key={color} 
-                    className="w-6 h-6 rounded-full border border-white/20" 
-                    style={{ backgroundColor: color }}
-                    onClick={() => setConfig({...config, primaryColor: color})}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Timer (minutos)</Label>
-              <Input 
-                type="number"
-                value={config.timerMinutes}
-                onChange={(e) => setConfig({...config, timerMinutes: parseInt(e.target.value) || 0})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-timer-minutes"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto do Timer</Label>
-              <Input 
-                value={config.timerText}
-                onChange={(e) => setConfig({...config, timerText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-timer-text"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Texto do Botão</Label>
-              <Input 
-                value={config.payButtonText}
-                onChange={(e) => setConfig({...config, payButtonText: e.target.value})}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-button-text"
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label className="text-xs text-zinc-400">Texto do Rodapé</Label>
               <Input 
                 value={config.footerText}
@@ -400,6 +347,31 @@ export default function CheckoutEditor() {
             >
               <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
             </Button>
+          </TabsContent>
+
+          <TabsContent value="visual" className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor Principal</Label>
+              <div className="flex gap-2">
+                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.primaryColor }} />
+                <Input 
+                  value={config.primaryColor} 
+                  onChange={(e) => setConfig({...config, primaryColor: e.target.value})} 
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                  data-testid="input-primary-color"
+                />
+              </div>
+              <div className="flex gap-1 mt-2">
+                {['#22a559', '#2563eb', '#9333ea', '#dc2626', '#d97706', '#000000'].map(color => (
+                  <button 
+                    key={color} 
+                    className="w-6 h-6 rounded-full border border-white/20" 
+                    style={{ backgroundColor: color }}
+                    onClick={() => setConfig({...config, primaryColor: color})}
+                  />
+                ))}
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-6">
