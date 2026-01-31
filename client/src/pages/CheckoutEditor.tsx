@@ -796,7 +796,7 @@ export default function CheckoutEditor() {
                           style={{ 
                             backgroundColor: `${config.primaryColor}20`, 
                             borderTop: `1px solid ${config.primaryColor}30`,
-                            transition: 'all 0.2s ease'
+                            transition: 'background-color 0.2s ease'
                           }}
                         >
                             <Checkbox 
