@@ -725,7 +725,7 @@ export default function CheckoutEditor() {
 
                   <div className="p-4 space-y-4">
                     <div className="space-y-1">
-                      <label className="block text-[11px] tracking-tight font-medium" style={{ color: config.textColor }}>Seu e-mail</label>
+                      <label className="block text-[11px] tracking-tight font-normal" style={{ color: config.textColor }}>Seu email</label>
                       <input 
                         type="email"
                         placeholder="Digite o e-mail para receber sua compra"
