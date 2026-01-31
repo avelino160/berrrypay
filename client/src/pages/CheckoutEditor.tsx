@@ -62,6 +62,7 @@ export default function CheckoutEditor() {
   const [productId, setProductId] = useState("");
   const [config, setConfig] = useState<CheckoutConfig>(defaultConfig);
   const [timerSeconds, setTimerSeconds] = useState(547); // 9 minutes and 7 seconds
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
   useEffect(() => {
     setTimerSeconds(config.timerMinutes * 60);
@@ -302,31 +303,61 @@ export default function CheckoutEditor() {
                 onChange={async (e) => {
                   const file = e.target.files?.[0];
                   if (file) {
-                    // Pre-visualização instantânea local
                     const localUrl = URL.createObjectURL(file);
                     setConfig({...config, heroImageUrl: localUrl});
 
+                    const xhr = new XMLHttpRequest();
                     const formData = new FormData();
                     formData.append("file", file);
-                    try {
-                      const res = await fetch("/api/upload", {
-                        method: "POST",
-                        body: formData,
-                      });
-                      if (!res.ok) throw new Error("Falha no upload");
-                      const data = await res.json();
-                      
-                      // Atualiza com a URL real do servidor, mas o preview já mudou antes
-                      setConfig({...config, heroImageUrl: data.url});
-                      toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
-                    } catch (err) {
+
+                    xhr.upload.addEventListener("progress", (event) => {
+                      if (event.lengthComputable) {
+                        const percent = Math.round((event.loaded / event.total) * 100);
+                        setUploadProgress(percent);
+                      }
+                    });
+
+                    xhr.addEventListener("load", () => {
+                      if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                          const data = JSON.parse(xhr.responseText);
+                          setConfig({...config, heroImageUrl: data.url});
+                          toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
+                        } catch (err) {
+                          toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
+                        }
+                      } else {
+                        toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+                      }
+                      setUploadProgress(null);
+                    });
+
+                    xhr.addEventListener("error", () => {
                       toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
-                    }
+                      setUploadProgress(null);
+                    });
+
+                    xhr.open("POST", "/api/upload");
+                    xhr.send(formData);
                   }
                 }}
                 className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
                 data-testid="input-hero-image-upload"
               />
+              {uploadProgress !== null && (
+                <div className="mt-2 space-y-1">
+                  <div className="flex justify-between text-[10px] text-zinc-500">
+                    <span>Enviando...</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-green-500 transition-all duration-300" 
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
               {config.heroImageUrl && (
                 <div className="mt-2 relative group">
                   <img src={config.heroImageUrl} alt="Banner Preview" className="w-full h-20 object-cover rounded-md border border-zinc-800" />
