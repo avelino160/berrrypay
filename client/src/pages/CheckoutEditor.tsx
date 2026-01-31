@@ -159,9 +159,7 @@ export default function CheckoutEditor() {
           <div className="px-4 pt-4">
             <TabsList className="w-full bg-zinc-900/50 border border-zinc-800 p-1">
               <TabsTrigger value="geral" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Geral</TabsTrigger>
-              <TabsTrigger value="hero" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Hero</TabsTrigger>
               <TabsTrigger value="testimonial" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Depoimento</TabsTrigger>
-              <TabsTrigger value="upsells" className="flex-1 text-xs data-[state=active]:bg-zinc-800">Upsells</TabsTrigger>
             </TabsList>
           </div>
 
@@ -201,6 +199,107 @@ export default function CheckoutEditor() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Upload de Banner (Hero)</Label>
+              <Input 
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const localUrl = URL.createObjectURL(file);
+                    setConfig({...config, heroImageUrl: localUrl});
+
+                    const xhr = new XMLHttpRequest();
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    xhr.upload.addEventListener("progress", (event) => {
+                      if (event.lengthComputable) {
+                        const percent = Math.round((event.loaded / event.total) * 95);
+                        setUploadProgress(percent);
+                      }
+                    });
+
+                    xhr.addEventListener("load", () => {
+                      if (xhr.status >= 200 && xhr.status < 300) {
+                        setUploadProgress(100);
+                        setTimeout(() => {
+                          try {
+                            const data = JSON.parse(xhr.responseText);
+                            setConfig({...config, heroImageUrl: data.url});
+                            toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
+                          } catch (err) {
+                            toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
+                          }
+                          setUploadProgress(null);
+                        }, 200);
+                      } else {
+                        toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
+                        setUploadProgress(null);
+                      }
+                    });
+
+                    xhr.addEventListener("error", () => {
+                      toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
+                      setUploadProgress(null);
+                    });
+
+                    xhr.open("POST", "/api/upload");
+                    xhr.send(formData);
+                  }
+                }}
+                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
+                data-testid="input-hero-image-upload"
+              />
+              {uploadProgress !== null && (
+                <div className="mt-2 space-y-1">
+                  <div className="flex justify-between text-[10px] text-zinc-500">
+                    <span>Enviando...</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-green-500 transition-all duration-300" 
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {config.heroImageUrl && (
+                <div className="mt-2 relative group">
+                  <img src={config.heroImageUrl} alt="Banner Preview" className="w-full h-20 object-cover rounded-md border border-zinc-800" />
+                  <Button 
+                    size="icon" 
+                    variant="destructive" 
+                    className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => setConfig({...config, heroImageUrl: ""})}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Selecione produtos para upsell:</Label>
+              <div className="space-y-2 max-h-[200px] overflow-y-auto p-1">
+                {products?.filter(p => p.id.toString() !== productId).map(p => (
+                  <div key={p.id} className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                    <Checkbox 
+                      checked={config.upsellProducts.includes(p.id)}
+                      onCheckedChange={() => toggleUpsell(p.id)}
+                      data-testid={`checkbox-upsell-${p.id}`}
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-white">{p.name}</div>
+                      <div className="text-xs text-zinc-500">{(p.price / 100).toFixed(2).replace('.', ',')} US$</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -301,90 +400,6 @@ export default function CheckoutEditor() {
             >
               <Save className="w-4 h-4 mr-2" /> {isNew ? "Criar Checkout" : "Salvar Alterações"}
             </Button>
-          </TabsContent>
-
-          <TabsContent value="hero" className="flex-1 overflow-y-auto p-4 space-y-4">
-            <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Upload de Banner (Hero)</Label>
-              <Input 
-                type="file"
-                accept="image/*"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const localUrl = URL.createObjectURL(file);
-                    setConfig({...config, heroImageUrl: localUrl});
-
-                    const xhr = new XMLHttpRequest();
-                    const formData = new FormData();
-                    formData.append("file", file);
-
-                    xhr.upload.addEventListener("progress", (event) => {
-                      if (event.lengthComputable) {
-                        const percent = Math.round((event.loaded / event.total) * 95); // Reach 95% during upload
-                        setUploadProgress(percent);
-                      }
-                    });
-
-                    xhr.addEventListener("load", () => {
-                      if (xhr.status >= 200 && xhr.status < 300) {
-                        setUploadProgress(100); // Complete to 100%
-                        setTimeout(() => {
-                          try {
-                            const data = JSON.parse(xhr.responseText);
-                            setConfig({...config, heroImageUrl: data.url});
-                            toast({ title: "Sucesso", description: "Banner enviado com sucesso!" });
-                          } catch (err) {
-                            toast({ title: "Erro", description: "Erro ao processar resposta", variant: "destructive" });
-                          }
-                          setUploadProgress(null);
-                        }, 200);
-                      } else {
-                        toast({ title: "Erro", description: "Falha no upload", variant: "destructive" });
-                        setUploadProgress(null);
-                      }
-                    });
-
-                    xhr.addEventListener("error", () => {
-                      toast({ title: "Erro", description: "Falha ao enviar imagem", variant: "destructive" });
-                      setUploadProgress(null);
-                    });
-
-                    xhr.open("POST", "/api/upload");
-                    xhr.send(formData);
-                  }
-                }}
-                className="bg-zinc-900/50 border-zinc-800 h-9 text-sm"
-                data-testid="input-hero-image-upload"
-              />
-              {uploadProgress !== null && (
-                <div className="mt-2 space-y-1">
-                  <div className="flex justify-between text-[10px] text-zinc-500">
-                    <span>Enviando...</span>
-                    <span>{uploadProgress}%</span>
-                  </div>
-                  <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-green-500 transition-all duration-300" 
-                      style={{ width: `${uploadProgress}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-              {config.heroImageUrl && (
-                <div className="mt-2 relative group">
-                  <img src={config.heroImageUrl} alt="Banner Preview" className="w-full h-20 object-cover rounded-md border border-zinc-800" />
-                  <Button 
-                    size="icon" 
-                    variant="destructive" 
-                    className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => setConfig({...config, heroImageUrl: ""})}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              )}
-            </div>
           </TabsContent>
 
           <TabsContent value="testimonial" className="flex-1 overflow-y-auto p-4 space-y-6">
@@ -549,25 +564,6 @@ export default function CheckoutEditor() {
                       }}
                       className="bg-zinc-950 border-zinc-800 text-xs min-h-[60px] resize-none"
                     />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="upsells" className="flex-1 overflow-y-auto p-4 space-y-4">
-            <Label className="text-xs text-zinc-400">Selecione produtos para upsell:</Label>
-            <div className="space-y-2">
-              {products?.filter(p => p.id.toString() !== productId).map(p => (
-                <div key={p.id} className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-                  <Checkbox 
-                    checked={config.upsellProducts.includes(p.id)}
-                    onCheckedChange={() => toggleUpsell(p.id)}
-                    data-testid={`checkbox-upsell-${p.id}`}
-                  />
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-white">{p.name}</div>
-                    <div className="text-xs text-zinc-500">{(p.price / 100).toFixed(2)} US$</div>
                   </div>
                 </div>
               ))}
