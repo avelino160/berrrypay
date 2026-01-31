@@ -599,6 +599,25 @@ export default function CheckoutEditor() {
                         <label className="block text-[10px] font-medium text-gray-700 mb-1">Account holder name</label>
                         <div className="h-10 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center text-gray-400 text-xs">Enter name printed on card</div>
                       </div>
+
+                      <div className="pt-4 border-t border-gray-100">
+                        <div className="flex justify-between items-center text-xs mb-2">
+                          <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
+                          <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-gray-900 text-xs">Total</span>
+                          <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
+                            {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                          </span>
+                        </div>
+                        <Button 
+                          className="w-full h-12 text-base font-bold mt-4"
+                          style={{ backgroundColor: config.primaryColor }}
+                        >
+                          {config.payButtonText}
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
@@ -633,22 +652,6 @@ export default function CheckoutEditor() {
               </div>
 
                   <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
-                    <div className="bg-white rounded-lg border border-gray-200 p-4">
-                      <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
-                      <div className="flex justify-between items-center text-xs mb-2">
-                        <span className="text-gray-600">{selectedProduct?.name || 'Produto'}</span>
-                        <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
-                      </div>
-                      <div className="border-t border-gray-100 pt-2 mt-2">
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-gray-900 text-xs">Total</span>
-                          <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
-                            {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
                     {config.testimonial && (
                       <div className="bg-white rounded-lg border border-gray-200 p-4">
                         <div className="flex items-start gap-3">
@@ -674,20 +677,13 @@ export default function CheckoutEditor() {
                       </div>
                     )}
 
-                    <Button 
-                      className="w-full h-12 text-base font-bold"
-                      style={{ backgroundColor: config.primaryColor }}
-                    >
-                      {config.payButtonText}
-                    </Button>
-
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
-                    <Lock className="w-2 h-2" />
-                    Secured by <span className="font-bold">Berry Pay</span>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-1 text-[10px] text-gray-400">
+                        <Lock className="w-2 h-2" />
+                        Secured by <span className="font-bold">Berry Pay</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
             </div>
 
             <footer className="py-4 border-t border-gray-200 text-center">
