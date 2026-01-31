@@ -469,7 +469,7 @@ export default function CheckoutEditor() {
         <div className={`flex-1 overflow-y-auto ${device === 'mobile' ? 'flex justify-center p-8 bg-zinc-800' : ''}`}>
           <div className={`bg-gray-50 h-fit ${device === 'desktop' ? 'w-full' : 'w-[375px] shadow-2xl rounded-xl overflow-hidden'}`}>
             <div 
-              className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[33px] pb-[33px]"
+              className="py-4 px-6 text-center text-white flex items-center justify-center gap-6 pt-[20px] pb-[20px]"
               style={{ backgroundColor: config.primaryColor }}
             >
               <span className="font-mono tabular-nums text-[31px] font-extrabold bg-[transparent] text-justify">
