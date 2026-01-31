@@ -34,6 +34,9 @@ const defaultConfig: CheckoutConfig = {
   payButtonText: "Buy now",
   footerText: "BerryPay © 2026. All rights reserved.",
   primaryColor: "#22a559",
+  backgroundColor: "#f9fafb",
+  highlightColor: "#f3f4f6",
+  textColor: "#111827",
   showChangeCountry: true,
   showTimer: false,
 };
@@ -351,7 +354,7 @@ export default function CheckoutEditor() {
 
           <TabsContent value="visual" className="flex-1 overflow-y-auto p-4 space-y-4">
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Cor Principal</Label>
+              <Label className="text-xs text-zinc-400">Cor Principal (Botões e Destaques)</Label>
               <div className="flex gap-2">
                 <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.primaryColor }} />
                 <Input 
@@ -368,6 +371,72 @@ export default function CheckoutEditor() {
                     className="w-6 h-6 rounded-full border border-white/20" 
                     style={{ backgroundColor: color }}
                     onClick={() => setConfig({...config, primaryColor: color})}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor de Fundo</Label>
+              <div className="flex gap-2">
+                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.backgroundColor }} />
+                <Input 
+                  value={config.backgroundColor} 
+                  onChange={(e) => setConfig({...config, backgroundColor: e.target.value})} 
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                />
+              </div>
+              <div className="flex gap-1 mt-2">
+                {['#f9fafb', '#ffffff', '#f3f4f6', '#e5e7eb', '#111827', '#000000'].map(color => (
+                  <button 
+                    key={color} 
+                    className="w-6 h-6 rounded-full border border-white/20" 
+                    style={{ backgroundColor: color }}
+                    onClick={() => setConfig({...config, backgroundColor: color})}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor de Destaque (Inputs/Cards)</Label>
+              <div className="flex gap-2">
+                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.highlightColor }} />
+                <Input 
+                  value={config.highlightColor} 
+                  onChange={(e) => setConfig({...config, highlightColor: e.target.value})} 
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                />
+              </div>
+              <div className="flex gap-1 mt-2">
+                {['#f3f4f6', '#ffffff', '#f9fafb', '#f4f4f5', '#1f2937', '#27272a'].map(color => (
+                  <button 
+                    key={color} 
+                    className="w-6 h-6 rounded-full border border-white/20" 
+                    style={{ backgroundColor: color }}
+                    onClick={() => setConfig({...config, highlightColor: color})}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs text-zinc-400">Cor do Texto</Label>
+              <div className="flex gap-2">
+                <div className="w-9 h-9 rounded-md border border-zinc-700" style={{ backgroundColor: config.textColor }} />
+                <Input 
+                  value={config.textColor} 
+                  onChange={(e) => setConfig({...config, textColor: e.target.value})} 
+                  className="bg-zinc-900/50 border-zinc-800 h-9 text-sm flex-1"
+                />
+              </div>
+              <div className="flex gap-1 mt-2">
+                {['#111827', '#000000', '#374151', '#4b5563', '#ffffff', '#f3f4f6'].map(color => (
+                  <button 
+                    key={color} 
+                    className="w-6 h-6 rounded-full border border-white/20" 
+                    style={{ backgroundColor: color }}
+                    onClick={() => setConfig({...config, textColor: color})}
                   />
                 ))}
               </div>

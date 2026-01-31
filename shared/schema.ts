@@ -58,6 +58,9 @@ export const checkouts = pgTable("checkouts", {
     payButtonText: "Buy now",
     footerText: "BerryPay © 2026. All rights reserved.",
     primaryColor: "#22a559",
+    backgroundColor: "#f9fafb",
+    highlightColor: "#f3f4f6",
+    textColor: "#111827",
     showChangeCountry: true,
     showTimer: false,
   }),
@@ -85,6 +88,9 @@ export type CheckoutConfig = {
   payButtonText: string;
   footerText: string;
   primaryColor: string;
+  backgroundColor: string;
+  highlightColor: string;
+  textColor: string;
   showChangeCountry: boolean;
   showTimer: boolean;
 };
