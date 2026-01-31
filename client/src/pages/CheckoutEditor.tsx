@@ -635,7 +635,7 @@ export default function CheckoutEditor() {
                       <div className="flex-1 space-y-1">
                         <h2 className="font-bold text-gray-900 text-[17px]">{selectedProduct?.name || 'Selecione um produto'}</h2>
                         <div className="text-lg font-bold" style={{ color: config.primaryColor }}>
-                          {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                          {selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$
                         </div>
                       </div>
                     </div>
@@ -736,12 +736,12 @@ export default function CheckoutEditor() {
                         <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
                         <div className="flex justify-between items-center text-xs mb-2">
                           <span className="text-gray-600">{selectedProduct?.name || 'Produto Principal'}</span>
-                          <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$</span>
+                          <span className="font-medium">{selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="font-bold text-gray-900 text-xs">Total</span>
                           <span className="font-bold text-lg" style={{ color: config.primaryColor }}>
-                            {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
+                            {selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$
                           </span>
                         </div>
                         <Button 
@@ -773,7 +773,7 @@ export default function CheckoutEditor() {
                               <h4 className="font-bold text-gray-900 text-xs">{p.name}</h4>
                               <p className="text-[10px] text-gray-500 mt-1 line-clamp-2">{p.description}</p>
                               <div className="mt-1 font-bold text-xs" style={{ color: config.primaryColor }}>
-                                {(p.price / 100).toFixed(2)} US$
+                                {(p.price / 100).toFixed(2).replace('.', ',')} US$
                               </div>
                             </div>
                           </div>
