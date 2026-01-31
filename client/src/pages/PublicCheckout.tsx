@@ -203,7 +203,6 @@ export default function PublicCheckout() {
                   </div>
                 )}
                 <div className="flex-1">
-                  <div className="text-gray-400 text-xs uppercase tracking-wider">BY MOVE DIGITAL MARKETING</div>
                   <h2 className="font-bold text-gray-900" data-testid="product-name">{product.name}</h2>
                   <div className="text-xl font-bold" style={{ color: config.primaryColor }} data-testid="product-price">
                     {(product.price / 100).toFixed(2)} US$

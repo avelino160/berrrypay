@@ -515,7 +515,6 @@ export default function CheckoutEditor() {
                       </div>
                     )}
                     <div className="flex-1">
-                      <div className="text-gray-400 text-[10px] uppercase">BY MOVE DIGITAL MARKETING</div>
                       <h2 className="font-bold text-gray-900 text-sm">{selectedProduct?.name || 'Selecione um produto'}</h2>
                       <div className="text-lg font-bold" style={{ color: config.primaryColor }}>
                         {selectedProduct ? (selectedProduct.price / 100).toFixed(2) : '0.00'} US$
