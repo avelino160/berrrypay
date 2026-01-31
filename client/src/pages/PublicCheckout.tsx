@@ -200,22 +200,6 @@ export default function PublicCheckout() {
               <div className="text-white text-sm font-medium">{config.heroBadgeText.split(' ').slice(1).join(' ')}</div>
             </div>
           </div>
-          <div className="flex flex-col gap-3">
-            <div className="bg-white/10 rounded-lg px-4 py-2 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-yellow-400" />
-              <div>
-                <div className="text-white text-xs font-bold">ACESSO IMEDIATO</div>
-                <div className="text-white/60 text-[10px]">Seu produto disponível em instantes</div>
-              </div>
-            </div>
-            <div className="bg-white/10 rounded-lg px-4 py-2 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-400" />
-              <div>
-                <div className="text-white text-xs font-bold">PAGAMENTO SEGURO</div>
-                <div className="text-white/60 text-[10px]">Dados protegidos e criptografados</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

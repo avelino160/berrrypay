@@ -446,20 +446,6 @@ export default function CheckoutEditor() {
                     <div className="text-white text-xs font-medium">{config.heroBadgeText.split(' ').slice(1).join(' ')}</div>
                   </div>
                 </div>
-                <div className={`flex ${device === 'mobile' ? 'flex-row' : 'flex-col'} gap-2`}>
-                  <div className="bg-white/10 rounded-lg px-3 py-2 flex items-center gap-2">
-                    <Zap className="w-3 h-3 text-yellow-400" />
-                    <div>
-                      <div className="text-white text-[10px] font-bold">ACESSO IMEDIATO</div>
-                    </div>
-                  </div>
-                  <div className="bg-white/10 rounded-lg px-3 py-2 flex items-center gap-2">
-                    <Shield className="w-3 h-3 text-green-400" />
-                    <div>
-                      <div className="text-white text-[10px] font-bold">PAGAMENTO SEGURO</div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
