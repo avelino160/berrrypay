@@ -65,6 +65,7 @@ export const checkouts = pgTable("checkouts", {
     textColor: "#111827",
     showChangeCountry: true,
     showTimer: false,
+    showPhone: true,
   }),
 });
 
@@ -97,6 +98,7 @@ export type CheckoutConfig = {
   textColor: string;
   showChangeCountry: boolean;
   showTimer: boolean;
+  showPhone: boolean;
 };
 
 export const settings = pgTable("settings", {

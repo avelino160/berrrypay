@@ -184,14 +184,25 @@ export default function CheckoutEditor() {
 
             <div className="space-y-2">
               <Label className="text-xs text-zinc-400 font-bold uppercase">Opções de Exibição</Label>
-              <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-                <Checkbox 
-                  id="showTimer"
-                  checked={config.showTimer}
-                  onCheckedChange={(checked) => setConfig({...config, showTimer: !!checked})}
-                  data-testid="checkbox-show-timer"
-                />
-                <Label htmlFor="showTimer" className="text-sm text-white cursor-pointer">Mostrar Timer de Oferta</Label>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                  <Checkbox 
+                    id="showTimer"
+                    checked={config.showTimer}
+                    onCheckedChange={(checked) => setConfig({...config, showTimer: !!checked})}
+                    data-testid="checkbox-show-timer"
+                  />
+                  <Label htmlFor="showTimer" className="text-sm text-white cursor-pointer">Mostrar Timer de Oferta</Label>
+                </div>
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+                  <Checkbox 
+                    id="showPhone"
+                    checked={config.showPhone}
+                    onCheckedChange={(checked) => setConfig({...config, showPhone: !!checked})}
+                    data-testid="checkbox-show-phone"
+                  />
+                  <Label htmlFor="showPhone" className="text-sm text-white cursor-pointer">Mostrar Campo de Celular</Label>
+                </div>
               </div>
             </div>
 
@@ -755,17 +766,19 @@ export default function CheckoutEditor() {
                         required
                       />
                     </div>
-                    <div className="space-y-1">
-                      <label className="block text-[11px] tracking-tight font-normal" style={{ color: config.textColor }}>Celular</label>
-                      <input 
-                        type="tel"
-                        placeholder="(00) 00000-0000"
-                        className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
-                        style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
-                        data-testid="input-phone"
-                        required
-                      />
-                    </div>
+                    {config.showPhone && (
+                      <div className="space-y-1">
+                        <label className="block text-[11px] tracking-tight font-normal" style={{ color: config.textColor }}>Celular</label>
+                        <input 
+                          type="tel"
+                          placeholder="(00) 00000-0000"
+                          className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+                          data-testid="input-phone"
+                          required
+                        />
+                      </div>
+                    )}
                   </div>
 
                   {orderBumpProductData && (
