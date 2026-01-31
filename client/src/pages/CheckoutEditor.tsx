@@ -752,6 +752,18 @@ export default function CheckoutEditor() {
                         className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
                         style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
                         data-testid="input-fullname"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-[11px] uppercase tracking-tight font-medium" style={{ color: config.textColor }}>Telefone</label>
+                      <input 
+                        type="tel"
+                        placeholder="(00) 00000-0000"
+                        className="w-full h-11 px-3 rounded-md border border-gray-200 flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                        style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+                        data-testid="input-phone"
+                        required
                       />
                     </div>
                   </div>
