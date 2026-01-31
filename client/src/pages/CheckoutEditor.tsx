@@ -857,7 +857,7 @@ export default function CheckoutEditor() {
                     </div>
                     <div className="p-4 space-y-3">
                       <div className="pt-4">
-                        <h3 className="font-medium text-sm mb-3" style={{ color: config.textColor }}>Detalhes do pedido</h3>
+                        <h3 className="text-sm mb-3 font-light" style={{ color: config.textColor }}>Detalhes da compra</h3>
                         <div className="flex justify-between items-center text-xs mb-2">
                           <span style={{ color: `${config.textColor}99` }}>{selectedProduct?.name || 'Produto Principal'}</span>
                           <span className="font-medium" style={{ color: config.textColor }}>{selectedProduct ? (selectedProduct.price / 100).toFixed(2).replace('.', ',') : '0,00'} US$</span>
