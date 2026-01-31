@@ -112,7 +112,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCheckout(checkout: InsertCheckout): Promise<Checkout> {
-    const [newCheckout] = await db.insert(checkouts).values(checkout).returning();
+    const [newCheckout] = await db.insert(checkouts).values(checkout as any).returning();
     return newCheckout;
   }
 

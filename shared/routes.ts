@@ -133,7 +133,7 @@ export const api = {
 };
 
 export type CreateCheckoutRequest = z.infer<typeof insertCheckoutSchema>;
-export type UpdateCheckoutRequest = z.infer<typeof insertCheckoutSchema.partial>;
+export type UpdateCheckoutRequest = Partial<CreateCheckoutRequest>;
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
   let url = path;
