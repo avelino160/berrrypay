@@ -597,38 +597,6 @@ export default function CheckoutEditor() {
               </div>
 
               <div className={device === 'mobile' ? 'space-y-3' : 'space-y-3'}>
-                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
-                  <div className="flex items-center gap-2 text-xs">
-                    <Lock className="w-3 h-3 text-green-600" />
-                    <span className="font-medium">Privacy</span>
-                  </div>
-                  <p className="text-[10px] text-gray-500">{config.privacyText}</p>
-                </div>
-
-                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
-                  <div className="flex items-center gap-2 text-xs">
-                    <CheckCircle2 className="w-3 h-3 text-green-600" />
-                    <span className="font-medium">Safe purchase</span>
-                  </div>
-                  <p className="text-[10px] text-gray-500">{config.safeText}</p>
-                </div>
-
-                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
-                  <div className="flex items-center gap-2 text-xs">
-                    <Mail className="w-3 h-3 text-green-600" />
-                    <span className="font-medium">Delivery via E-mail</span>
-                  </div>
-                  <p className="text-[10px] text-gray-500">{config.deliveryText}</p>
-                </div>
-
-                <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-2">
-                  <div className="flex items-center gap-2 text-xs">
-                    <CheckCircle2 className="w-3 h-3 text-green-600" />
-                    <span className="font-medium">Approved content</span>
-                  </div>
-                  <p className="text-[10px] text-gray-500">{config.approvedText}</p>
-                </div>
-
                 <div className="bg-white rounded-lg border border-gray-200 p-4">
                   <h3 className="font-medium text-gray-900 text-sm mb-3">Order details</h3>
                   <div className="flex justify-between items-center text-xs mb-2">
