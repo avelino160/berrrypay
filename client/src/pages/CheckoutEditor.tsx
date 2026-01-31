@@ -793,7 +793,11 @@ export default function CheckoutEditor() {
                         </div>
                         <label 
                           className="flex items-center gap-2 p-3 cursor-pointer" 
-                          style={{ backgroundColor: `${config.primaryColor}20`, borderTop: `1px solid ${config.primaryColor}30` }}
+                          style={{ 
+                            backgroundColor: `${config.primaryColor}20`, 
+                            borderTop: `1px solid ${config.primaryColor}30`,
+                            transition: 'all 0.2s ease'
+                          }}
                         >
                             <Checkbox 
                               checked={orderBumpSelected} 
