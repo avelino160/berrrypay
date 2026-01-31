@@ -394,7 +394,12 @@ export default function CheckoutEditor() {
                 variant="outline" 
                 size="sm" 
                 className="h-7 text-[10px] bg-zinc-900 border-zinc-800"
+                disabled={(config.testimonials || []).length >= 3}
                 onClick={() => {
+                  if ((config.testimonials || []).length >= 3) {
+                    toast({ title: "Limite atingido", description: "O máximo é de 3 depoimentos", variant: "destructive" });
+                    return;
+                  }
                   const newId = Math.random().toString(36).substring(2, 9);
                   const newList = [...(config.testimonials || []), {
                     id: newId,
