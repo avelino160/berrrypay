@@ -168,9 +168,12 @@ export class DatabaseStorage implements IStorage {
 
     const whereConditions = [
       eq(sales.status, 'paid'),
-      gte(sales.createdAt, startDate),
-      lt(sales.createdAt, new Date(endDate.getTime() + 1))
+      gte(sales.createdAt, startDate)
     ];
+
+    if (endDate) {
+      whereConditions.push(lt(sales.createdAt, new Date(endDate.getTime() + 1)));
+    }
 
     if (productId && productId !== "all") {
       whereConditions.push(eq(sales.productId, parseInt(productId)));
