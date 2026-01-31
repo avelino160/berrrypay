@@ -38,6 +38,9 @@ export interface IStorage {
 
   // Stats
   getDashboardStats(period?: string, productId?: string): Promise<DashboardStats>;
+  getSaleByPaypalOrderId(orderId: string): Promise<Sale | undefined>;
+  updateSaleStatus(id: number, status: string): Promise<void>;
+  createSale(sale: InsertSale): Promise<Sale>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -110,6 +113,21 @@ export class DatabaseStorage implements IStorage {
   async createCheckout(checkout: InsertCheckout): Promise<Checkout> {
     const [newCheckout] = await db.insert(checkouts).values(checkout).returning();
     return newCheckout;
+  }
+
+  // Sales
+  async createSale(sale: InsertSale): Promise<Sale> {
+    const [newSale] = await db.insert(sales).values(sale).returning();
+    return newSale;
+  }
+
+  async getSaleByPaypalOrderId(orderId: string): Promise<Sale | undefined> {
+    const [sale] = await db.select().from(sales).where(eq(sales.paypalOrderId, orderId));
+    return sale;
+  }
+
+  async updateSaleStatus(id: number, status: string): Promise<void> {
+    await db.update(sales).set({ status }).where(eq(sales.id, id));
   }
 
   // Settings

@@ -48,8 +48,9 @@ export const sales = pgTable("sales", {
   checkoutId: integer("checkout_id"),
   productId: integer("product_id"),
   amount: integer("amount").notNull(),
-  status: text("status").notNull(), // pending, paid, failed
+  status: text("status").notNull(), // pending, paid, failed, captured
   customerEmail: text("customer_email"),
+  paypalOrderId: text("paypal_order_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

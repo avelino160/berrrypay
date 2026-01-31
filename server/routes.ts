@@ -167,6 +167,53 @@ export async function registerRoutes(
     res.json(stats);
   });
 
+  // PayPal API Integration
+  app.post("/api/paypal/create-order", async (req, res) => {
+    try {
+      const { checkoutId, productId } = req.body;
+      const product = await storage.getProduct(productId);
+      if (!product) return res.status(404).json({ message: "Produto não encontrado" });
+
+      const settings = await storage.getSettings();
+      if (!settings?.paypalClientId || !settings?.paypalClientSecret) {
+        return res.status(500).json({ message: "PayPal não configurado" });
+      }
+
+      // In a real app, you'd call PayPal API here to create an order
+      // For this demo, we'll return a mock order ID
+      const mockOrderId = `PAYPAL-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      
+      await storage.createSale({
+        checkoutId,
+        productId,
+        amount: product.price,
+        status: "pending",
+        paypalOrderId: mockOrderId
+      } as any);
+
+      res.json({ id: mockOrderId });
+    } catch (err) {
+      console.error("PayPal Create Order Error:", err);
+      res.status(500).json({ message: "Erro ao criar pedido PayPal" });
+    }
+  });
+
+  app.post("/api/paypal/capture-order/:orderId", async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      // In a real app, call PayPal API to capture the order
+      // Then update sale status in DB
+      const sale = await (storage as any).getSaleByPaypalOrderId(orderId);
+      if (sale) {
+        await (storage as any).updateSaleStatus(sale.id, "paid");
+      }
+      res.json({ status: "COMPLETED" });
+    } catch (err) {
+      console.error("PayPal Capture Order Error:", err);
+      res.status(500).json({ message: "Erro ao capturar pedido PayPal" });
+    }
+  });
+
   // Seed Data
   await seedDatabase();
 
