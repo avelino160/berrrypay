@@ -48,6 +48,78 @@ const defaultConfig: CheckoutConfig = {
 
 import { timerIcon } from "@/lib/assets";
 
+// Helper function to generate a soft, light pastel version of a color
+function getSoftBackgroundColor(hexColor: string): string {
+  // Remove # if present
+  const hex = hexColor.replace('#', '');
+  
+  // Parse hex to RGB
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  // Convert RGB to HSL
+  const rNorm = r / 255;
+  const gNorm = g / 255;
+  const bNorm = b / 255;
+  
+  const max = Math.max(rNorm, gNorm, bNorm);
+  const min = Math.min(rNorm, gNorm, bNorm);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+  
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    
+    switch (max) {
+      case rNorm:
+        h = ((gNorm - bNorm) / d + (gNorm < bNorm ? 6 : 0)) / 6;
+        break;
+      case gNorm:
+        h = ((bNorm - rNorm) / d + 2) / 6;
+        break;
+      case bNorm:
+        h = ((rNorm - gNorm) / d + 4) / 6;
+        break;
+    }
+  }
+  
+  // Create a soft pastel: keep hue, reduce saturation, increase lightness
+  const newS = Math.min(s * 0.35, 0.25); // Soft saturation
+  const newL = 0.94; // Very light
+  
+  // Convert HSL back to RGB
+  const hue2rgb = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+  
+  let newR, newG, newB;
+  if (newS === 0) {
+    newR = newG = newB = newL;
+  } else {
+    const q = newL < 0.5 ? newL * (1 + newS) : newL + newS - newL * newS;
+    const p = 2 * newL - q;
+    newR = hue2rgb(p, q, h + 1/3);
+    newG = hue2rgb(p, q, h);
+    newB = hue2rgb(p, q, h - 1/3);
+  }
+  
+  // Convert back to hex
+  const toHex = (x: number) => {
+    const hex = Math.round(x * 255).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  };
+  
+  return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
+}
+
 export default function CheckoutEditor() {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/checkouts/edit/:id");
@@ -793,7 +865,7 @@ export default function CheckoutEditor() {
                         </div>
                         <label 
                           className="flex items-center gap-2 p-3 cursor-pointer" 
-                          style={{ backgroundColor: `${config.primaryColor}15`, borderTop: `1px solid ${config.primaryColor}30` }}
+                          style={{ backgroundColor: getSoftBackgroundColor(config.primaryColor), borderTop: `1px solid ${config.primaryColor}30` }}
                         >
                             <Checkbox 
                               checked={orderBumpSelected} 
