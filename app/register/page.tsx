@@ -1,50 +1,39 @@
 "use client";
 
+import React from "react"
+
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Loader2, ArrowRight } from "lucide-react";
+import { Loader2, ArrowRight, UserPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 
-export default function Login() {
+export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
-  const { toast } = useToast();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    
+    if (password !== confirmPassword) {
+      setError("As senhas nao coincidem");
+      return;
+    }
+    
     setIsLoading(true);
     
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: email, password }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Erro no login");
-      }
-
-      toast({
-        title: "Sucesso",
-        description: "Login realizado com sucesso!",
-      });
-      router.push("/dashboard");
-    } catch (err: any) {
-      toast({
-        title: "Erro",
-        description: err.message,
-        variant: "destructive",
-      });
-    } finally {
+    // Simular registro
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      router.push("/dashboard");
+    }, 1000);
   };
 
   return (
@@ -60,11 +49,23 @@ export default function Login() {
             <span className="bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent">Berry</span>
             <span className="text-white">Pay</span>
           </h1>
-          <p className="text-zinc-500 text-sm">Entre na sua conta</p>
+          <p className="text-zinc-500 text-sm">Crie sua conta</p>
         </div>
 
-        <div className="bg-[#18181b]/80 backdrop-blur-xl p-6 rounded-xl shadow-2xl shadow-black/50 ring-0 border-none outline-none">
-          <form onSubmit={handleLogin} className="space-y-4">
+        <div className="bg-[#18181b]/80 backdrop-blur-xl p-6 rounded-xl shadow-2xl shadow-black/50">
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-zinc-300 ml-1">Nome</label>
+              <Input
+                type="text"
+                placeholder="Seu nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-purple-500/20 focus:border-purple-500 h-11"
+                required
+              />
+            </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300 ml-1">E-mail</label>
               <Input
@@ -78,19 +79,10 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                 <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
-                 <Link 
-                   href="/forgot-password"
-                   className="text-xs text-purple-500 hover:text-purple-400"
-                   data-testid="link-forgot-password"
-                 >
-                   Esqueceu a senha?
-                 </Link>
-              </div>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Senha</label>
               <Input
                 type="password"
-                placeholder="••••••••"
+                placeholder="********"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-purple-500/20 focus:border-purple-500 h-11"
@@ -98,39 +90,54 @@ export default function Login() {
               />
             </div>
 
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-zinc-300 ml-1">Confirmar Senha</label>
+              <Input
+                type="password"
+                placeholder="********"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="bg-black/40 border-zinc-800 text-white placeholder:text-zinc-600 focus:ring-purple-500/20 focus:border-purple-500 h-11"
+                required
+              />
+            </div>
+
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transition-all duration-300 border-none outline-none ring-0"
+              className="w-full h-11 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transition-all duration-300"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Entrando...</span>
+                  <span>Criando conta...</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <span>Entrar</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <UserPlus className="w-4 h-4" />
+                  <span>Criar conta</span>
                 </div>
               )}
             </Button>
           </form>
         </div>
 
-        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl p-4 rounded-xl flex items-center justify-center gap-1 ring-0 border-none outline-none">
-          <p className="text-sm text-zinc-400">Não tem conta?</p>
+        <div className="mt-4 bg-[#18181b]/60 backdrop-blur-xl p-4 rounded-xl flex items-center justify-center gap-1">
+          <p className="text-sm text-zinc-400">Ja tem conta?</p>
           <Link 
-            href="/register"
+            href="/"
             className="text-sm text-purple-500 hover:text-purple-400 font-medium transition-colors"
-            data-testid="link-criar-agora"
           >
-            Criar agora
+            Entrar
           </Link>
         </div>
         
         <p className="text-center text-xs text-zinc-600 mt-8">
-          © 2026 BerryPay Inc. Todos os direitos reservados.
+          2026 BerryPay Inc. Todos os direitos reservados.
         </p>
       </div>
     </div>
