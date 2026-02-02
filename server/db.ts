@@ -4,13 +4,12 @@ import * as schema from "@shared/schema";
 
 const { Pool } = pg;
 
-// Use a fallback for DATABASE_URL if it's not present during build/push steps, 
-// though it should be present here.
-const connectionString = process.env.DATABASE_URL;
+// Use POSTGRES_URL (Supabase) or DATABASE_URL as fallback
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
 
 if (!connectionString) {
   throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
+    "POSTGRES_URL or DATABASE_URL must be set. Did you forget to provision a database?",
   );
 }
 
