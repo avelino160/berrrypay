@@ -13,14 +13,12 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
+  turbopack: {
+    resolveAlias: {
       '@': './src',
       '@shared': './src/shared',
-    };
-    return config;
+    },
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

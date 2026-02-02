@@ -1,49 +1,58 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl, type CreateCheckoutRequest, type UpdateCheckoutRequest } from "@shared/routes";
+import type { Checkout, InsertCheckout } from "@shared/schema";
 
 export function useCheckouts() {
-  return useQuery({
-    queryKey: [api.checkouts.list.path],
+  return useQuery<Checkout[]>({
+    queryKey: ["/api/checkouts"],
     queryFn: async () => {
-      const res = await fetch(api.checkouts.list.path, { credentials: "include" });
+      const res = await fetch("/api/checkouts", { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch checkouts");
-      return api.checkouts.list.responses[200].parse(await res.json());
+      return res.json();
     },
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
 }
 
+export function useCheckout(id: number) {
+  return useQuery<Checkout | null>({
+    queryKey: ["/api/checkouts", id],
+    queryFn: async () => {
+      const res = await fetch(`/api/checkouts/${id}`, { credentials: "include" });
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error("Failed to fetch checkout");
+      return res.json();
+    },
+    enabled: !!id,
+  });
+}
+
 export function useCreateCheckout() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: CreateCheckoutRequest) => {
-      const res = await fetch(api.checkouts.create.path, {
-        method: api.checkouts.create.method,
+    mutationFn: async (data: { name: string; productId: number; slug: string }) => {
+      const res = await fetch("/api/checkouts", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
         credentials: "include",
       });
 
       if (!res.ok) {
-        if (res.status === 400) {
-           const error = api.checkouts.create.responses[400].parse(await res.json());
-           throw new Error(error.message);
-        }
-        throw new Error("Failed to create checkout");
+        const error = await res.json();
+        throw new Error(error.message || "Failed to create checkout");
       }
-      return api.checkouts.create.responses[201].parse(await res.json());
+      return res.json();
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.checkouts.list.path] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/checkouts"] }),
   });
 }
 
 export function useUpdateCheckout() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: UpdateCheckoutRequest }) => {
-      const url = buildUrl(api.checkouts.get.path, { id });
-      const res = await fetch(url, {
+    mutationFn: async ({ id, data }: { id: number; data: Partial<Checkout> }) => {
+      const res = await fetch(`/api/checkouts/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -53,25 +62,28 @@ export function useUpdateCheckout() {
       if (!res.ok) {
         throw new Error("Failed to update checkout");
       }
-      return await res.json();
+      return res.json();
     },
     onSuccess: (_, { id }) => {
-      queryClient.invalidateQueries({ queryKey: [api.checkouts.list.path] });
-      queryClient.invalidateQueries({ queryKey: [api.checkouts.get.path, id] });
+      queryClient.invalidateQueries({ queryKey: ["/api/checkouts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/checkouts", id] });
     },
   });
 }
 
-export function useCheckout(id: number) {
-  return useQuery({
-    queryKey: [api.checkouts.get.path, id],
-    queryFn: async () => {
-      const url = buildUrl(api.checkouts.get.path, { id });
-      const res = await fetch(url, { credentials: "include" });
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error("Failed to fetch checkout");
-      return api.checkouts.get.responses[200].parse(await res.json());
+export function useDeleteCheckout() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/checkouts/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      
+      if (!res.ok) {
+        throw new Error("Failed to delete checkout");
+      }
     },
-    enabled: !!id,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/checkouts"] }),
   });
 }

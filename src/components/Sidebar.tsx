@@ -1,16 +1,20 @@
-import { Link, useLocation } from "wouter";
+"use client";
+
+import Link from "next/link";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Trophy, ChevronDown, User, BarChart3, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useStats } from "@/hooks/use-stats";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo, useEffect } from "react";
+import { useState, Suspense } from "react";
 
-export function Sidebar() {
-  const [location] = useLocation();
-  const [settingsOpen, setSettingsOpen] = useState(location.startsWith("/settings"));
+function SidebarContent() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [settingsOpen, setSettingsOpen] = useState(pathname?.startsWith("/settings") || false);
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const currentTab = searchParams.get("tab") || "gateway";
+  const currentTab = searchParams?.get("tab") || "gateway";
 
   const { data: user } = useQuery<any>({
     queryKey: ["/api/user"],
@@ -45,9 +49,13 @@ export function Sidebar() {
   const currentGoal = goals.find(g => currentRevenue < g.value) || goals[goals.length - 1];
   const progress = Math.min((currentRevenue / currentGoal.value) * 100, 100);
 
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/");
+  };
+
   return (
     <div className="w-80 bg-[#09090b] border-r border-zinc-800 flex flex-col">
-      {/* Brand */}
       <div className="p-8 border-b border-zinc-800/50 flex-shrink-0">
         <h1 className="text-4xl font-extrabold tracking-tight">
           <span className="bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent">Berry</span>
@@ -55,9 +63,7 @@ export function Sidebar() {
         </h1>
         <p className="text-sm text-zinc-500 mt-1">Plataforma de Vendas</p>
       </div>
-      {/* Navigation and Widgets Area - No internal scroll, fixed within flex */}
       <div className="flex-1">
-        {/* Revenue Widget */}
         <div className="px-4 py-3">
           <div className="bg-zinc-900/50 rounded-lg p-3 border border-zinc-800/50 relative overflow-hidden group">
              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -88,11 +94,10 @@ export function Sidebar() {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="px-4 py-2 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location === item.href;
+            const isActive = pathname === item.href;
             return (
               <Link key={item.href} href={item.href}>
                 <button
@@ -115,7 +120,7 @@ export function Sidebar() {
               onClick={() => setSettingsOpen(!settingsOpen)}
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold transition-all duration-200 text-[15px]",
-                location.startsWith("/settings")
+                pathname?.startsWith("/settings")
                   ? "bg-[#8b5cf6] text-white shadow-lg"
                   : "text-zinc-400 hover:text-white hover:bg-zinc-900"
               )}
@@ -135,7 +140,7 @@ export function Sidebar() {
                 {settingSubItems.map((item) => {
                   const Icon = item.icon;
                   const itemTab = new URLSearchParams(item.href.split('?')[1]).get("tab");
-                  const isActive = location === "/settings" && currentTab === itemTab;
+                  const isActive = pathname === "/settings" && currentTab === itemTab;
                   
                   return (
                     <Link key={item.href} href={item.href}>
@@ -158,21 +163,29 @@ export function Sidebar() {
           </div>
         </nav>
       </div>
-      {/* Footer - No fixed positioning */}
       <div className="p-4 border-t border-zinc-800/50 flex-shrink-0">
         <div className="px-2">
             <p className="text-xs text-zinc-500 truncate mb-2">{user?.username || ''}</p>
-          <Link href="/">
-            <button className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-md transition-colors border border-zinc-700">
-              <LogOut size={16} />
-              Sair
-            </button>
-          </Link>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-md transition-colors border border-zinc-700"
+          >
+            <LogOut size={16} />
+            Sair
+          </button>
           <p className="text-[10px] text-zinc-600 text-center mt-3">
             © 2026 BerryPay Inc.
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <Suspense fallback={<div className="w-80 bg-[#09090b] border-r border-zinc-800" />}>
+      <SidebarContent />
+    </Suspense>
   );
 }

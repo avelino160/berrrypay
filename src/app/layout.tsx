@@ -3,7 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "ColdPay - Sistema de Checkout",
+  title: "BerryPay - Plataforma de Vendas",
   description: "Sistema de gerenciamento de checkouts e vendas",
 };
 

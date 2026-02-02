@@ -1,20 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@shared/routes";
+
+export interface StatsData {
+  salesToday: number;
+  revenuePaid: number;
+  salesApproved: number;
+  revenueTarget: number;
+  revenueCurrent: number;
+  chartData: { name: string; sales: number }[];
+}
 
 export function useStats(period?: string, productId?: string) {
-  const queryKey = [api.stats.get.path, { period, productId }];
   const params = new URLSearchParams();
   if (period) params.append("period", period);
   if (productId && productId !== "all") params.append("productId", productId);
   
-  const url = params.toString() ? `${api.stats.get.path}?${params.toString()}` : api.stats.get.path;
+  const queryString = params.toString();
+  const url = queryString ? `/api/stats?${queryString}` : "/api/stats";
   
-  return useQuery({
-    queryKey,
+  return useQuery<StatsData>({
+    queryKey: ["/api/stats", { period, productId }],
     queryFn: async () => {
       const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch stats");
-      return api.stats.get.responses[200].parse(await res.json());
+      return res.json();
     },
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

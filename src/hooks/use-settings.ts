@@ -1,32 +1,33 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, type UpdateSettingsRequest } from "@shared/routes";
+import type { Settings } from "@shared/schema";
 
 export function useSettings() {
-  return useQuery({
-    queryKey: [api.settings.get.path],
+  return useQuery<Settings | null>({
+    queryKey: ["/api/settings"],
     queryFn: async () => {
-      const res = await fetch(api.settings.get.path, { credentials: "include" });
-      if (res.status === 404) return null; 
+      const res = await fetch("/api/settings", { credentials: "include" });
+      if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch settings");
-      return api.settings.get.responses[200].parse(await res.json());
+      return res.json();
     },
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
 }
 
 export function useUpdateSettings() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: UpdateSettingsRequest) => {
-      const res = await fetch(api.settings.update.path, {
-        method: api.settings.update.method,
+    mutationFn: async (data: Partial<Settings>) => {
+      const res = await fetch("/api/settings", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
         credentials: "include",
       });
-
       if (!res.ok) throw new Error("Failed to update settings");
-      return api.settings.update.responses[200].parse(await res.json());
+      return res.json();
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [api.settings.get.path] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/settings"] }),
   });
 }
