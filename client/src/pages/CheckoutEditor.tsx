@@ -49,14 +49,39 @@ const defaultConfig: CheckoutConfig = {
 import { timerIcon } from "@/lib/assets";
 
 // Helper function to generate a soft, light pastel version of a color
-function getSoftBackgroundColor(hexColor: string): string {
-  // Remove # if present
-  const hex = hexColor.replace('#', '');
+function getSoftBackgroundColor(color: string): string {
+  let r = 0, g = 0, b = 0;
   
-  // Parse hex to RGB
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
+  // Handle different color formats
+  if (color.startsWith('rgba') || color.startsWith('rgb')) {
+    // Parse rgb(r, g, b) or rgba(r, g, b, a)
+    const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      r = parseInt(match[1]);
+      g = parseInt(match[2]);
+      b = parseInt(match[3]);
+    }
+  } else if (color.startsWith('#')) {
+    // Parse hex color
+    const hex = color.replace('#', '');
+    if (hex.length === 3) {
+      r = parseInt(hex[0] + hex[0], 16);
+      g = parseInt(hex[1] + hex[1], 16);
+      b = parseInt(hex[2] + hex[2], 16);
+    } else if (hex.length >= 6) {
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    }
+  } else {
+    // Fallback: try to parse as hex without #
+    const hex = color;
+    if (hex.length >= 6) {
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    }
+  }
   
   // Convert RGB to HSL
   const rNorm = r / 255;
